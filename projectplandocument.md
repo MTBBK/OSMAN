@@ -19,11 +19,8 @@ Proje görev dağılımını planlarken yapılması planlanan işleri göz önü
 Projemizde ilk olarak internet sitesinin ana sayfasının görünümüne ve hangi işlevleri gerçekleştirebileceğine karar verilecektir. Ardından navbar ve footer gibi tüm sayfalarda ortak olarak bulunacak temel elemanlar için ayrı bir HTML dosyası tasarlanarak sisteme dahil edilecek. Bunların ardından her bir özel yazı sayfasının görünümüne ve tema seçeneklerine karar verilecek ve backend safhasına geçiş yapılacaktır. Bu aşamadan sonra frontend ve backend süreçleri paralel olarak yürütülmeye başlanacak ve ekip içinde bir koordinasyon gerekecek. Her bir aşamanın ardından test süreci gerçekleştirilecektir.
 
 ## Key Phases and Timeline: Create a simple timeline showing
-the essential phases required to complete the project (e.g., requirements gathering,
-design, development, testing, deployment) and the estimated start and end dates for
-each phase. This illustrates the project duration and when phases should be completed.
-Delivery dates and deliverables are explained and mapped to the timeline. Closure date
-and project evaluation date.
+![Gantt Chart](http://osman.guru/images/gantt_chart.png)
+
 
 ## Resource Planning:
 Java
