@@ -1,0 +1,15 @@
+# Otomatlar ve Otobotlar
+User-agent: *
+Allow: /
+Disallow: /*.DS_Store
+Disallow: /*.Thumbs.db
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
