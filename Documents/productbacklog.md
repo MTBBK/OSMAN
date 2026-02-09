@@ -1,9 +1,6 @@
-# Requirements Document
+# Product Backlog:
 
 `https://osman.guru`
-
-## Product Backlog:
-
 
 | Priority       | Story     | Estimate |
 | ------- | -------------------------------------------- | -------- |
