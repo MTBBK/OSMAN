@@ -14,7 +14,7 @@ Projemizde yayınlanmış internet sitelerine faal bir veri tabanlı backend sis
 ## Target Audience:
 Kolay ve hızlı şekilde site yapmak isteyen her birey. Özellikle blog yazarları, köşe yazısı yazarları, gezi yazısı yazarları, fotoğrafçılar öğrenciler.
 
-## Key Feature::
+## Key Feature:
 Otomatik site üretimi
 Seçilebilecek pek çok tema
 Kullanıcı dostu arayüz
