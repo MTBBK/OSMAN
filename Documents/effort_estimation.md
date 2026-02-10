@@ -18,3 +18,11 @@
 |Kullanıcı dostu arayüzün inşası|Yazılımcılar|6|
 |Kullanım kılavuzunun yazılması|Yazılımcılar|4|
 ||Toplam:|90|
+|-------------------|----------------|---------------|
+
+| Birim | Toplam İşi (Saat)|
+|------|----------------|
+|Tasarımcılar|52|
+|Yazılımcılar|38|
+|----------|----------|
+
