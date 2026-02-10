@@ -20,7 +20,7 @@
 ||Toplam:|82|
 
 | Birim | İş Tanımı | Toplam İşi (Saat)|
-|------|----------------|
+|------|----------------|-----|
 |Mesut Barbaros KÖŞ|Frontend Yazılımcı (HTML & CSS)|22|
 |Melih Efe TURSUN|Backend Yazılmcı (Java)|16|
 |Ahmet Taha KILINÇ|Tasarımcı|22|
