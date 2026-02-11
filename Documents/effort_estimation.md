@@ -25,3 +25,5 @@
 |Melih Efe TURSUN|Backend Yazılmcı (Java)|16|
 |Ahmet Taha KILINÇ|Tasarımcı|22|
 |Mahmut TOSUN|Tasarımcı|22|
+
+- Tahmini bitiş süreleri takım içinde tartışılarak takım üyelerinin maksimum performans gösterebilecekleri biçimde belirlenmiştir.
