@@ -37,18 +37,18 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 ##Codebase Structure: {#codebase-structure}
 
 `
-├── config.toml
-├── builder.java
-├── content/
-│   ├── _index.md
-│   ├── first.md
-│   └── second.md
-├── output/
-├── templates/
-│   ├── base.html
-│   ├── page.html
-│   └── index.html
-└── themes/
+├── config.toml\n
+├── builder.java\n
+├── content/\n
+│   ├── _index.md\n
+│   ├── first.md\n
+│   └── second.md\n
+├── output/\n
+├── templates/\n
+│   ├── base.html\n
+│   ├── page.html\n
+│   └── index.html\n
+└── themes/\n
 `
 
 ##Key Implementations: {#key-implementations}
