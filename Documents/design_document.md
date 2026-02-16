@@ -19,9 +19,9 @@
 - - [Technology Comparisons](#technology-comparisons)
 - -[Decision Justifications](#decision-justifications)
 
-#System Overview {#system-overview}
+#System Overview (#system-overview)
 
-##Brief Project Description: {#brief-project-description}
+##Brief Project Description: (#brief-project-description)
 OSMAN; Java ile yazılmış, hız için optimize edilmiş ve esneklik için tasarlanmış bir statik internet sitesi oluşturucudur. Geniş tema seçenekleri ve kullanıcıya uyum sağlayan özellikleriyle internet sitesi oluşturmayı kolaylaştırarak birkaç tık öteye indiren gelişmiş bir araçtır. Kullanıcılar saniyeler içinde gerek ellerindeki yazılar ile gerekse de ellerinde bulunan resimler ile statik bir internet sitesi oluşturabilmektedir.
 
 ##System Architecture: {#system-architecture}
@@ -36,20 +36,20 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 
 ##Codebase Structure: {#codebase-structure}
 
-`
-├── config.toml\n
-├── builder.java\n
-├── content/\n
-│   ├── _index.md\n
-│   ├── first.md\n
-│   └── second.md\n
-├── output/\n
-├── templates/\n
-│   ├── base.html\n
-│   ├── page.html\n
-│   └── index.html\n
-└── themes/\n
-`
+```
+├── config.toml
+├── builder.java
+├── content/
+│   ├── _index.md
+│   ├── first.md
+│   └── second.md
+├── output/
+├── templates/
+│   ├── base.html
+│   ├── page.html
+│   └── index.html
+└── themes/
+```
 
 ##Key Implementations: {#key-implementations}
 - config.toml: Ana konfigürasyon dosyası, kullanıcıların oluşturmak istediklerini internet sitesinin; başlık, alt-başlık, tema gibi özelliklerini ayarlaması için yerleştirilmiş bir dosyadır.
