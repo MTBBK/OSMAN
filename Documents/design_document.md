@@ -1,6 +1,6 @@
-#Design Document
+# Design Document
 
-#Table of Contents:
+# Table of Contents:
 
 - [System Overview](#system-overview)
 - - [Brief Project Description](#brief-project-description)
@@ -19,25 +19,25 @@
 - - [Technology Comparisons](#technology-comparisons)
 - -[Decision Justifications](#decision-justifications)
 
-#System Overview
+# System Overview (#system-overview)
 
-##Brief Project Description:
+## Brief Project Description: (#brief-project-description)
 
 OSMAN; Java ile yazılmış, hız için optimize edilmiş ve esneklik için tasarlanmış bir statik internet sitesi oluşturucudur. Geniş tema seçenekleri ve kullanıcıya uyum sağlayan özellikleriyle internet sitesi oluşturmayı kolaylaştırarak birkaç tık öteye indiren gelişmiş bir araçtır. Kullanıcılar saniyeler içinde gerek ellerindeki yazılar ile gerekse de ellerinde bulunan resimler ile statik bir internet sitesi oluşturabilmektedir.
 
-##System Architecture:
+## System Architecture: {#system-architecture}
 
 Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single unit” olarak “deploy” edilerek geliştirilmiştir.
 
-##Technology Stack:
+## Technology Stack: {#technology-stack}
 
 - Frontend: HTML, CSS, JavaScript
 - Backend: Java
 
 
-#Implementation Details
+# Implementation Details {#implementation-details}
 
-##Codebase Structure:
+## Codebase Structure: {#codebase-structure}
 
 ```
 ├── config.toml
@@ -54,28 +54,28 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 └── themes/
 ```
 
-##Key Implementations:
+## Key Implementations: {#key-implementations}
 
 - config.toml: Ana konfigürasyon dosyası, kullanıcıların oluşturmak istediklerini internet sitesinin; başlık, alt-başlık, tema gibi özelliklerini ayarlaması için yerleştirilmiş bir dosyadır.
 - builder.java: Kullanıcıların config.toml dosyasından gerekli ayarlamaları yaptıktan ve sayfa oluşturmak için eklemek istedikleri belgeleri yükledikten sonra çalıştıracakları ve siteyi oluşturacak olan ana modüldür.
 
-##Component Interfaces:
+## Component Interfaces: {#component-interfaces}
 
-## builder.java
+### builder.java
 
 - parse_content_files(filename): "content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
 - build_site(): "content", "templates", "themes" klasörlerindeki verileri, "parse_content_files(filename)" fonksiyonunu kullanarak "output" klasörüne siteyi hazırlayan fonksiyon.
 - main(): "build_site()" fonksiyonunu çağırarak işlemi başlatan ana fonksiyon.
 
-## config.toml
+### config.toml
 
 - Ayarlanabilir bütün değişkenlerin tutulduğu dosya formatı.
 
-##Visual Interfaces:
+## Visual Interfaces: {#visual-interfaces}
 
-#Use Case Support Design
+# Use Case Support Design {#use-case-support-design}
 
-##Use Case Selection:
+## Use Case Selection: {#use-case-selection}
 
 1. Kullanıcı, isterse config dosyasını isterse de geliştireceğimiz arayüzü kullanarak oluşturmak istediği internet sitesi için bir tema tercihinde bulunabilecek ve internet sitesinin başlık, alt başlık, açıklama gibi özelliklerini bu yollarla ayarlayabilecek.
 2. Kullanıcı, pratik bir şekilde elindeki metin veya resim dosyalarını sisteme yükleyebilecek ve sistemi çalıştırdığında beklediği sonuçları alabilecek.
@@ -83,20 +83,20 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 4. Kullanıcı, sistemi hızla kurup gerektiğinde hızla kaldırabilecek.
 
 
-##Requirement Mapping:
+## Requirement Mapping: {#requirement-mapping}
 
- 1. config.toml dosyasının fonksiyonel özellikleri.
- 2. builder.java dosyasının fonksiyonel özellikleri.
- 3. builder.java dosyası fonksiyonel özellikleri.
- 4. osman.guru internet sitesinin kullanımı.
+1. config.toml dosyasının fonksiyonel özellikleri.
+2. builder.java dosyasının fonksiyonel özellikleri.
+3. builder.java dosyası fonksiyonel özellikleri.
+4. osman.guru internet sitesinin kullanımı.
 
-##Use Case Design:
+## Use Case Design: {#use-case-design}
 
 Projemizde kullandığımız monolitik mimari sayesinde yazılımımızın tüm dosyaları tek bir pakette toplanmakta ve bu sayede gerekli bir çalıştırma dosyası çalıştırıldığında hızlı bir şekilde çalışır vaziyete gelebilmektedir. Program çalıştırıldığında sırası ile `config.toml -> builder.java` akışı izlenmektedir.
 
-#Design Decisions
+# Design Decisions {#design-decisions}
 
-##Technology Comparisons:
+## Technology Comparisons: {#technology-comparisons}
 
 Projemizde temel "backend" dili olarak Java programlama dilini tercih ettik.
 | Feature | Java   | C++ | Python |
@@ -107,7 +107,7 @@ Projemizde temel "backend" dili olarak Java programlama dilini tercih ettik.
 | Main Use Cases | Enterprise apps android, backend | Games, simulations, system software | Data science, AI, scripting, web |
 | Platform Spesification | Platform-unaffected | Platform dependent | Platform independent |
 
-##Decision Justifications
+## Decision Justifications {#decision-justifications}
 
 Projemiz bir internet sitesi oluşturucu olduğu için web framework kullandık.
 
