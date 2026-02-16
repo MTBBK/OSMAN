@@ -61,13 +61,13 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 
 ##Component Interfaces:
 
-### builder.java
+## builder.java
 
 - parse_content_files(filename): "content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
 - build_site(): "content", "templates", "themes" klasörlerindeki verileri, "parse_content_files(filename)" fonksiyonunu kullanarak "output" klasörüne siteyi hazırlayan fonksiyon.
 - main(): "build_site()" fonksiyonunu çağırarak işlemi başlatan ana fonksiyon.
 
-### config.toml
+## config.toml
 
 - Ayarlanabilir bütün değişkenlerin tutulduğu dosya formatı.
 
