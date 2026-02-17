@@ -72,6 +72,8 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 - Ayarlanabilir bütün değişkenlerin tutulduğu dosya formatı.
 
 ## Visual Interfaces:
+![Example Page Top](http://osman.guru/images/sayfa_ust.png)
+![Example Page Bottom](http://osman.guru/images/sayfa_alt.png)
 
 # Use Case Support Design
 
