@@ -54,8 +54,14 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 ├── Output/
 ├── Templates/
 │   ├── base.html
+│   ├── base.css
+│   ├── base.md
 │   ├── page.html
-│   └── index.html
+│   ├── page.css
+│   ├── page.md
+│   ├── index.html
+│   ├── index.css
+│   └── index.md
 └── Themes/
 ```
 

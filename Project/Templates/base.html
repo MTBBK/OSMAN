@@ -1,1 +1,44 @@
-Navbar / Footer
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_DESCRIPTION }}">
+    <title>{{ SITE_TITLE }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ FAVICON_URL }}">
+    <link rel="stylesheet" href="base.css">
+    {{ HEAD_EXTRA }}
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="index.html">
+                    {{ LOGO_AREA }}
+                </a>
+            </div>
+            <nav class="nav-links">
+                {{ NAV_BAR_LINKS }}
+            </nav>
+        </div>
+    </header>
+
+    <main class="content container">
+        {{ CONTENT }}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}. All rights reserved.</p>
+                <div class="social-links">
+                    {{ SOCIAL_LINKS }}
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
