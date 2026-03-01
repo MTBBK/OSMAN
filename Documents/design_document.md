@@ -17,7 +17,7 @@
 - - [Use Case Design](#use-case-design)
 - [Design Decisions](#design-decisions)
 - - [Technology Comparisons](#technology-comparisons)
-- -[Decision Justifications](#decision-justifications)
+- - [Decision Justifications](#decision-justifications)
 
 <a name="system-overview"></a>
 # System Overview
@@ -46,33 +46,33 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 
 ```
 ├── config.toml
-├── builder.java
-├── content/
+├── Builder.java
+├── Content/
 │   ├── _index.md
 │   ├── first.md
 │   └── second.md
-├── output/
-├── templates/
+├── Output/
+├── Templates/
 │   ├── base.html
 │   ├── page.html
 │   └── index.html
-└── themes/
+└── Themes/
 ```
 
 <a name="key-implementations"></a>
 ## Key Implementations:
 
 - config.toml: Ana konfigürasyon dosyası, kullanıcıların oluşturmak istediklerini internet sitesinin; başlık, alt-başlık, tema gibi özelliklerini ayarlaması için yerleştirilmiş bir dosyadır.
-- builder.java: Kullanıcıların config.toml dosyasından gerekli ayarlamaları yaptıktan ve sayfa oluşturmak için eklemek istedikleri belgeleri yükledikten sonra çalıştıracakları ve siteyi oluşturacak olan ana modüldür.
+- Builder.java: Kullanıcıların config.toml dosyasından gerekli ayarlamaları yaptıktan ve sayfa oluşturmak için eklemek istedikleri belgeleri yükledikten sonra çalıştıracakları ve siteyi oluşturacak olan ana modüldür.
 
 <a name="component-interfaces"></a>
 ## Component Interfaces:
 
-### builder.java
+### Builder.java
 
-- parse_content_files(filename): "content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
-- build_site(): "content", "templates", "themes" klasörlerindeki verileri, "parse_content_files(filename)" fonksiyonunu kullanarak "output" klasörüne siteyi hazırlayan fonksiyon.
-- main(): "build_site()" fonksiyonunu çağırarak işlemi başlatan ana fonksiyon.
+- parseContentFiles(folderName): "content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
+- buildSite(): "Content", "Templates", "Themes" klasörlerindeki verileri, "parseContentFiles(filename)" metodunu kullanarak "Output" klasörüne siteyi hazırlayan fonksiyon.
+- main(): "buildSite()" metodunu çağırarak işlemi başlatan ana fonksiyon.
 
 ### config.toml
 
@@ -99,14 +99,14 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 ## Requirement Mapping:
 
 1. config.toml dosyasının fonksiyonel özellikleri.
-2. builder.java dosyasının fonksiyonel özellikleri.
-3. builder.java dosyası fonksiyonel özellikleri.
+2. Builder.java dosyasının fonksiyonel özellikleri.
+3. Builder.java dosyası fonksiyonel özellikleri.
 4. osman.guru internet sitesinin kullanımı.
 
 <a name="use-case-design"></a>
 ## Use Case Design:
 
-Projemizde kullandığımız monolitik mimari sayesinde yazılımımızın tüm dosyaları tek bir pakette toplanmakta ve bu sayede gerekli bir çalıştırma dosyası çalıştırıldığında hızlı bir şekilde çalışır vaziyete gelebilmektedir. Program çalıştırıldığında sırası ile `config.toml -> builder.java` akışı izlenmektedir.
+Projemizde kullandığımız monolitik mimari sayesinde yazılımımızın tüm dosyaları tek bir pakette toplanmakta ve bu sayede gerekli bir çalıştırma dosyası çalıştırıldığında hızlı bir şekilde çalışır vaziyete gelebilmektedir. Program çalıştırıldığında sırası ile `config.toml -> Builder.java` akışı izlenmektedir.
 
 <a name="design-decisions"></a>
 # Design Decisions
