@@ -1,4 +1,4 @@
-# OSMAN Base Template Documentation
+# OSMAN Base Template Documentation (base.html)
 
 This document explains the placeholders and design principles used in the `base.html` and `base.css` templates.
 
