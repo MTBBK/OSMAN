@@ -1,1 +1,28 @@
-Ana Sayfa
+{{ LAYOUT = "base.html" }}
+<link rel="stylesheet" href="index.css">
+
+<section class="index-page">
+    <header class="index-welcome">
+        <div class="welcome-header">
+            {{ AUTHOR_AVATAR_URL }}
+            <h1 class="welcome-title">{{ WELCOME_TITLE }}</h1>
+        </div>
+        <div class="welcome-intro">
+            {{ INTRO_ABOUT_ME }}
+        </div>
+        <div class="welcome-socials">
+            {{ SOCIAL_ICONS }}
+        </div>
+        <div class="tag-cloud">
+            {{ TAG_CLOUD }}
+        </div>
+    </header>
+
+    <div class="index-stats">
+        <span class="post-count">{{ TOTAL_POSTS_COUNT }}</span>
+    </div>
+
+    <div class="post-feed">
+        {{ POST_LIST }}
+    </div>
+</section>

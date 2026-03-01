@@ -1,0 +1,126 @@
+/* Post-specific styling for OSMAN */
+
+.post {
+    margin: 2rem 0;
+}
+
+.post-header {
+    margin-bottom: 3rem;
+    text-align: left;
+}
+
+.post-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+    color: var(--text-color);
+}
+
+.post-meta {
+    font-size: 0.95rem;
+    color: var(--secondary-text);
+}
+
+.post-date::after,
+.post-author::after {
+    content: " • ";
+    margin: 0 0.3rem;
+}
+
+.post-read-time {
+    font-style: italic;
+}
+
+.post-updated {
+    font-size: 0.85rem;
+    color: var(--secondary-text);
+    margin-top: 0.5rem;
+    font-style: italic;
+}
+
+.featured-image {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.post-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-color);
+}
+
+/* Image styling within posts */
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto;
+    border-radius: 4px;
+}
+
+/* Blockquote styling */
+.post-content blockquote {
+    border-left: 3px solid var(--border-color);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--secondary-text);
+}
+
+/* Code block styling */
+.post-content pre {
+    background: #f4f4f4;
+    padding: 1rem;
+    overflow-x: auto;
+    border-radius: 4px;
+    margin: 1.5rem 0;
+}
+
+.post-content code {
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.post-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-tags {
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+}
+
+.post-tags a {
+    color: var(--link-color);
+    text-decoration: none;
+    margin-right: 0.5rem;
+}
+
+.post-pagination {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.95rem;
+}
+
+.post-pagination a {
+    text-decoration: none;
+    color: var(--link-color);
+}
+
+.post-pagination a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .post-title {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,170 @@
+/* Rosetta-inspired Index Page styling for OSMAN */
+
+.index-page {
+    margin-top: 2rem;
+}
+
+/* Welcome Section */
+.index-welcome {
+    margin-bottom: 4rem;
+    text-align: left;
+}
+
+.welcome-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.author-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--border-color);
+}
+
+.welcome-title {
+    font-size: 3rem;
+    font-weight: 850;
+    margin: 0;
+    color: var(--text-color);
+    letter-spacing: -0.02em;
+}
+
+.welcome-intro {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    max-width: 650px;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-socials {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.welcome-socials a {
+    color: var(--secondary-text);
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.welcome-socials a:hover {
+    color: var(--text-color);
+}
+
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.tag-cloud a {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    background: var(--border-color);
+    color: var(--secondary-text);
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.tag-cloud a:hover {
+    background: var(--link-color);
+    color: #fff;
+}
+
+.index-stats {
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+/* Post Feed (Card-based) */
+.post-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.post-card {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: transform 0.2s ease;
+}
+
+.post-card:last-child {
+    border-bottom: none;
+}
+
+.post-card-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.post-card-title a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.post-card-title a:hover {
+    color: var(--link-color);
+}
+
+.post-card-excerpt {
+    font-size: 1.1rem;
+    color: var(--secondary-text);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.post-card-categories {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.post-card-categories a {
+    font-size: 0.8rem;
+    color: var(--link-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.post-card-meta {
+    font-size: 0.85rem;
+    color: var(--secondary-text);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.post-card-meta span::after {
+    content: "·";
+    margin-left: 0.75rem;
+}
+
+.post-card-meta span:last-child::after {
+    content: "";
+}
+
+@media (max-width: 768px) {
+    .welcome-title {
+        font-size: 2.5rem;
+    }
+
+    .post-card-title {
+        font-size: 1.5rem;
+    }
+}

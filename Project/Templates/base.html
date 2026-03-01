@@ -12,31 +12,27 @@
 </head>
 
 <body>
-    <header class="navbar">
-        <div class="container">
-            <div class="logo">
-                <a href="index.html">
-                    {{ LOGO_AREA }}
-                </a>
-            </div>
-            <nav class="nav-links">
-                {{ NAV_BAR_LINKS }}
-            </nav>
+    <header class="header container">
+        <div class="site-branding">
+            <a href="index.html" class="site-title">{{ LOGO_AREA }}</a>
         </div>
+        <nav class="nav-bar">
+            {{ NAV_BAR_LINKS }}
+        </nav>
     </header>
 
     <main class="content container">
         {{ CONTENT }}
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}. All rights reserved.</p>
-                <div class="social-links">
-                    {{ SOCIAL_LINKS }}
-                </div>
-            </div>
+    <footer class="footer container">
+        <hr>
+        <div class="footer-links">
+            {{ SOCIAL_LINKS }}
+        </div>
+        <div class="footer-copy">
+            <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}</p>
+            <p>&copy; OSMAN</p>
         </div>
     </footer>
 </body>
