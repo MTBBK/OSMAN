@@ -70,7 +70,7 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 
 ### Builder.java
 
-- parseContentFiles(folderName): "content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
+- parseContentFiles(String folderName): "Content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
 - buildSite(): "Content", "Templates", "Themes" klasörlerindeki verileri, "parseContentFiles(filename)" metodunu kullanarak "Output" klasörüne siteyi hazırlayan fonksiyon.
 - main(): "buildSite()" metodunu çağırarak işlemi başlatan ana fonksiyon.
 
