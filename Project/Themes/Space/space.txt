@@ -1,0 +1,13 @@
+Tema Adı: Space Theme (Uzay Teması)
+Yazar: Mahmut TOSUN
+Tarih: 01.03.2026
+Version: 1.0
+
+Renk Paleti :
+- Background: #0b111a
+- Text Primary: #ffffff
+- Container BG: #191f27
+- Borders/Lines: #30363d
+- Title Blue: #519aed
+- Meta/Secondary Text: #8b949e
+- Link/Pagination: #58a6ff

@@ -1,0 +1,34 @@
+body {
+    background-color: #0b111a; /* Çok koyu lacivert */
+    color: #ffffff;            /*default yazı kullanmıyoz ama lazım olur*/
+    font-family: 'Segoe UI', Arial, sans-serif;/*Font listesi göze batmadığı sürece pek mühim değil*/
+    margin: 0;
+    padding: 0;
+}
+
+.post {
+    background-color: #191f27; 
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 40px;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.1);
+}
+
+.post-title { color: #519aed; margin-bottom: 5px; }
+
+.post-meta, .post-updated, .post-tags { 
+    color: #8b949e; font-size: 14px; margin-bottom: 15px; 
+}
+
+.post-content { line-height: 1.6; font-size: 17px; }
+
+img { max-width: 100%; border-radius: 5px; margin: 10px 0; }
+
+.post-pagination { 
+    display: flex; justify-content: space-between; 
+    border-top: 1px solid #30363d; padding-top: 20px; margin-top: 30px; 
+}
+
+.post-pagination div { color: #58a6ff; font-weight: bold; cursor: pointer; }
