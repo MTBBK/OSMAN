@@ -1,0 +1,7 @@
+- Tema Adı
+- Tema Tasarımcısının Adı
+- Temanın Eklenme Tarihi
+
+- Temada kullanılan renkler (Renk Paleti):
+- - #d3d3d3
+- - #000000

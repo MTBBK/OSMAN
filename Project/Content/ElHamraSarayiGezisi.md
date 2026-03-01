@@ -1,0 +1,2 @@
+Güzel geziydi doğrusu.
+
