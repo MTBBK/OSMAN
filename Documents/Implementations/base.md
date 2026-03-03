@@ -11,6 +11,7 @@ The following placeholders should be detected and replaced by the Java Builder u
 - `{{ SITE_DESCRIPTION }}`: A brief description for SEO meta tags.
 - `{{ AUTHOR_NAME }}`: The name of the site creator/author.
 - `{{ FAVICON_URL }}`: Path to the site's shortcut icon.
+- `{{ THEME_NAME }}`: Name for the selected theme.
 
 ### Layout & Navigation
 - `{{ LOGO_AREA }}`: Injected HTML for the site logo (either an <img> tag or plain text).

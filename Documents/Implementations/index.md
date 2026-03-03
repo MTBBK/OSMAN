@@ -15,8 +15,8 @@ The following placeholders should be detected and replaced by the Java Builder u
 - `{{ AUTHOR_AVATAR_URL }}`: Placeholder for a profile image tag.
 
 ### Discovery & Socials
-- `{{ SOCIAL_ICONS }}`: Slot for RSS and social media link icons.
-- `{{ TAG_CLOUD }}`: A collection of tags used globaly to filter posts.
+- `{{ SOCIAL_ICONS }}`: Slot for RSS and social media links and icons.
+- `{{ TAG_CLOUD }}`: A collection of tags used in posts.
 - `{{ TOTAL_POSTS_COUNT }}`: Total number of writings published.
 
 ### Post List Feature

@@ -1,0 +1,25 @@
+BASE:
+baseURL: "https://osman.guru" #Websites URL
+languageCode: "tr" #Websites Main Lanuage
+theme: "PaperMod" #Selected Theme Name (You can find more on website)
+SITE_TITLE: "Osman Site" #Websites Title
+SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası." #Websites Description
+AUTHOR_NAME: "Barbaros Köş (MTBBK)" #Main Author Of The Website
+FAVICON_URL: "kostebekgiller.png" #URL or path to your favicon from Content/Images/
+NAV_BAR_LINKS: #Links or subsite names for navigation panel section
+	- "https://osman.guru"
+	- "/robots.txt
+	- "/haritalar"
+COPYRIGHT_YEAR: "2026" #Current Year For The Copyright Section
+SOCIAL_LINKS: #Links for social medias
+	- "https://buymeacoffee.com/mtbbk"
+	- "https://github.com/MTBBK"
+
+INDEX:
+WELCOME_TITLE: "Osman'ın Sitesi" #Main greeting title.
+INTRO_ABOUT_ME: "Sondan Eklemeli Günlük Sayfası." #Short intro text.
+AUTHOR_AVATAR_URL: "osman.png" #URL or path to your favicon from Content/Images/
+SOCIAL_ICONS: #Links for social media icons and social media links
+	- "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2edc.png", "mtbbk46@gmail.com"
+	- "https://images.seeklogo.com/logo-png/31/1/youtube-2017-icon-logo-png_seeklogo-316067.png", "https://www.youtube.com/@cezerisoftware"
+
