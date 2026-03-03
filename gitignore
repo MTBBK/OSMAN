@@ -1,3 +1,6 @@
 Project/Templates/base.css
 Project/Templates/index.css
 Project/Templates/page.css
+Project/Output/*
+!Project/Output/readme.txt
+Old_Files/
