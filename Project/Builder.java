@@ -1,9 +1,9 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 public class Builder {
     public static void main(String arg[]) {
@@ -16,6 +16,19 @@ public class Builder {
 
     }
 
+    static void buildSite() throws Exception {
+        // this string will be specified in config.toml later on
+        String theme = "Space";
+        // [i][0] - file name, [i][1] file content
+        String[][] contents = parseContentFiles("Project/Content/Texts/");
+        String[][] templates = parseContentFiles("Project/Templates/");
+        // String[][] themes = parseContentFiles("Project/Themes/" + theme + "/");
+
+        for (int i = 0; i < templates.length; i++) {
+            writeFile(templates[i][0], templates[i][1]);
+        }
+    }
+
     static String[][] parseContentFiles(String folderName) throws IOException {
         File folder = new File(folderName);
 
@@ -24,62 +37,70 @@ public class Builder {
             throw new IOException("Folder \"" + folderName + "\" Could Not Be Found\n");
         }
 
-        File[] fileNames = folder.listFiles();
+        File[] files = folder.listFiles();
 
         // throw an IOException if the folder is empty
-        if (null == fileNames || 0 == fileNames.length) {
+        if (null == files || 0 == files.length) {
             throw new IOException("Folder \"" + folderName + "\" Is Empty\n");
         }
 
-        String[][] fileContents = new String[fileNames.length][2]; // [i][0] - dosyanın adı, [i][1] - dosyanın içeriği
+        String[][] fileContents = new String[files.length][2]; // [i][0] - dosyanın adı, [i][1] - dosyanın içeriği
 
         // reads all files and puts them in a string array
-        for (int i = 0; i < fileNames.length; i++) {
-            BufferedReader br = new BufferedReader(new FileReader(fileNames[i]));
-            try {
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
+        for (int i = 0; i < files.length; i++) {
 
-                while (null != line) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                    line = br.readLine();
-                }
-                fileContents[i][0] = fileNames[i].getName();
-                fileContents[i][1] = sb.toString();
-            } finally {
-                br.close();
-            }
+            fileContents[i][0] = files[i].getName();
+            fileContents[i][1] = readFile(folderName + fileContents[i][0]);
+
         }
 
         return fileContents;
     }
 
-    static void buildSite() throws Exception {
-        // this string will be specified in config.toml later on
-        String theme = "Space";
-        // [i][0] - file name, [i][1] file content
-        String[][] contents = parseContentFiles("Content");
-        String[][] templates = parseContentFiles("Templates");
-        String[][] themes = parseContentFiles("Themes/" + theme);
+    // takes text file's name and reads text file and return its contents as a sting
+    static String readFile(String filePath) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(filePath));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
 
-        for (int i = 0; i < templates.length; i++) {
-            StringBuilder sb = new StringBuilder(templates[i][1]);
-            // "<link rel=\"stylesheet\" href=\"style.css\">", len = 44
-
-            File output = new File("Output/" + templates[i][0]);
-            FileWriter fw = new FileWriter(output);
-
-            try {
-                fw.write(sb.toString());
-                fw.flush();
-            } finally {
-                fw.close();
+            while (null != line) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
             }
+
+            return sb.toString();
+        } catch (IOException e) {
+            throw new IOException("Failed To Read File " + filePath);
+        } finally {
+            br.close();
         }
     }
 
-    StringBuilder setBaseStyle(String[][] templates, String style) throws IOException {
+    // takes a file name and file's text contents and creates an output in "Output"
+    // folder
+    static void writeFile(String fileName, String fileContent) throws IOException {
+        // StringBuilder sb = new StringBuilder(fileContent);
+        // Bu niye var bilmiyom
+
+        File outputFile = new File("Project/Output/" + fileName);
+        if (!outputFile.exists() && !outputFile.createNewFile()) {
+            throw new IOException("Could Not Make File \"" + fileName + "\" On Output Folder");
+        }
+        FileWriter fw = new FileWriter(outputFile);
+
+        try {
+            fw.write(fileContent);
+            fw.flush();
+        } catch (IOException e) {
+            throw new IOException("Could Not Write File \"" + fileName + "\" On Output Folder");
+        } finally {
+            fw.close();
+        }
+    }
+
+    static StringBuilder makeBaseFile(String[][] templates, String style) throws IOException {
         int baseIndex = -1;
         for (int i = 0; i < templates.length; i++) {
             if (templates[i][0].equals("base.html")) {
