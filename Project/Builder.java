@@ -21,14 +21,14 @@ public class Builder {
 
         // throw an IOException if folderName is not an existing folder's path
         if (!folder.isDirectory()) {
-            throw new IOException("Folder \"" + folderName + "\" Could Not Be Found");
+            throw new IOException("Folder \"" + folderName + "\" Could Not Be Found\n");
         }
 
         File[] fileNames = folder.listFiles();
 
         // throw an IOException if the folder is empty
         if (null == fileNames || 0 == fileNames.length) {
-            throw new IOException("Folder \"" + folderName + "\" Is Empty");
+            throw new IOException("Folder \"" + folderName + "\" Is Empty\n");
         }
 
         String[][] fileContents = new String[fileNames.length][2]; // [i][0] - dosyanın adı, [i][1] - dosyanın içeriği
@@ -59,15 +59,15 @@ public class Builder {
         // this string will be specified in config.toml later on
         String theme = "Space";
         // [i][0] - file name, [i][1] file content
-        String[][] contents = parseContentFiles("Project/Content");
-        String[][] templates = parseContentFiles("Project/Templates");
-        String[][] themes = parseContentFiles("Project/Themes/" + theme);
+        String[][] contents = parseContentFiles("Content");
+        String[][] templates = parseContentFiles("Templates");
+        String[][] themes = parseContentFiles("Themes/" + theme);
 
         for (int i = 0; i < templates.length; i++) {
             StringBuilder sb = new StringBuilder(templates[i][1]);
             // "<link rel=\"stylesheet\" href=\"style.css\">", len = 44
 
-            File output = new File("./Project/Output/" + templates[i][0]);
+            File output = new File("Output/" + templates[i][0]);
             FileWriter fw = new FileWriter(output);
 
             try {
@@ -89,15 +89,17 @@ public class Builder {
         }
 
         if (-1 == baseIndex) {
-            throw new IOException("base.html could not be found in Project/Templates/");
+            throw new IOException("base.html could not be found in Project/Templates/\n");
         }
 
         StringBuilder baseSB = new StringBuilder(templates[baseIndex][1]);
-        StringBuilder themePath = new StringBuilder("../Themes/Space/");
+
+        StringBuilder themePath = new StringBuilder("Themes/");
         themePath.append(style);
         themePath.append("/");
         themePath.append(style);
         themePath.append(".css");
+
         String themeName = "{{ THEME_NAME }}";
         int styleIndex = baseSB.indexOf(themeName);
         baseSB.replace(styleIndex, styleIndex + themeName.length(), themePath.toString());
