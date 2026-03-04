@@ -79,10 +79,10 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 - **static void writeFile(String fileName, String fileContent)**: Output klasöründe bir dosya oluşturur ve içine fileContent'in içeriğini yazar.
 - **static String readFile(String filePath)**: filePath ile verilen dosya yolundaki dosyayı okur ve içeriğini String olarak döner.
 - **static String[][] parseContentFiles(String folderPath)**:"Content" ve "Templates" klasörlerindeki tüm dosyaları analiz ederek bunları hafızada depolar.
+- **static void stringEditor(String contentName, String newContent, StringBuilder file)**: Verilen file'ın içinde contentName'in olduğu satırı bulup 
 - **static StringBuilder makeBaseFile(String[][] templates, String style)**: hebele hübele
-- **static void stringEditor(String contentName, String newContent, StringBuilder file)**: hübele höbele
-- **static void buildSite()**: "Content", "Templates", "Themes" klasörlerindeki kullanılacak verileri, "String[][] parseContentFiles(String folderPath)" metodunu kullanarak "Output" klasörüne siteyi hazırlayan fonksiyon.
-- **main()**: "buildSite()" metodunu çağırarak işlemi başlatan ana fonksiyon.
+- **static void buildSite()**: "Content", "Templates", "Themes" klasörlerindeki kullanılacak verileri, "String[][] parseContentFiles(String folderPath)" metodunu kullanarak "Output" klasörüne siteyi hazırlayan fonksiyon. ***EKSİK***
+- **main()**: "buildSite()" metodunu çağırarak işlemi başlatan ana fonksiyon. Diğer fonkisyonlarda olan hataları ErrorLogs klasöründeki log.txt dosyasına yazar.
 
 ### config.toml
 

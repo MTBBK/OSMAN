@@ -11,9 +11,15 @@ public class Builder {
     public static void main(String arg[]) {
 
         try {
+            // File dir = new File("ErrorLogs");
+            // File errorFile = new File(new File("ErrorLogs"), "log.txt");
+            // if (!errorFile.exists()) {
+            // errorFile.createNewFile();
+            // }
+            // PrintStream err = new PrintStream(new FileOutputStream(errorFile));
+            // System.setErr(err);
+            // stringEditor(null, null, null);
             buildSite();
-            PrintStream err = new PrintStream(new FileOutputStream("ErrorLogs/log.txt"));
-            System.setErr(err);
         } catch (Exception e) {
             e.printStackTrace();
         }
