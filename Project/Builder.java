@@ -1,8 +1,10 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.RandomAccessFile;
 
 public class Builder {
@@ -10,6 +12,8 @@ public class Builder {
 
         try {
             buildSite();
+            PrintStream err = new PrintStream(new FileOutputStream("ErrorLogs/log.txt"));
+            System.setErr(err);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,19 +33,19 @@ public class Builder {
         }
     }
 
-    static String[][] parseContentFiles(String folderName) throws IOException {
-        File folder = new File(folderName);
+    static String[][] parseContentFiles(String folderPath) throws IOException {
+        File folder = new File(folderPath);
 
-        // throw an IOException if folderName is not an existing folder's path
+        // throw an IOException if folderPath is not an existing folder's path
         if (!folder.isDirectory()) {
-            throw new IOException("Folder \"" + folderName + "\" Could Not Be Found\n");
+            throw new IOException("Folder \"" + folderPath + "\" Could Not Be Found\n");
         }
 
         File[] files = folder.listFiles();
 
         // throw an IOException if the folder is empty
         if (null == files || 0 == files.length) {
-            throw new IOException("Folder \"" + folderName + "\" Is Empty\n");
+            throw new IOException("Folder \"" + folderPath + "\" Is Empty\n");
         }
 
         String[][] fileContents = new String[files.length][2]; // [i][0] - dosyanın adı, [i][1] - dosyanın içeriği
@@ -50,7 +54,7 @@ public class Builder {
         for (int i = 0; i < files.length; i++) {
 
             fileContents[i][0] = files[i].getName();
-            fileContents[i][1] = readFile(folderName + fileContents[i][0]);
+            fileContents[i][1] = readFile(folderPath + fileContents[i][0]);
 
         }
 
@@ -126,5 +130,9 @@ public class Builder {
         baseSB.replace(styleIndex, styleIndex + themeName.length(), themePath.toString());
 
         return baseSB;
+    }
+
+    static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
+        throw new Exception("BU METODU DAHA YAPMADIM");
     }
 }

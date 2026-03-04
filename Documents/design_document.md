@@ -63,6 +63,7 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 │   ├── index.css
 │   └── index.md
 └── Themes/
+└── ErrorLogs/
 ```
 
 <a name="key-implementations"></a>
@@ -75,10 +76,13 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 ## Component Interfaces:
 
 ### Builder.java
-
-- parseContentFiles(String folderName): "Content" klasöründeki tüm dosyaları analiz ederek bunları hafızada depolar.
-- buildSite(): "Content", "Templates", "Themes" klasörlerindeki verileri, "parseContentFiles(filename)" metodunu kullanarak "Output" klasörüne siteyi hazırlayan fonksiyon.
-- main(): "buildSite()" metodunu çağırarak işlemi başlatan ana fonksiyon.
+- **static void writeFile(String fileName, String fileContent)**: Output klasöründe bir dosya oluşturur ve içine fileContent'in içeriğini yazar.
+- **static String readFile(String filePath)**: filePath ile verilen dosya yolundaki dosyayı okur ve içeriğini String olarak döner.
+- **static String[][] parseContentFiles(String folderPath)**:"Content" ve "Templates" klasörlerindeki tüm dosyaları analiz ederek bunları hafızada depolar.
+- **static StringBuilder makeBaseFile(String[][] templates, String style)**: hebele hübele
+- **static void stringEditor(String contentName, String newContent, StringBuilder file)**: hübele höbele
+- **static void buildSite()**: "Content", "Templates", "Themes" klasörlerindeki kullanılacak verileri, "String[][] parseContentFiles(String folderPath)" metodunu kullanarak "Output" klasörüne siteyi hazırlayan fonksiyon.
+- **main()**: "buildSite()" metodunu çağırarak işlemi başlatan ana fonksiyon.
 
 ### config.toml
 

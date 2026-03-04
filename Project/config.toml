@@ -1,7 +1,7 @@
 BASE:
 baseURL: "https://osman.guru" #Websites URL
-languageCode: "tr" #Websites Main Lanuage
-theme: "PaperMod" #Selected Theme Name (You can find more on website)
+SITE_LANGUAGE: "tr" #Websites Main Lanuage
+THEME_NAME: "PaperMod" #Selected Theme Name (You can find more on website)
 SITE_TITLE: "Osman Site" #Websites Title
 SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası." #Websites Description
 AUTHOR_NAME: "Barbaros Köş (MTBBK)" #Main Author Of The Website
