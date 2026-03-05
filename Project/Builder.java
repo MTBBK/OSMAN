@@ -92,7 +92,7 @@ public class Builder {
     // folder
     static void writeFile(String fileName, String fileContent) throws IOException {
         // StringBuilder sb = new StringBuilder(fileContent);
-        // Bu niye var bilmiyom
+        // Bu ^^^ niye var bilmiyom
 
         File outputFile = new File("Project/Output/" + fileName);
         if (!outputFile.exists() && !outputFile.createNewFile()) {
@@ -110,35 +110,11 @@ public class Builder {
         }
     }
 
-    static StringBuilder makeBaseFile(String[][] templates, String style) throws IOException {
-        int baseIndex = -1;
-        for (int i = 0; i < templates.length; i++) {
-            if (templates[i][0].equals("base.html")) {
-                baseIndex = i;
-                break;
-            }
-        }
-
-        if (-1 == baseIndex) {
-            throw new IOException("base.html could not be found in Project/Templates/\n");
-        }
-
-        StringBuilder baseSB = new StringBuilder(templates[baseIndex][1]);
-
-        StringBuilder themePath = new StringBuilder("Themes/");
-        themePath.append(style);
-        themePath.append("/");
-        themePath.append(style);
-        themePath.append(".css");
-
-        String themeName = "{{ THEME_NAME }}";
-        int styleIndex = baseSB.indexOf(themeName);
-        baseSB.replace(styleIndex, styleIndex + themeName.length(), themePath.toString());
-
-        return baseSB;
+    static StringBuilder makeFile(String[] file, String config) throws Exception {
+        throw new Exception("makeFile METODUNU DAHA YAPMADIM");
     }
 
     static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
-        throw new Exception("BU METODU DAHA YAPMADIM");
+        throw new Exception("stringEditor METODU DAHA YAPMADIM");
     }
 }
