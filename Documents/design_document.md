@@ -76,12 +76,12 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 ## Component Interfaces:
 
 ### Builder.java
-- **static void writeFile(String fileName, String fileContent)**: Output klasöründe bir dosya oluşturur ve içine fileContent'in içeriğini yazar. Dosyayı yazamazsa IOException "throw"lar.
-- **static String readFile(String filePath)**: filePath ile verilen dosya yolundaki dosyayı okur ve içeriğini String olarak döner.  Dosyayı okuyamazsa IOException "throw"lar.
-- **static String[][] parseContentFiles(String folderPath)**: folderPath'te olan klasörü readFile kullanarak analiz eder ve dosyaların içeriklerini isimleriyle birlikte iki boyutlu bir diziye koyup diziyi döner. readFile'dan hata gelirse gelen hatayı "throw"lar.
-- **static void stringEditor(String contentName, String newContent, StringBuilder file)**: Verilen file'ın içinde contentName'in geçtiği yeri bulup, onu silip, yerine newContent'te gelen veriyi koyar. Herhangi bir hata olması durumunda hatayı "throw"lar.
-- **static StringBuilder makeFile(String file, String config)**: file ile aldığı veriyi config'in içeriğine bakarak stringEditor ile düzenler ve yeni sonucu StringBuilder olarak döner. Herhangi bir hata olması durumunda hatayı "throw"lar.
-- **static void buildSite()**: "config.toml" dosyasını readFile ile okuyup içeriğine göre "Content", "Templates", "Themes" klasörlerindeki kullanılacak verileri, parseContentFiles ve makeFile metodlarını kullanarak writeFile ile "Output" klasörüne siteyi hazırlayan metod. Çağırdığı metodlardan birinde hata olursa hatayı "throw"lar.
+- **static void writeFile(String filePath, String fileContent)**: Output klasöründe bir filePath'e göre bir dosya oluşturan ve içine fileContent'in içeriğini yazan metod. Dosyayı yazamazsa IOException "throw"lar.
+- **static String readFile(String filePath)**: filePath ile verilen dosya yolundaki dosyayı okuyan ve içeriğini String olarak dönen metod. Dosyayı okuyamazsa IOException "throw"lar.
+- **static String[][] parseContentFiles(String folderPath)**: folderPath'te olan klasörü readFile kullanarak analiz eden ve dosyaların içeriklerini isimleriyle birlikte iki boyutlu bir diziye koyup diziyi dönen metod. readFile'dan hata gelirse gelen hatayı "throw"lar.
+- **static void stringEditor(String contentName, String newContent, StringBuilder file)**: Verilen file'ın içinde contentName'in geçtiği yeri bulup, onu silip, yerine newContent'te gelen veriyi koyan metod. Herhangi bir hata olması durumunda hatayı "throw"lar.
+- **static StringBuilder makeFile(String file, String config)**: file ile aldığı veriyi config'in içeriğine bakarak stringEditor ile düzenleyen ve yeni sonucu StringBuilder olarak dönen metod. Herhangi bir hata olması durumunda hatayı "throw"lar.
+- **static void buildSite()**: "config.toml" dosyasını readFile ile okuyup içeriğine göre "Content", "Templates", "Themes" klasörlerindeki kullanılacak verileri; parseContentFiles ile alıp, makeFile ile düzenleyip, writeFile ile "Output" klasörüne siteyi hazırlayan metod. Çağırdığı metodlardan birinde hata olursa hatayı "throw"lar.
 - **main()**: "buildSite()" metodunu çağırarak işlemi başlatan ana metod. Metodlarda oluşabilecek hataların çıktısını ErrorLogs klasöründeki log.txt dosyasına yazar.
 
 ### config.toml

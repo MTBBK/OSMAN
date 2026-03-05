@@ -90,24 +90,26 @@ public class Builder {
 
     // takes a file name and file's text contents and creates an output in "Output"
     // folder
-    static void writeFile(String fileName, String fileContent) throws IOException {
+    static void writeFile(String filePath, String fileContent) throws IOException {
         // StringBuilder sb = new StringBuilder(fileContent);
         // Bu ^^^ niye var bilmiyom
+        throw new IOException("writeFile METODU DUZENLENMELI");
+        // File outputFile = new File("Project/Output/" + fileName);
+        // if (!outputFile.exists() && !outputFile.createNewFile()) {
+        // throw new IOException("Could Not Make File \"" + fileName + "\" On Output
+        // Folder");
+        // }
+        // FileWriter fw = new FileWriter(outputFile);
 
-        File outputFile = new File("Project/Output/" + fileName);
-        if (!outputFile.exists() && !outputFile.createNewFile()) {
-            throw new IOException("Could Not Make File \"" + fileName + "\" On Output Folder");
-        }
-        FileWriter fw = new FileWriter(outputFile);
-
-        try {
-            fw.write(fileContent);
-            fw.flush();
-        } catch (IOException e) {
-            throw new IOException("Could Not Write File \"" + fileName + "\" On Output Folder");
-        } finally {
-            fw.close();
-        }
+        // try {
+        // fw.write(fileContent);
+        // fw.flush();
+        // } catch (IOException e) {
+        // throw new IOException("Could Not Write File \"" + fileName + "\" On Output
+        // Folder");
+        // } finally {
+        // fw.close();
+        // }
     }
 
     static StringBuilder makeFile(String[] file, String config) throws Exception {
