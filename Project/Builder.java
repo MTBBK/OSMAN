@@ -11,14 +11,11 @@ public class Builder {
     public static void main(String arg[]) {
 
         try {
-            // File dir = new File("ErrorLogs");
-            // File errorFile = new File(new File("ErrorLogs"), "log.txt");
-            // if (!errorFile.exists()) {
-            // errorFile.createNewFile();
-            // }
-            // PrintStream err = new PrintStream(new FileOutputStream(errorFile));
-            // System.setErr(err);
-            // stringEditor(null, null, null);
+            // sets error's print location to log.txt in ErrorLogs
+            writeFile("Project/ErrorLogs/log.txt", null);
+            PrintStream err = new PrintStream(new FileOutputStream("Project/ErrorLogs/log.txt"));
+            System.setErr(err);
+
             buildSite();
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,35 +85,51 @@ public class Builder {
         }
     }
 
-    // takes a file name and file's text contents and creates an output in "Output"
-    // folder
+    // takes a file path and file's text contents and creates an output in "Output"
+    // folder. WORKS
     static void writeFile(String filePath, String fileContent) throws IOException {
-        // StringBuilder sb = new StringBuilder(fileContent);
-        // Bu ^^^ niye var bilmiyom
-        throw new IOException("writeFile METODU DUZENLENMELI");
-        // File outputFile = new File("Project/Output/" + fileName);
-        // if (!outputFile.exists() && !outputFile.createNewFile()) {
-        // throw new IOException("Could Not Make File \"" + fileName + "\" On Output
-        // Folder");
-        // }
-        // FileWriter fw = new FileWriter(outputFile);
+        // Checks if the file path exists for the file.
+        // Creates required folders ifthe don't already exist.
+        // Currently requires filepaths to not end with a '/' so that
+        // file's name can be extracted.
+        File folder = new File(filePath.substring(0, filePath.lastIndexOf('/')));
+        if (!folder.isDirectory()) {
+            folder.mkdirs();
+        }
 
-        // try {
-        // fw.write(fileContent);
-        // fw.flush();
-        // } catch (IOException e) {
-        // throw new IOException("Could Not Write File \"" + fileName + "\" On Output
-        // Folder");
-        // } finally {
-        // fw.close();
-        // }
+        // checks if the file exists, tries to make a new file and throws an exception
+        // if it fails.
+        File file = new File(filePath);
+        if (!file.exists() && !file.createNewFile()) {
+            throw new IOException("File: " + filePath + " could not be created on the given path.");
+        }
+
+        // creates an empty file if the content is null
+        if (null == fileContent) {
+            return;
+        }
+
+        // tries to write "fileContent" into the created file.
+        // throws an exception if it fails.
+        FileWriter fw = new FileWriter(filePath);
+        try {
+            fw.write(fileContent);
+            fw.flush();
+        } catch (IOException e) {
+            throw new IOException("File: " + filePath + " could not be written over.");
+        } finally {
+            fw.close();
+        }
     }
 
     static StringBuilder makeFile(String[] file, String config) throws Exception {
         throw new Exception("makeFile METODUNU DAHA YAPMADIM");
     }
 
+    // takes current file's content, the part that will be changed and the new part
+    // that will be placed instead of it. Then replaces the part.
     static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
-        throw new Exception("stringEditor METODU DAHA YAPMADIM");
+        int index = file.indexOf(contentName);
+        file.replace(index, index + contentName.length(), newContent);
     }
 }
