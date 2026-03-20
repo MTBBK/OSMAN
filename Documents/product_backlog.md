@@ -8,7 +8,7 @@
 | 2   | Kullanıcı, pratik bir şekilde elindeki metin veya resim dosyalarını sisteme yükleyebilecek.      | 21 |
 | 3  | Sistem, işletim sisteminden bağımsız olarak JVM üzerinden çalışacak. | 3 |
 | 4  | Kullanıcı sisteme yüklediği metin dosyaları için ayrı ayrı oluşturulmuş sayfaları bir buton listesi hâlinde ana sayfada görüp butonlardan herhangi birine tıkladığı takdirde o sayfaya erişebilecek.  | 610 |
-| 5 | Kullanıcı, isterse config dosyasını isterse de geliştireceğimiz arayüzü kullanarak oluşturmak istediği internet sitesi için bir tema tercihinde bulunabilecek ve internet sitesinin başlık, alt başlık, açıklama gibi özelliklerini bu yollarla ayarlayabilecek. | 377 |
+| 5 | Kullanıcı, config dosyasını kullanarak oluşturmak istediği internet sitesi için bir tema tercihinde bulunabilecek ve internet sitesinin başlık, alt başlık, açıklama gibi özelliklerini bu yollarla ayarlayabilecek. | 377 |
 | 6 | Kullanıcı, isterse temayı daha sonradan da değiştirebilecek ve bu esneklikten dilediği zaman faydalanabilecek. | 89 |
 | 7 |  Kullanıcı kendi cihaz depolamasının el verdiği sınırsızlıkta resim veya metin dosyasını sisteme yükleyebilecek. | 8 |
 | 8 | Kullanıcı internet sitesini oluşturduktan sonra her an modifiye edebilecek. | 13 |
