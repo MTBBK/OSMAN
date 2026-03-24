@@ -1,14 +1,14 @@
 BASE:
 baseURL: "https://osman.guru" #Websites URL
 SITE_LANGUAGE: "tr" #Websites Main Lanuage
-THEME_NAME: "PaperMod" #Selected Theme Name (You can find more on website)
+THEME_NAME: "Space" #Selected Theme Name (You can find more on website)
 SITE_TITLE: "Osman Site" #Websites Title
 SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası." #Websites Description
 AUTHOR_NAME: "Barbaros Köş (MTBBK)" #Main Author Of The Website
 FAVICON_URL: "kostebekgiller.png" #URL or path to your favicon from Content/Images/
 NAV_BAR_LINKS: #Links or subsite names for navigation panel section
 	- "https://osman.guru"
-	- "/robots.txt
+	- "/robots.txt"
 	- "/haritalar"
 COPYRIGHT_YEAR: "2026" #Current Year For The Copyright Section
 SOCIAL_LINKS: #Links for social medias
