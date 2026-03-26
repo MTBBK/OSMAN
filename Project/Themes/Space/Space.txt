@@ -1,7 +1,7 @@
 Tema Adı: Space Theme (Uzay Teması)
 Yazar: Mahmut TOSUN
-Tarih: 01.03.2026
-Version: 1.0
+Tarih: 26.03.2026
+Version: v2.0
 
 Renk Paleti :
 - Background: #0b111a
