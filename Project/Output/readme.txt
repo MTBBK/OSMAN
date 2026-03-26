@@ -1,2 +1,0 @@
-Çıktılar burada olacak
-
