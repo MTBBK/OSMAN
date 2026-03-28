@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class Builder {
-    public static void main(String arg[]) {
+    public static void main(String args[]) {
 
         try {
             // sets error's print location to log.txt in ErrorLogs
