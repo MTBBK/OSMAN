@@ -180,6 +180,7 @@ Projemiz bir internet sitesi oluşturucu olduğu için web framework kullandık.
 | Frontend Tasarımı             | Mesut Barbaros Köş           |
 | Frontend İmplementasyonu      | Mesut Barbaros Köş              |
 | Teknoloji Kıyaslamaları    | Mesut Barbaros Köş                           |
+| Budget and Resources   | Mesut Barbaros Köş                           |
 
 <a name="contributors"></a>
 ## Contributors
