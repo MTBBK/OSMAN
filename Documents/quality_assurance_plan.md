@@ -21,7 +21,7 @@ EndUserLike Test: Aracın nihai çıktısının son kullanıcının gözünden g
 <a name="quality-factors-and-metrics"></a>
 ## Quality Factors and Metrics:
 | Quality Factor | Description   | Measurement Metric |
-| ------ | ------- | ------ | ------ |
+| ------ | ------- | ------ |
 | Usability | System is easy to learn and use | User score from surveys over 75% |
 | Reliability | System works without crashes or unexpected failures
  | No critical system crashes during test period |
