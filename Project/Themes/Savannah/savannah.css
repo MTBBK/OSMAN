@@ -1,0 +1,134 @@
+/* --- 1. RENK PALETİ --- */
+:root{
+    --bg-earth:#1c1917;      /* Derin toprak */
+    --paper-text:#f5f5f4;    /* Solmuş keten */
+    --clay-dark:#292524;     /* Koyu kil */
+    --sunset-ochre:#d97706;  /* Gün batımı turuncusu */
+    --dull-gold:#b89d70;     /* Donuk altın */
+    --sand-meta:#a8a29e;     /* Sönük kum */
+    --stone-border:#44403c;  /* Taş grisi */
+}
+body{
+    background-color:var(--bg-earth); 
+    color:var(--paper-text);
+    font-family:'Georgia',serif; 
+    margin:0;
+    padding:0;
+    font-size:0.92rem;
+    line-height:1.7;
+}
+.container{
+    max-width:850px;
+    margin:0 auto;
+    padding:0 25px;
+}
+
+a{
+    color:var(--dull-gold) !important; 
+    transition:color 0.3s ease;
+    text-decoration:none;
+}
+
+a:hover{
+    color:var(--sunset-ochre) !important; 
+}
+
+.header{
+    padding:2rem 0;
+    border-bottom:3px solid var(--sunset-ochre);
+}
+
+.site-title{
+    color:var(--sunset-ochre) !important;
+    font-size:1.6rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.nav-bar a{
+    color:var(--paper-text) !important; 
+    margin-right:1.5rem;
+    font-size:0.8rem;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+
+img{ 
+    max-width:50%;
+    height:auto;                
+    display:block;
+    border:3px solid var(--clay-dark);   
+    outline:1px solid var(--stone-border);  
+    margin:2rem auto;
+    box-shadow:10px 10px 0px rgba(0, 0, 0, 0.4); 
+}
+.profile-avatar{
+    max-width:120px !important; 
+    border-radius:12px;
+}
+
+.index-welcome{
+    text-align: center;
+    padding: 4rem 0; 
+}
+
+.welcome-title{
+    font-size:clamp(2rem, 8vw, 3.5rem); 
+    color:var(--sunset-ochre) !important; 
+    margin:10px 0;
+}
+
+.welcome-intro{
+    max-width:600px;
+    margin:1rem auto 2rem;
+    color:var(--sand-meta);
+}
+
+.post-feed article,.post {
+    background-color:var(--clay-dark); 
+    padding: clamp(1.5rem, 5vw, 3rem); 
+    margin-bottom:3rem;
+    border:1px solid var(--stone-border);
+    box-shadow:12px 12px 0px rgba(0, 0, 0, 0.4);
+}
+
+.post-title,.post-title a{
+    color:var(--sunset-ochre) !important; 
+    font-size:1.8rem; 
+    line-height:1.2;
+    transition:0.3s;
+}
+
+.post-title a:hover{
+    color:var(--sunset-ochre) !important; 
+}
+
+.post-meta{
+    color:var(--sand-meta);
+    font-size:0.8rem;
+    text-transform:uppercase;
+    margin-bottom:1.5rem;
+}
+
+.post-pagination{
+    display:flex;
+    justify-content:space-between;
+    border-top:1px dashed var(--stone-border);
+    padding-top:1.5rem;
+    margin-top:2rem;
+}
+
+.footer{
+    padding:4rem 0 2rem;
+    text-align:center;
+    color:var(--sand-meta);
+    font-size:0.8rem;
+}
+
+hr { border:0; border-top:1px dashed var(--stone-border); margin-bottom:2rem; }
+
+@media (max-width: 600px){
+    img {max-width:90%;}
+    .post-pagination{flex-direction:column; text-align:center; gap:20px;}
+}

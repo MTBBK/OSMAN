@@ -5,10 +5,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.RandomAccessFile;
 
 public class Builder {
-    public static void main(String arg[]) {
+    private static Strategy strategy;
+
+    public static void main(String args[]) {
 
         try {
             // sets error's print location to log.txt in ErrorLogs
@@ -16,6 +17,7 @@ public class Builder {
             PrintStream err = new PrintStream(new FileOutputStream("Project/ErrorLogs/log.txt"));
             System.setErr(err);
 
+            // begin site building process
             buildSite();
         } catch (Exception e) {
             e.printStackTrace();
@@ -25,15 +27,31 @@ public class Builder {
 
     static void buildSite() throws Exception {
         // this string will be specified in config.toml later on
-        String theme = "Space";
-        // [i][0] - file name, [i][1] file content
-        String[][] contents = parseContentFiles("Project/Content/Texts/");
-        String[][] templates = parseContentFiles("Project/Templates/");
-        // String[][] themes = parseContentFiles("Project/Themes/" + theme + "/");
-
-        for (int i = 0; i < templates.length; i++) {
-            writeFile(templates[i][0], templates[i][1]);
+        String config = readFile("Project/config.toml");
+        System.out.println(config);
+        // index of THEME_NAME in the config file.
+        int THEME_NAMEindex = config.indexOf("THEME_NAME");
+        if (-1 == THEME_NAMEindex) {
+            throw new Exception("Failed to find \"THEME_NAME\" in the config file.");
         }
+        // index of the first " after THEME_NAME
+        int kesme1Index = config.indexOf('"', THEME_NAMEindex);
+        // selected theme's name
+        // "Project/Themes/" + themeName + "/" + themeName + ".css"
+        String themeName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
+        if (!(new File("Project/Themes/" + themeName + "/" + themeName + ".css")).exists()) {
+            throw new Exception("Selected theme could not be found in Themes folder.");
+        }
+        // [i][0] - file name, [i][1] file content
+        // String[][] contents = parseContentFiles("Project/Content/Texts/");
+        String[][] templates = parseContentFiles("Project/Templates/");
+
+        for (int i = 0; 0 != i; i++) {
+            ;
+            writeFile("Project/Output/" + templates[i][0], makeFile(templates[i], config).toString());
+        }
+
+        throw new Exception("buildSite FONKSİYONU HAZIR DEĞİL");
     }
 
     static String[][] parseContentFiles(String folderPath) throws IOException {
@@ -122,14 +140,99 @@ public class Builder {
         }
     }
 
+    // replaces file[1]'s with the appropriate parts in config and returns the
+    // result as a StringBuilder
     static StringBuilder makeFile(String[] file, String config) throws Exception {
-        throw new Exception("makeFile METODUNU DAHA YAPMADIM");
+        // properly made file content
+        StringBuilder newFile = new StringBuilder(file[1]);
+        // figure out file name
+        String fileName = (file[0].toUpperCase()).substring(0, file[0].indexOf('.'));
+        int index = config.indexOf(fileName) + 1;
+        index = config.indexOf('\n', index) + 1;
+
+        while (-1 != index) {
+            // take lines one by one
+            String line = config.substring(index, config.indexOf('\n', index));
+            String toBeChanged = config.substring(index, config.indexOf(':', index));
+            toBeChanged = "{{ " + toBeChanged + " }}";
+
+            if (config.indexOf('-') > config.indexOf('\"')) {
+                // handle array parts
+
+                // <a href="{{ SOCIAL_ICON }}"><img src="{{ SOCIAL_LINKS }}"
+                // style="width:2rem;height:2rem;"></a>
+
+            } else {
+                // handle non-array parts
+                int lineIndex = line.indexOf('"');
+                String content = line.substring(lineIndex + 1, config.indexOf('"', lineIndex + 1));
+                newFile.replace(newFile.indexOf(toBeChanged), newFile.indexOf(toBeChanged) + toBeChanged.length(),
+                        content);
+            }
+
+            index = config.indexOf('\n', index);
+        }
+
+        throw new Exception("makeFile METODU HAZIR DEĞİL");
     }
 
     // takes current file's content, the part that will be changed and the new part
     // that will be placed instead of it. Then replaces the part.
-    static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
+    public static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
         int index = file.indexOf(contentName);
         file.replace(index, index + contentName.length(), newContent);
+    }
+
+    // sets a Strategy using Factory class
+    private static void setStrategy(String option) throws Exception {
+        strategy = Factory.decideStrategy(option);
+    }
+
+    // performs the set Strategy
+    private static void performStrategy(StringBuilder file, String config) throws Exception {
+        strategy.makeChanges(file, config);
+    }
+}
+
+interface Strategy {
+    public void makeChanges(StringBuilder file, String config) throws Exception;
+}
+
+class NavbarStartegy implements Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class SocialLinksStrategy implements Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class NonArrayStartegy implements Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class Factory {
+    // factory to decide which strategy is selected in which scenario
+    static Strategy decideStrategy(String option) {
+        Strategy strategy;
+        switch (option) {
+            case "NAV_BAR_LINKS":
+                strategy = new NavbarStartegy();
+                break;
+            case "SOCIAL_LINKS":
+                strategy = new SocialLinksStrategy();
+                break;
+            default:
+                strategy = new NonArrayStartegy();
+        }
+        return strategy;
     }
 }
