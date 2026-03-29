@@ -1,0 +1,38 @@
+// https://sequencediagram.org/
+title Builder.java Sequence Diagram
+autoactivation on
+actor User
+
+
+
+User->Builder.main: run Builder.java
+Builder.main->Builder.buildSite:
+Builder.buildSite->Builder.parseContentFiles:folderPath: "Project/Templates/"
+group loop
+Builder.parseContentFiles->Builder.readFile:filePath
+Builder.readFile-->Builder.parseContentFiles:fileContents
+end
+Builder.buildSite<--Builder.parseContentFiles: templates
+Builder.buildSite->Builder.parseContentFiles: folderPath: "Project/Content/Texts/"
+group loop
+Builder.parseContentFiles->Builder.readFile:filePath
+Builder.readFile-->Builder.parseContentFiles:fileContents
+end
+Builder.buildSite<--Builder.parseContentFiles: texts
+group loop
+Builder.buildSite->Builder.makeFile: file, config
+group loop
+Builder.makeFile->Factory.decideStrategy :setStrategy(option)
+Builder.makeFile<--Factory.decideStrategy :strategy
+Builder.makeFile->Strategy.makeChanges: to the relevant strategy: performStrategy(file, config)
+group possible loop
+Builder.stringEditor <-Strategy.makeChanges:   contentName,\nnewContent, file
+Builder.stringEditor -->Strategy.makeChanges: edited file
+end
+Builder.makeFile<--Strategy.makeChanges: changed file
+end
+Builder.buildSite<--Builder.makeFile: madeFile
+Builder.buildSite->Builder.writeFile:filePath, madeFile
+Builder.writeFile-->Builder.buildSite: has written the file
+end
+Builder.main<--Builder.buildSite:built the site
