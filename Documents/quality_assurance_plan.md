@@ -30,11 +30,11 @@ EndUserLike Test: Aracın nihai çıktısının son kullanıcının gözünden g
 <a name="test-plan"></a>
 ## Test Plan:
 
-- 1: Kullanıcı, `config` dosyasını kullanarak oluşturmak istediği internet sitesi için bir tema tercihinde bulunabilecek. Adımlar: `config` dosyasına git -> İstenilen temanın adını yaz -> Programı çalıştır. Beklenen Sonuçlar: Temaya uygun internet sitesinin çıktı olarak gelmesi.
-- 2: Kullanıcı, pratik bir şekilde elindeki metin veya resim dosyalarını sisteme yükleyebilecek ve sistemi çalıştırdığında beklediği sonuçları alabilecek. Adımlar: Dosya dizinine git -> `Images` veya `Texts` klasörüne git -> Dosyaları klasöre yükle -> Programı çalıştır. Beklenen Sonuçlar: Eklenen dosyaların program çıktısında uygun yerlerde bulunması.
-- 3: Kullanıcı sisteme yüklediği metin dosyaları için ayrı ayrı oluşturulmuş sayfaları bir buton listesi hâlinde ana sayfada görüp butonlardan herhangi birine tıkladığı takdirde o sayfaya erişebilecek. Adımlar: Oluşturulan sitenin ana sayfasına gir -> Sayfa butonlarından birisine tıkla -> Sayfaya eriş. Beklenen Sonuçlar: Ana sayfadaki butonlar aracılığıyla alt sayfalara erişilebilmesi.
-- 4: Sistem, işletim sisteminden bağımsız olarak JVM üzerinden çalışacak. Adımlar: Programı Çalıştır -> Çıktıyı elde et. Beklenen Sonuçlar: Programın sorunsuz çıktı vermesi.
-- 5: Kullanıcının `config` dosyasında oluşturacağı internet sitesi için başlık ve açıklama belirleyebilmesi. Adımlar: Config dosyasına git -> İstenilen bilgileri yaz -> Programı çalıştır. Beklenen Sonuçlar: `config` dosyasındaki girdilere uygun internet sitesinin çıktı olarak gelmesi.
+- Test 1: Kullanıcı, `config` dosyasını kullanarak oluşturmak istediği internet sitesi için bir tema tercihinde bulunabilecek. Adımlar: ``` `config` dosyasına git``` -> ```İstenilen temanın adını yaz``` -> ```Programı çalıştır```. Beklenen Sonuçlar: Temaya uygun internet sitesinin çıktı olarak gelmesi.
+- Test 2: Kullanıcı, pratik bir şekilde elindeki metin veya resim dosyalarını sisteme yükleyebilecek ve sistemi çalıştırdığında beklediği sonuçları alabilecek. Adımlar: ```Dosya dizinine git``` -> ``` `Images` veya `Texts` klasörüne git``` -> ```Dosyaları klasöre yükle``` -> ```Programı çalıştır```. Beklenen Sonuçlar: Eklenen dosyaların program çıktısında uygun yerlerde bulunması.
+- Test 3: Kullanıcı sisteme yüklediği metin dosyaları için ayrı ayrı oluşturulmuş sayfaları bir buton listesi hâlinde ana sayfada görüp butonlardan herhangi birine tıkladığı takdirde o sayfaya erişebilecek. Adımlar: Oluşturulan sitenin ana sayfasına gir -> Sayfa butonlarından birisine tıkla -> Sayfaya eriş. Beklenen Sonuçlar: Ana sayfadaki butonlar aracılığıyla alt sayfalara erişilebilmesi.
+- Test 4: Sistem, işletim sisteminden bağımsız olarak JVM üzerinden çalışacak. Adımlar: Programı Çalıştır -> Çıktıyı elde et. Beklenen Sonuçlar: Programın sorunsuz çıktı vermesi.
+- Test 5: Kullanıcının `config` dosyasında oluşturacağı internet sitesi için başlık ve açıklama belirleyebilmesi. Adımlar: Config dosyasına git -> İstenilen bilgileri yaz -> Programı çalıştır. Beklenen Sonuçlar: `config` dosyasındaki girdilere uygun internet sitesinin çıktı olarak gelmesi.
 
 Hata takibi manuel olarak yapılacaktır.
 
