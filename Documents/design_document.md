@@ -18,6 +18,8 @@
 - [Design Decisions](#design-decisions)
 - - [Technology Comparisons](#technology-comparisons)
 - - [Decision Justifications](#decision-justifications)
+- [Task Matrix](#task-matrix)
+- [Contributors](#contributors)
 
 <a name="system-overview"></a>
 # System Overview
@@ -32,7 +34,7 @@ OSMAN; Java ile yazılmış, hız için optimize edilmiş ve esneklik için tasa
 
 Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single unit” olarak “deploy” edilerek geliştirilmiştir.
 Builder.java'da Factory ve Strategy tasarım örüntüleri kodun okunabilirliğini artırmak için kullanılmıştır.
-UML diyargramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
+UML diyagramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
 
 <a name="technology-stack"></a>
 ## Technology Stack:
@@ -166,4 +168,24 @@ Projemizde temel "backend" dili olarak Java programlama dilini tercih ettik.
 
 Projemiz bir internet sitesi oluşturucu olduğu için web framework kullandık.
 
+## Task Matrix
+
+
+| Görev      | Görevli                   |
+| -------------------------- | ---------------------------------------- |
+| Projenin Tanımı             | Mesut Barbaros Köş ve Melih Efe Tursun |
+| Sistem Mimarisi            | Melih Efe Tursun |
+| Backend İmplementasyonları      | Melih Efe Tursun    |
+| Tema Tasarımı           | Mahmut Tosun ve Ahmet Taha Kılınç                           |
+| Frontend Tasarımı             | Mesut Barbaros Köş           |
+| Frontend İmplementasyonu      | Mesut Barbaros Köş              |
+| Teknoloji Kıyaslamaları    | Mesut Barbaros Köş                           |
+| Budget and Resources   | Mesut Barbaros Köş                           |
+
+<a name="contributors"></a>
+## Contributors
+- Mesut Barbaros Köş
+- Melih Efe Tursun
+- Mahmut Tosun
+- Ahmet Taha Kılınç
 
