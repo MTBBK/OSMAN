@@ -184,8 +184,8 @@ public class Builder {
     }
 
     // sets a Strategy using Factory class
-    private static void setStrategy(String strat) throws Exception {
-        strategy = Factory.decideStrategy(strat);
+    private static void setStrategy(String option) throws Exception {
+        strategy = Factory.decideStrategy(option);
     }
 
     // performs the set Strategy
@@ -227,7 +227,6 @@ class Factory {
             case "NAV_BAR_LINKS":
                 strategy = new NavbarStartegy();
                 break;
-
             case "SOCIAL_LINKS":
                 strategy = new SocialLinksStrategy();
                 break;
