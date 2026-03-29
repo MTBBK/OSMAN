@@ -18,6 +18,8 @@
 - [Design Decisions](#design-decisions)
 - - [Technology Comparisons](#technology-comparisons)
 - - [Decision Justifications](#decision-justifications)
+- [Task Matrix](#task-matrix)
+- [Contributors](#contributors)
 
 <a name="system-overview"></a>
 # System Overview
@@ -166,4 +168,23 @@ Projemizde temel "backend" dili olarak Java programlama dilini tercih ettik.
 
 Projemiz bir internet sitesi oluşturucu olduğu için web framework kullandık.
 
+## Task Matrix
+
+
+| Görev      | Görevli                   |
+| -------------------------- | ---------------------------------------- |
+| Projenin Tanımı             | Mesut Barbaros Köş ve Melih Efe Tursun |
+| Sistem Mimarisi            | Melih Efe Tursun |
+| Backend İmplementasyonları      | Melih Efe Tursun    |
+| Tema Tasarımı           | Mahmut Tosun ve Ahmet Taha Kılınç                           |
+| Frontend Tasarımı             | Mesut Barbaros Köş           |
+| Frontend İmplementasyonu      | Mesut Barbaros Köş              |
+| Teknoloji Kıyaslamaları    | Mesut Barbaros Köş                           |
+
+<a name="contributors"></a>
+## Contributors
+- Mesut Barbaros Köş
+- Melih Efe Tursun
+- Mahmut Tosun
+- Ahmet Taha Kılınç
 
