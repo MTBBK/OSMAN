@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 public class Builder {
+    private static Strategy strategy;
+
     public static void main(String args[]) {
 
         try {
@@ -143,7 +145,6 @@ public class Builder {
     static StringBuilder makeFile(String[] file, String config) throws Exception {
         // properly made file content
         StringBuilder newFile = new StringBuilder(file[1]);
-
         // figure out file name
         String fileName = (file[0].toUpperCase()).substring(0, file[0].indexOf('.'));
         int index = config.indexOf(fileName) + 1;
@@ -177,8 +178,62 @@ public class Builder {
 
     // takes current file's content, the part that will be changed and the new part
     // that will be placed instead of it. Then replaces the part.
-    static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
+    public static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
         int index = file.indexOf(contentName);
         file.replace(index, index + contentName.length(), newContent);
+    }
+
+    // sets a Strategy using Factory class
+    private static void setStrategy(String strat) throws Exception {
+        strategy = Factory.decideStrategy(strat);
+    }
+
+    // performs the set Strategy
+    private static void performStrategy(StringBuilder file, String config) throws Exception {
+        strategy.makeChanges(file, config);
+    }
+}
+
+interface Strategy {
+    public void makeChanges(StringBuilder file, String config) throws Exception;
+}
+
+class NavbarStartegy implements Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class SocialLinksStrategy implements Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class NonArrayStartegy implements Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class Factory {
+    // factory to decide which strategy is selected in which scenario
+    static Strategy decideStrategy(String option) {
+        Strategy strategy;
+        switch (option) {
+            case "NAV_BAR_LINKS":
+                strategy = new NavbarStartegy();
+                break;
+
+            case "SOCIAL_LINKS":
+                strategy = new SocialLinksStrategy();
+                break;
+            default:
+                strategy = new NonArrayStartegy();
+        }
+        return strategy;
     }
 }
