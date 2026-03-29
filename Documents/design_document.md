@@ -32,7 +32,7 @@ OSMAN; Java ile yazılmış, hız için optimize edilmiş ve esneklik için tasa
 
 Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single unit” olarak “deploy” edilerek geliştirilmiştir.
 Builder.java'da Factory ve Strategy tasarım örüntüleri kodun okunabilirliğini artırmak için kullanılmıştır.
-UML diyargramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
+UML diyagramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
 
 <a name="technology-stack"></a>
 ## Technology Stack:
