@@ -23,10 +23,8 @@ EndUserLike Test: Aracın nihai çıktısının son kullanıcının gözünden g
 | Quality Factor | Description   | Measurement Metric |
 | ------ | ------- | ------ |
 | Usability | System is easy to learn and use | User score from surveys over 75% |
-| Reliability | System works without crashes or unexpected failures
- | No critical system crashes during test period |
-| Compatibility | System works across different operating systems
- | Tests for Windows and Linux but no Mac support for arbitrary reasons |
+| Reliability | System works without crashes or unexpected failures | No critical system crashes during test period |
+| Compatibility | System works across different operating systems | Tests for Windows and Linux but no Mac support for arbitrary reasons |
 | Usability | Ease of use for users | User satisfaction score from surveys |
 
 <a name="test-plan"></a>
