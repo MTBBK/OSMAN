@@ -194,25 +194,34 @@ public class Builder {
     }
 }
 
-interface Strategy {
-    public void makeChanges(StringBuilder file, String config) throws Exception;
+abstract class Strategy {
+    String option;
+
+    abstract void makeChanges(StringBuilder file, String config) throws Exception;
 }
 
-class NavbarStartegy implements Strategy {
+class NavbarStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
         // TODO Auto-generated method stub
     }
 }
 
-class SocialLinksStrategy implements Strategy {
+class SocialLinksStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
         // TODO Auto-generated method stub
     }
 }
 
-class NonArrayStartegy implements Strategy {
+class ThemeNameStrategy extends Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+    }
+}
+
+class NonArrayStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
         // TODO Auto-generated method stub
@@ -221,18 +230,21 @@ class NonArrayStartegy implements Strategy {
 
 class Factory {
     // factory to decide which strategy is selected in which scenario
-    static Strategy decideStrategy(String option) {
+    static Strategy decideStrategy(String option) throws Exception {
         Strategy strategy;
         switch (option) {
             case "NAV_BAR_LINKS":
-                strategy = new NavbarStartegy();
+                strategy = new NavbarStrategy();
                 break;
             case "SOCIAL_LINKS":
                 strategy = new SocialLinksStrategy();
                 break;
+            case "THEME_NAME":
+                strategy = new ThemeNameStrategy();
             default:
-                strategy = new NonArrayStartegy();
+                strategy = new NonArrayStrategy();
         }
+        strategy.option = option;
         return strategy;
     }
 }

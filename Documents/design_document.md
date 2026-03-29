@@ -31,6 +31,8 @@ OSMAN; Java ile yazılmış, hız için optimize edilmiş ve esneklik için tasa
 ## System Architecture:
 
 Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single unit” olarak “deploy” edilerek geliştirilmiştir.
+Builder.java'da Factory ve Strategy tasarım örüntüleri kodun okunabilirliğini artırmak için kullanılmıştır.
+UML diyargramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
 
 <a name="technology-stack"></a>
 ## Technology Stack:
@@ -76,13 +78,39 @@ Projemiz monolitik mimari üslubunda “self-contained” bir yapıda “single 
 ## Component Interfaces:
 
 ### Builder.java
+##### Builder Sınıfı
+- **private static void setStrategy(String option)**: Factory sınıfının decideStrategy metodunu kullanarak option'a göre stratejiyi belirler. Herhangi bir hata olması durumunda hatayı "throw"lar.
+- **private static void performStrategy(StringBuilder file, String config)**: Belirlenmiş stratejinin makeChanges metodunu file ve config'i argüman olarak vererek çağırır. Herhangi bir hata olması durumunda hatayı "throw"lar.
 - **static void writeFile(String filePath, String fileContent)**: Output klasöründe bir filePath'e göre bir dosya oluşturan ve içine fileContent'in içeriğini yazan metod. Dosyayı yazamazsa IOException "throw"lar.
 - **static String readFile(String filePath)**: filePath ile verilen dosya yolundaki dosyayı okuyan ve içeriğini String olarak dönen metod. Dosyayı okuyamazsa IOException "throw"lar.
 - **static String[][] parseContentFiles(String folderPath)**: folderPath'te olan klasörü readFile kullanarak analiz eden ve dosyaların içeriklerini isimleriyle birlikte iki boyutlu bir diziye koyup diziyi dönen metod. readFile'dan hata gelirse gelen hatayı "throw"lar.
 - **static void stringEditor(String contentName, String newContent, StringBuilder file)**: Verilen file'ın içinde contentName'in geçtiği yeri bulup, onu silip, yerine newContent'te gelen veriyi koyan metod. Herhangi bir hata olması durumunda hatayı "throw"lar.
-- **static StringBuilder makeFile(String file, String config)**: file ile aldığı veriyi config'in içeriğine bakarak stringEditor ile düzenleyen ve yeni sonucu StringBuilder olarak dönen metod. Herhangi bir hata olması durumunda hatayı "throw"lar.
+- **static StringBuilder makeFile(String file, String config)**: file ile aldığı veriyi config'in içeriğine göre Factory ile gerekli stratejiyi seçip düzenleyen ve yeni sonucu StringBuilder olarak dönen metod. Herhangi bir hata olması durumunda hatayı "throw"lar.
 - **static void buildSite()**: "config.toml" dosyasını readFile ile okuyup içeriğine göre "Content", "Templates", "Themes" klasörlerindeki kullanılacak verileri; parseContentFiles ile alıp, makeFile ile düzenleyip, writeFile ile "Output" klasörüne siteyi hazırlayan metod. Çağırdığı metodlardan birinde hata olursa hatayı "throw"lar.
 - **main()**: "buildSite()" metodunu çağırarak işlemi başlatan ana metod. Metodlarda oluşabilecek hataların çıktısını ErrorLogs klasöründeki log.txt dosyasına yazar.
+
+##### Strategy Abstract Sınıfı
+- **String option**: Kullanılacak stratejinin değiştireceği değişkeni tutan değişken.
+- **abstract void makeChanges(StringBuilder file, String config)**: Strategy'i implement eden sınıflar için yapılmış taslak metod.
+
+##### NavbarStrategy Sınıfı
+- Strategy arayüzünü extend eder.
+- **public void makeChanges(StringBuilder file, String config)**: config'de olan NAV_BAR_LINKS altındaki verileri uygun bir biçimde file'a ekler. Herhangi bir hata olması durumunda hatayı "throw"lar.
+
+##### SocialLinksStrategy Sınıfı
+- Strategy arayüzünü extend eder.
+- **public void makeChanges(StringBuilder file, String config)**: config'de olan SOCIAL_LINKS ve SOCIAL_ICONS altındaki verileri uygun bir biçimde file'a ekler. Herhangi bir hata olması durumunda hatayı "throw"lar.
+
+##### ThemeNameStrategy Sınıfı
+- Strategy arayüzünü extend eder.
+- **public void makeChanges(StringBuilder file, String config)**: config'de olan THEME_NAME altındaki veriyi uygun bir biçimde file'a ekler. Herhangi bir hata olması durumunda hatayı "throw"lar.
+
+##### NonArrayStrategy Sınıfı
+- Strategy arayüzünü extend eder.
+- **public void makeChanges(StringBuilder file, String config)**: config'de olan NAV_BAR_LINKS altındaki verileri uygun bir biçimde file'a ekler. Herhangi bir hata olması durumunda hatayı "throw"lar.
+
+##### Factory Sınıfı
+- **static Strategy decideStrategy(String option)**: option'a bakarak uygun Strategy'yi seçer, Strategy'nin option'unu ayarlar ve Strategy'yi döner.
 
 ### config.toml
 
