@@ -1,0 +1,12 @@
+Tema Adı: Savannah Theme (Savana Teması)
+Yazar: Ahmet Taha Kılınç
+Tarih: 29.04.2026
+Version: v1.0
+
+Renk Paleti :
+- Background: #1c1917
+- Text Primary: #f5f5f4
+- Borders/Lines: #44403c
+- Title Yellow: #d97706
+- Meta/Secondary Text: #8b949e
+- Link/Pagination: #b89d70

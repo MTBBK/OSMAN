@@ -1,9 +1,6 @@
 # OSMAN Page Template Documentation (page.html)
 
-This document explains the placeholders and design principles used in the `page.html` and `page.css` templates.
-
-## Layout Configuration
-- `{{ LAYOUT = "base.html" }}`: (Indicator) Tells the Java builder which base template to wrap this page with.
+This document explains the placeholders and design principles used in the `page.html` template.
 
 ## Placeholders Logic
 
@@ -17,7 +14,6 @@ The following placeholders should be detected and replaced by the Java Builder u
 
 ### Reading Experience
 - `{{ POST_READ_TIME }}`: Estimated time to read (e.g., "4 min read").
-- `{{ POST_UPDATED_DATE }}`: Shows if and when the post was last modified.
 
 ### Taxonomy & Discovery
 - `{{ POST_TAGS }}`: Injected list of links or text for categorical tags.
@@ -26,14 +22,6 @@ The following placeholders should be detected and replaced by the Java Builder u
 
 ### Visuals & SEO
 - `{{ FEATURED_IMAGE_URL }}`: Placeholder for a hero image at the top of the article.
-- `{{ POST_EXCERPT }}`: (Internal logic) Should be used by the builder to populate the `<meta name="description">` in the `base.html` head slot.
-
-## Styling Guidelines
-The `page.css` file targets the following semantic classes:
-- `.post`: The main container for the article.
-- `.post-header`: Contains title and metadata.
-- `.post-content`: Styles the Markdown output (images, blockquotes, code).
-- `.post-footer`: Contains tags and pagination.
 
 ---
 *Note: The Java Builder handles the replacement of these placeholders based on the metadata found in `Content` folders markdown files.*

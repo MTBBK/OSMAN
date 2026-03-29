@@ -1,2 +1,12 @@
-Güzel geziydi doğrusu.
+FEATURED_IMAGE_URL: "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2edc.png"
+POST_TITLE: "El Hamra Sarayı Gezisi"
+POST_DATE: "19/10/2020"
+POST_AUTHOR: "Büyük Albert"
+POST_TAGS: albertP.png
+	- "İspanya"
+	- "Saray"
 
+}
+
+POST_CONTENT:
+Güzel geziydi doğrusu. Harika gezdik. Ama nasıl gezdik bir bilseniz... Bir ara o kadar gezdik ki gezmekten sıkılacak olduk ama sıkıntımız geçsin diye biraz daha gezdik.
