@@ -143,34 +143,38 @@ public class Builder {
     // replaces file[1]'s with the appropriate parts in config and returns the
     // result as a StringBuilder
     static StringBuilder makeFile(String[] file, String config) throws Exception {
-        // properly made file content
-        StringBuilder newFile = new StringBuilder(file[1]);
-        // figure out file name
-        String fileName = (file[0].toUpperCase()).substring(0, file[0].indexOf('.'));
-        int index = config.indexOf(fileName) + 1;
+        StringBuilder sbFile = new StringBuilder(file[1]);
+        int index = 0;
+
+        if (-1 != file[0].indexOf("base")) { // for base
+            index = config.indexOf("BASE");
+        } else if (-1 != file[0].indexOf("index")) { // for index
+            index = config.indexOf("INDEX");
+        } else { // for unknown templates
+            // cut file[0] from 0 to first '.' to remove extension and make it all uppercase
+            // then look for it in config
+            index = config.indexOf(file[0].substring(0, file[0].indexOf('.')).toUpperCase());
+            if (-1 == index) {
+                throw new Exception("Could not find the mention in the config for the file \"" + file[0] + "\"");
+            }
+        }
+
         index = config.indexOf('\n', index) + 1;
-
         while (-1 != index) {
-            // take lines one by one
-            String line = config.substring(index, config.indexOf('\n', index));
-            String toBeChanged = config.substring(index, config.indexOf(':', index));
-            toBeChanged = "{{ " + toBeChanged + " }}";
+            int nextLine = config.indexOf('\n', index) + 1;
+            int nextDots = config.indexOf(config.indexOf(':', index));
 
-            if (config.indexOf('-') > config.indexOf('\"')) {
-                // handle array parts
-
-                // <a href="{{ SOCIAL_ICON }}"><img src="{{ SOCIAL_LINKS }}"
-                // style="width:2rem;height:2rem;"></a>
-
-            } else {
-                // handle non-array parts
-                int lineIndex = line.indexOf('"');
-                String content = line.substring(lineIndex + 1, config.indexOf('"', lineIndex + 1));
-                newFile.replace(newFile.indexOf(toBeChanged), newFile.indexOf(toBeChanged) + toBeChanged.length(),
-                        content);
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextDots > nextLine) {
+                index = nextLine;
+                continue;
             }
 
-            index = config.indexOf('\n', index);
+            String option = config.substring(index, nextDots);
+            setStrategy(option);
+            performStrategy(sbFile, config);
+            index = nextLine;
         }
 
         throw new Exception("makeFile METODU HAZIR DEĞİL");
@@ -186,11 +190,15 @@ public class Builder {
     // sets a Strategy using Factory class
     private static void setStrategy(String option) throws Exception {
         strategy = Factory.decideStrategy(option);
+        if (null == strategy) {
+            throw new Exception("Failed to set a Strategy.");
+        }
     }
 
     // performs the set Strategy
     private static void performStrategy(StringBuilder file, String config) throws Exception {
         strategy.makeChanges(file, config);
+        strategy = null;
     }
 }
 
@@ -241,6 +249,9 @@ class Factory {
                 break;
             case "THEME_NAME":
                 strategy = new ThemeNameStrategy();
+                break;
+            case "":
+                throw new Exception("Could not detect the next config variable.");
             default:
                 strategy = new NonArrayStrategy();
         }
