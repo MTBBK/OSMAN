@@ -218,7 +218,63 @@ class NavbarStrategy extends Strategy {
 class SocialLinksStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        // TODO Auto-generated method stub
+        // <a href="{{ SOCIAL_ICONS }}"><img src="{{ SOCIAL_LINKS }}"
+        // style="width:2rem;height:2rem;"></a>
+
+        int lIndex = config.indexOf('\n', config.indexOf("SOCIAL_LINKS")) + 1;
+        int iIndex = config.indexOf('\n', config.indexOf("SOCIAL_ICONS")) + 1;
+
+        if (-1 == lIndex) {
+            throw new Exception("Could not find SOCIAL_LINKS in config.toml");
+        }
+        if (-1 == iIndex) {
+            throw new Exception("Could not find SOCIAL_ICONS in config.toml");
+        }
+
+        boolean nextExists = true;
+
+        String sl = "{{ SOCIAL_LINKS }}";
+        String si = "{{ SOCIAL_ICONS }}";
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf(config.indexOf('-', lIndex));
+
+            int nextIQuote = config.indexOf('"', iIndex) + 1;
+            int nextIDash = config.indexOf(config.indexOf('-', iIndex));
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || -1 == nextLDash) {
+                nextExists = false;
+                continue;
+            }
+            if (nextIDash > nextIQuote || -1 == nextIDash) {
+                throw new Exception("SOCIAL_LINKS and SOCIAL_ICONS have different amount of elements");
+            }
+
+            StringBuilder ref = new StringBuilder(
+                    "<a href=\"{{ SOCIAL_ICONS }}\"><img src=\"{{ SOCIAL_LINKS }}\" style=\"width:2rem;height:2rem;\"></a>");
+
+            int firstLQuote = config.indexOf('"', nextLDash) + 1;
+            String lValue = config.substring(firstLQuote, config.indexOf('"', firstLQuote));
+
+            int firstIQuote = config.indexOf('"', nextIDash) + 1;
+            String iValue = config.substring(firstIQuote, config.indexOf('"', firstIQuote));
+
+            lIndex = nextLQuote;
+            iIndex = nextIQuote;
+
+            ref.replace(ref.indexOf(si), ref.indexOf(si) + si.length(), iValue);
+            ref.replace(ref.indexOf(sl), ref.indexOf(sl) + sl.length(), lValue);
+
+            result.append(ref);
+            result.append('\n');
+        }
+
+        file.replace(file.indexOf("SOCIAL_LINKS"), file.indexOf("SOCIAL_LINKS") + 12, result.toString());
     }
 }
 
@@ -232,7 +288,10 @@ class ThemeNameStrategy extends Strategy {
 class NonArrayStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        // TODO Auto-generated method stub
+        int firstQuote = config.indexOf('"', config.indexOf(option)) + 1;
+        String value = config.substring(firstQuote, config.indexOf('"', firstQuote));
+        option = "{{ " + option + " }}";
+        file.replace(file.indexOf(option), file.indexOf(option) + option.length(), value);
     }
 }
 

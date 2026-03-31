@@ -6,7 +6,5 @@ POST_TAGS: albertP.png
 	- "İspanya"
 	- "Saray"
 
-}
-
 POST_CONTENT:
 Güzel geziydi doğrusu. Harika gezdik. Ama nasıl gezdik bir bilseniz... Bir ara o kadar gezdik ki gezmekten sıkılacak olduk ama sıkıntımız geçsin diye biraz daha gezdik.
