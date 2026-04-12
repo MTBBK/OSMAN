@@ -20,6 +20,9 @@ public class Builder {
             PrintStream out = new PrintStream(new FileOutputStream("OSMAN/Project/ErrorLogs/log.txt"));
             System.setOut(out);
 
+            // print to confirm that System.err.println functions properly
+            System.err.println("Error's Stack Trace Will Be Below:");
+
             // begin site building process
             buildSite();
         } catch (Exception e) {
@@ -160,16 +163,16 @@ public class Builder {
 
         index = config.indexOf('\n', index) + 1;
         int nextLine;
-        int nextColon = config.indexOf(':', index);
+        int nextColon = 0;
+        int nextDash;
         while (0 != index && -1 != nextColon) {
             nextLine = config.indexOf('\n', index) + 1;
-            // check if there is a variable to read and skip to the next iteration if there
-            // isnt
-            if (nextColon > nextLine) {
+            nextDash = config.indexOf('-', index);
+            nextColon = config.indexOf(':', index);
+            // check if there is a variable to read and skip to the next iteration if so
+            if ((nextColon > nextDash && -1 != nextDash) || nextColon > nextLine || -1 == nextColon) {
                 index = nextLine;
-                nextColon = config.indexOf(':', index);
                 System.out.println("makeFile: Successfully skipped to the next line.");
-                continue;
             } else {
                 String option = config.substring(index, nextColon);
                 System.out.println("makeFile: Successfully found the option: \"" + option + "\".");
@@ -178,8 +181,7 @@ public class Builder {
                 performStrategy(sbFile, config);
                 System.out.println("makeFile: Successfully performed performStrategy(\"" + option + "\") in the file.");
                 index = nextLine;
-                nextColon = config.indexOf(':', index);
-                System.out.println("makeFile: Successfully changed \"" + option + "\" in the file.");
+                System.out.println("makeFile: Successfully finished changing \"" + option + "\" in the file.");
             }
         }
         System.out.println("makeFile: Successfully finished making the file.");
