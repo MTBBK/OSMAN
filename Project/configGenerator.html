@@ -1,0 +1,48 @@
+<html>
+<body>
+   <h2>OSMAN config generator</h2>
+   <p>Enter the file content:</p>
+   <textarea id= "baseURL" placeholder="https://osman.guru"></textarea>
+   <textarea id= "SITE_LANGUAGE" placeholder="tr"></textarea>
+   <textarea id= "THEME_NAME" placeholder="Space"></textarea>
+   <textarea id= "SITE_TITLE" placeholder="Osman Site"></textarea>
+   <textarea id= "SITE_DESCRIPTION" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
+   <textarea id= "AUTHOR_NAME" placeholder="Barbaros Köş (MTBBK)"></textarea>
+   <textarea id= "FAVICON_URL" placeholder="kostebekgiller.png"></textarea>
+   <textarea id= "COPYRIGHT_YEAR" placeholder="2026"></textarea>
+   <textarea id= "WELCOME_TITLE" placeholder="Osman'ın Sitesi"></textarea>
+   <textarea id= "INTRO_ABOUT_ME" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
+   <textarea id= "AUTHOR_AVATAR_URL" placeholder="osman.png"></textarea>
+
+   <br/><br/>
+   <button onclick="downloadFile()">Save File</button>
+
+   <script>
+      const downloadFile = () => {
+		  const link = document.createElement("a");
+		  const baseURL = document.getElementById("baseURL").value;
+		  const SITE_LANGUAGE = document.getElementById("SITE_LANGUAGE").value;
+		  const THEME_NAME = document.getElementById("THEME_NAME").value;
+		  const SITE_TITLE = document.getElementById("SITE_TITLE").value;
+		  const SITE_DESCRIPTION = document.getElementById("SITE_DESCRIPTION").value;
+		  const AUTHOR_NAME = document.getElementById("AUTHOR_NAME").value;
+		  const FAVICON_URL = document.getElementById("FAVICON_URL").value;
+		  const COPYRIGHT_YEAR = document.getElementById("COPYRIGHT_YEAR").value;
+		  const WELCOME_TITLE = document.getElementById("WELCOME_TITLE").value;
+		  const INTRO_ABOUT_ME = document.getElementById("INTRO_ABOUT_ME").value;
+		  const AUTHOR_AVATAR_URL = document.getElementById("AUTHOR_AVATAR_URL").value;
+		  
+		  var config = [];
+		  config.push(
+			  `BASE:\nbaseURL: "${baseURL}"\nSITE_LANGUAGE: "${SITE_LANGUAGE}"\nTHEME_NAME: "${THEME_NAME}"\nSITE_TITLE: "${SITE_TITLE}"\nSITE_DESCRIPTION: "${SITE_DESCRIPTION}"\nAUTHOR_NAME: "${AUTHOR_NAME}"\nFAVICON_URL: "${FAVICON_URL}"\nCOPYRIGHT_YEAR: "${COPYRIGHT_YEAR}"\n\nINDEX:\nWELCOME_TITLE: "${WELCOME_TITLE}"\nINTRO_ABOUT_ME: "${INTRO_ABOUT_ME}"\nAUTHOR_AVATAR_URL: "${AUTHOR_AVATAR_URL}"`
+		  );
+		
+         const file = new Blob([config], { type: 'text/plain' });
+         link.href = URL.createObjectURL(file);
+         link.download = "config.toml";
+         link.click();
+         URL.revokeObjectURL(link.href);
+      };
+   </script>
+</body>
+</html>

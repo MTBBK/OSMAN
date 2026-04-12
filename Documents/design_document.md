@@ -50,6 +50,7 @@ UML diyagramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
 
 ```
 ├── config.toml
+├── configGenerator.html
 ├── Builder.java
 ├── Content/
 │   ├── _index.md
@@ -58,14 +59,8 @@ UML diyagramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
 ├── Output/
 ├── Templates/
 │   ├── base.html
-│   ├── base.css
-│   ├── base.md
 │   ├── page.html
-│   ├── page.css
-│   ├── page.md
 │   ├── index.html
-│   ├── index.css
-│   └── index.md
 └── Themes/
 └── ErrorLogs/
 ```
@@ -74,6 +69,7 @@ UML diyagramları tasarım örüntüleri eklenecek şekilde güncellenmiştir.
 ## Key Implementations:
 
 - config.toml: Ana konfigürasyon dosyası, kullanıcıların oluşturmak istediklerini internet sitesinin; başlık, alt-başlık, tema gibi özelliklerini ayarlaması için yerleştirilmiş bir dosyadır.
+- configBuilder.html: Config dosyasını oluşturmayı kolaylaştıran bir web arayüz.
 - Builder.java: Kullanıcıların config.toml dosyasından gerekli ayarlamaları yaptıktan ve sayfa oluşturmak için eklemek istedikleri belgeleri yükledikten sonra çalıştıracakları ve siteyi oluşturacak olan ana modüldür.
 
 <a name="component-interfaces"></a>
