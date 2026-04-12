@@ -7,13 +7,13 @@ SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası." #Websites Description
 AUTHOR_NAME: "Barbaros Köş (MTBBK)" #Main Author Of The Website
 FAVICON_URL: "kostebekgiller.png" #URL or path to your favicon from Content/Images/
 NAV_BAR_LINKS: #Links or subsite names for navigation panel section
-	- "https://osman.guru"
-	- "/robots.txt"
-	- "/haritalar"
+	- "Ana Sayfa", "https://osman.guru"
+	- "Robotlar", "/robots.txt"
+	- "Harita", "/haritalar"
 COPYRIGHT_YEAR: "2026" #Current Year For The Copyright Section
 SOCIAL_LINKS: #Links for social medias
-	- "https://buymeacoffee.com/mtbbk"
-	- "https://github.com/MTBBK"
+	- "Buy Me A Coffee", "https://buymeacoffee.com/mtbbk"
+	- "Github", "https://github.com/MTBBK"
 
 INDEX:
 WELCOME_TITLE: "Osman'ın Sitesi" #Main greeting title.
