@@ -229,7 +229,7 @@ class NavbarStrategy extends Strategy {
 class SocialLinksStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        // <a href="{{ SOCIAL_ICONS }}"><img src="{{ SOCIAL_LINKS }}"
+        // <a href="{{ SOCIAL_LINKS }}"><img src="{{ SOCIAL_ICONS }}"
         // style="width:2rem;height:2rem;"></a>
         System.out.println("\nSocialLinksStrategy: Begin.");
         System.out.println("SocialLinksStrategy: Does not work as intended.");
@@ -253,10 +253,10 @@ class SocialLinksStrategy extends Strategy {
 
         while (nextExists) {
             int nextLQuote = config.indexOf('"', lIndex) + 1;
-            int nextLDash = config.indexOf(config.indexOf('-', lIndex));
+            int nextLDash = config.indexOf('-', lIndex);
 
             int nextIQuote = config.indexOf('"', iIndex) + 1;
-            int nextIDash = config.indexOf(config.indexOf('-', iIndex));
+            int nextIDash = config.indexOf('-', iIndex);
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
@@ -269,7 +269,7 @@ class SocialLinksStrategy extends Strategy {
             }
 
             StringBuilder ref = new StringBuilder(
-                    "<a href=\"{{ SOCIAL_ICONS }}\"><img src=\"{{ SOCIAL_LINKS }}\" style=\"width:2rem;height:2rem;\"></a>");
+                    "<a href=\"{{ SOCIAL_LINKS }}\"><img src=\"{{ SOCIAL_ICONS }}\" style=\"width:2rem;height:2rem;\"></a>\n\t\t\t");
 
             int firstLQuote = config.indexOf('"', nextLDash) + 1;
             String lValue = config.substring(firstLQuote, config.indexOf('"', firstLQuote));
@@ -277,18 +277,16 @@ class SocialLinksStrategy extends Strategy {
             int firstIQuote = config.indexOf('"', nextIDash) + 1;
             String iValue = config.substring(firstIQuote, config.indexOf('"', firstIQuote));
 
-            lIndex = nextLQuote;
-            iIndex = nextIQuote;
+            lIndex = config.indexOf('\n', lIndex) + 1;
+            iIndex = config.indexOf('\n', iIndex) + 1;
 
-            ref.replace(ref.indexOf(si), ref.indexOf(si) + si.length(), iValue);
-            ref.replace(ref.indexOf(sl), ref.indexOf(sl) + sl.length(), lValue);
+            Builder.stringEditor(si, iValue, ref);
+            Builder.stringEditor(sl, lValue, ref);
 
             result.append(ref);
-            result.append('\n');
         }
-
-        file.replace(file.indexOf("SOCIAL_LINKS"), file.indexOf("SOCIAL_LINKS") + 12, result.toString());
-        System.out.println("\nSocialLinksStrategy: End.\n");
+        Builder.stringEditor("{{ SOCIAL_LINKS }}", result.toString(), file);
+        System.out.println("SocialLinksStrategy: End.\n");
     }
 }
 
@@ -347,6 +345,7 @@ class Factory {
                 strategy = new NavbarStrategy();
                 System.out.println("Factory: Chose NavbarStrategy.");
                 break;
+            case "SOCIAL_ICONS":
             case "SOCIAL_LINKS":
                 strategy = new SocialLinksStrategy();
                 System.out.println("Factory: Chose SocialLinksStrategy.");
