@@ -19,12 +19,31 @@ public class Builder {
             writeFile("OSMAN/Project/ErrorLogs/log.txt", null);
             PrintStream out = new PrintStream(new FileOutputStream("OSMAN/Project/ErrorLogs/log.txt"));
             System.setOut(out);
+            System.out.println("main: Begin.");
 
             // print to confirm that System.err.println functions properly
             System.err.println("Error's Stack Trace Will Be Below:");
 
+            // clean the Output folder for the new output
+            File folder = new File("OSMAN/Project/Output");
+            for (File file : folder.listFiles()) {
+                // ignore .gitignore because duh.
+                if (file.getName().equals(".gitignore")) {
+                    continue;
+                }
+
+                if (file.delete()) {
+                    System.out.println("main: Successfully deleted file \"" + file.getName() + "\" in Output folder.");
+                } else {
+                    throw new IOException("Could not clear the OSMAN/Project/Output folder");
+                }
+            }
+
             // begin site building process
+
+            // TODO: Empty Output folder before starting.
             buildSite();
+            System.out.println("main: End.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,7 +51,7 @@ public class Builder {
     }
 
     static void buildSite() throws Exception {
-        System.out.println("buildFile: Begin.");
+        System.out.println("\nbuildFile: Begin.");
         // this string will be specified in config.toml later on
         String config = readFile("OSMAN/Project/config.toml");
         System.out.println("buildSite: Successfully read the config.");
@@ -48,18 +67,21 @@ public class Builder {
             if (templates[i][0].equals("base.html")) {
                 base = makeFile(templates[i], config);
                 System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
-                        + "\" and printed its output to Output folder.");
+                        + "\".");
             }
             if (templates[i][0].equals("index.html")) {
                 index = makeFile(templates[i], config);
                 System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
-                        + "\" and printed its output to Output folder.");
+                        + "\".");
             }
         }
-        stringEditor("{{ CONTENT }}", index.toString(), base);
-        writeFile("OSMAN/Project/Output/index.html", base.toString());
+        StringBuilder indexPage = new StringBuilder(base);
+        stringEditor("{{ CONTENT }}", index.toString(), indexPage);
+        System.out.println("buildSite: Successfully merged base and index.");
 
-        System.out.println("buildFile: End.");
+        writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
+
+        System.out.println("buildFile: End.\n");
     }
 
     static String[][] parseContentFiles(String folderPath) throws IOException {
