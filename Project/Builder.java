@@ -10,7 +10,7 @@ public class Builder {
     private static Strategy strategy;
 
     public static void main(String args[]) {
-
+        long startTime = System.currentTimeMillis();
         try {
             // sets error's print location to log.txt in ErrorLogs
             writeFile("OSMAN/Project/ErrorLogs/errorLog.txt", null);
@@ -40,14 +40,14 @@ public class Builder {
             }
 
             // begin site building process
-
-            // TODO: Empty Output folder before starting.
             buildSite();
-            System.out.println("main: End.");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println(
+                "main: Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+        System.out.println("main: End.");
     }
 
     static void buildSite() throws Exception {
