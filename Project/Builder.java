@@ -54,8 +54,8 @@ public class Builder {
 
     static void buildSite() throws Exception {
         System.out.println("\nbuildFile: Begin.");
-        // this string will be specified in config.toml later on
-        String config = readFile("OSMAN/Project/config.toml");
+
+        String config = readFile("OSMAN/Project/config.osman");
         System.out.println("buildSite: Successfully read the config.");
 
         // [i][0] - file name, [i][1] file content
