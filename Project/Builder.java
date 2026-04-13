@@ -96,11 +96,14 @@ public class Builder {
         }
         System.out.println("buildSite: Successfully made all of the site pages.");
 
+        // handle index.html
         StringBuilder indexPage = new StringBuilder(base);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         System.out.println("buildSite: Successfully merged base and index.");
+        stringEditor("{{ TOTAL_POSTS_COUNT }}", "" + pages.length, indexPage);
 
         writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
+
         System.out.println("buildSite: Successfully made \"index.html\".");
 
         for (int i = 0; i < textContent.length; i++) {
@@ -243,9 +246,9 @@ public class Builder {
                 String option = config.substring(index + 1, nextColon);
                 System.out.println("makeFile: Successfully found the option: \"" + option + "\".");
                 setStrategy(option);
-                System.out.println("makeFile: Successfully performed setStrategy(\"" + option + "\") in the file.");
+                System.out.println("makeFile: Successfully executed setStrategy(\"" + option + "\") on the file.");
                 performStrategy(sbFile, config);
-                System.out.println("makeFile: Successfully performed performStrategy(\"" + option + "\") in the file.");
+                System.out.println("makeFile: Successfully executed performStrategy(\"" + option + "\") on the file.");
                 index = nextLine;
                 System.out.println("makeFile: Successfully finished changing \"" + option + "\" in the file.");
             }
@@ -506,14 +509,13 @@ class NonArrayStrategy extends Strategy {
         int firstQuote = config.indexOf('"', config.indexOf(option)) + 1;
         String value = config.substring(firstQuote, config.indexOf('"', firstQuote));
         option = "{{ " + option + " }}";
-        int fOptionIndex = file.indexOf(option);
-        if (-1 == fOptionIndex) {
+        if (-1 == file.indexOf(option)) {
             System.out.println(
                     "NonArrayStrategy: Could not find the option \"" + option + "\" in the file, it will be skipped.");
             System.out.println("NonArrayStrategy: End.\n");
             return;
         } else {
-            file.replace(fOptionIndex, fOptionIndex + option.length(), value);
+            Builder.stringEditor(option, value, file);
             System.out.println("NonArrayStrategy: End.\n");
         }
 
@@ -579,15 +581,35 @@ class PostContentStrategy extends Strategy {
         int contentStart = config.indexOf('\n', config.indexOf(option)) + 1;
         String value = config.substring(contentStart);
         option = "{{ " + option + " }}";
-        int fOptionIndex = file.indexOf(option);
-        if (-1 == fOptionIndex) {
+
+        if (-1 == file.indexOf(option)) {
+            // if the option isnt available in the file
             System.out.println(
                     "PostContentStrategy: Could not find the option \"" + option
                             + "\" in the file, it will be skipped.");
             System.out.println("PostContentStrategy: End.\n");
             return;
         } else {
-            file.replace(fOptionIndex, fOptionIndex + option.length(), value);
+
+            // {{ POST_READ_TIME }} handling part. (Yes, it just counts spaces.
+            // Yes, I trust people to not leave ten thousand spaces.)
+            System.out.println("PostContentStrategy: Starting to calculate \"POST_READ_TIME\".");
+            int wordNum = 0;
+            int index = value.indexOf(' ');
+            while (-1 != index) {
+                wordNum++;
+                index = value.indexOf(' ', index + 1);
+            }
+            wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
+
+            if (wordNum > 0) {
+                Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: " + wordNum + " minutes", file);
+            } else {
+                Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: Under one minute.", file);
+            }
+            System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
+
+            Builder.stringEditor(option, value, file);
             System.out.println("PostContentStrategy: End.\n");
         }
         System.out.println("PostContentStrategy: End.\n");
