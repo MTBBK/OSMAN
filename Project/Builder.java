@@ -26,8 +26,26 @@ public class Builder {
             // print to confirm that System.err.println functions properly
             System.err.println("Error's Stack Trace Will Be Below:");
 
+            // clean the Output/Images folder to be able to delete Output's contents
+            File folder = new File("OSMAN/Project/Output/Images");
+            if (folder.isDirectory()) {
+                for (File file : folder.listFiles()) {
+                    // ignore .gitignore because duh.
+                    if (file.getName().equals(".gitignore")) {
+                        continue;
+                    }
+
+                    if (file.delete()) {
+                        System.out.println(
+                                "main: Successfully deleted file \"" + file.getName() + "\" in Output/Images folder.");
+                    } else {
+                        throw new IOException("Could not clear the OSMAN/Project/Output/Images folder");
+                    }
+                }
+            }
+
             // clean the Output folder for the new output
-            File folder = new File("OSMAN/Project/Output");
+            folder = new File("OSMAN/Project/Output");
             for (File file : folder.listFiles()) {
                 // ignore .gitignore because duh.
                 if (file.getName().equals(".gitignore")) {
@@ -87,6 +105,9 @@ public class Builder {
             }
         }
 
+        // TODO: we need to get page titles, page dates, page tags and page contents'
+        // first 20 words. to put them in the stupid index posts section thingamabob
+
         // Sort textContent based on POST_DATEs.
         Arrays.sort(textContent, new Comparator<String[]>() {
             @Override
@@ -110,6 +131,12 @@ public class Builder {
                 return comp;
             }
         });
+
+        String[] pageDates = new String[textContent.length];
+        for (int i = 0; i < textContent.length; i++) {
+            int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_DATE")) + 1;
+            pageDates[i] = textContent[i][1].substring(first1Quote, textContent[1][1].indexOf('"', first1Quote));
+        }
 
         // handling page.htmls
         System.out.println("buildSite: Starting to make site pages.");
@@ -153,7 +180,7 @@ public class Builder {
         StringBuilder indexPage = new StringBuilder(base);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         System.out.println("buildSite: Successfully merged base and index.");
-        stringEditor("{{ TOTAL_POSTS_COUNT }}", "" + pages.length, indexPage);
+        stringEditor("{{ TOTAL_POSTS_COUNT }}", "Total Posts: " + pages.length, indexPage);
 
         writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
 
@@ -458,6 +485,7 @@ class SocialLinksStrategy extends Strategy {
     }
 }
 
+// TODO: array's read other arrays directly below them so go fix that
 class SocialIconsStrategy extends Strategy {
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
@@ -568,7 +596,9 @@ class NonArrayStrategy extends Strategy {
             System.out.println("NonArrayStrategy: End.\n");
             return;
         } else {
-            Builder.stringEditor(option, value, file);
+            do {
+                Builder.stringEditor(option, value, file);
+            } while (-1 != file.indexOf(option));
             System.out.println("NonArrayStrategy: End.\n");
         }
 
