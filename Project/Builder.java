@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Builder {
     private static Strategy strategy;
@@ -52,8 +54,8 @@ public class Builder {
 
     static void buildSite() throws Exception {
         System.out.println("\nbuildFile: Begin.");
-        // this string will be specified in config.toml later on
-        String config = readFile("OSMAN/Project/config.toml");
+
+        String config = readFile("OSMAN/Project/config.osman");
         System.out.println("buildSite: Successfully read the config.");
 
         // [i][0] - file name, [i][1] file content
@@ -85,6 +87,30 @@ public class Builder {
             }
         }
 
+        // Sort textContent based on POST_DATEs.
+        Arrays.sort(textContent, new Comparator<String[]>() {
+            @Override
+            public int compare(String[] o1, String[] o2) {
+                int first1Quote = o1[1].indexOf('"', o1[1].indexOf("POST_DATE")) + 1;
+                String[] date1 = o1[1].substring(first1Quote, o1[1].indexOf('"', first1Quote)).split("/");
+                int first2Quote = o2[1].indexOf('"', o2[1].indexOf("POST_DATE")) + 1;
+                String[] date2 = o2[1].substring(first2Quote, o2[1].indexOf('"', first2Quote)).split("/");
+                int comp = -1;
+                if (3 != date1.length) {
+                    return -1;
+                } else if (3 != date2.length) {
+                    return 1;
+                }
+                for (int i = 2; i > -1; i--) {
+                    comp = date1[i].compareTo(date2[i]);
+                    if (0 != comp) {
+                        return comp;
+                    }
+                }
+                return comp;
+            }
+        });
+
         // handling page.htmls
         System.out.println("buildSite: Starting to make site pages.");
         StringBuilder[] pages = new StringBuilder[textContent.length];
@@ -92,7 +118,34 @@ public class Builder {
             String[] arr = { textContent[i][0], page };
             pages[i] = new StringBuilder(base);
             stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
-            System.out.println("buildSite: Successfully \"" + textContent[i][0] + "\" page.");
+
+            if (0 != i) {
+                // <a href="ElHamraSarayiGezisi01.html">Previous Post</a>
+                stringEditor(
+                        "{{ PREVIOUS_POST }}", "<a href=\"./"
+                                + textContent[i - 1][0].substring(0, textContent[i - 1][0].indexOf(".md"))
+                                + ".html\">Previous Post</a>",
+                        pages[i]);
+            } else {
+                stringEditor(
+                        "{{ PREVIOUS_POST }}", "<a href=\"./index.html\">Previous Post</a>", pages[i]);
+            }
+
+            if (textContent.length - 1 != i) {
+                // <a href="ElHamraSarayiGezisi01.html">Next Post</a>
+                stringEditor(
+                        "{{ NEXT_POST }}", "<a href=\"./"
+                                + textContent[i + 1][0].substring(0, textContent[i + 1][0].indexOf(".md"))
+                                + ".html\">Next Post</a>",
+                        pages[i]);
+            } else {
+                stringEditor(
+                        "{{ NEXT_POST }}", "<a href=\"./index.html\">Next Post</a>", pages[i]);
+
+            }
+
+            System.out.println("buildSite: Successfully made \"" + textContent[i][0] + "\" page.");
+
         }
         System.out.println("buildSite: Successfully made all of the site pages.");
 

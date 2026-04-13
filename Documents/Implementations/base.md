@@ -18,12 +18,9 @@ The following placeholders should be detected and replaced by the Java Builder u
 - `{{ NAV_BAR_LINKS }}`: A collection of <a> tags for the top navigation menu.
 - `{{ CONTENT }}`: The primary injection point for page-specific HTML content.
 
-### Style & Customization
-- `{{ HEAD_EXTRA }}`: A slot for injecting additional meta tags, scripts, or styles per page.
-
 ### Footer & Integration
-- `{{ COPYRIGHT_YEAR }}`: The current year for the copyright notice.
 - `{{ SOCIAL_LINKS }}`: A collection of <a> tags for social media profile links.
+- `{{ COPYRIGHT_YEAR }}`: The current year for the copyright notice.
 
 ## Design Principles
 

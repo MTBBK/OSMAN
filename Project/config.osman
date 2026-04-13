@@ -10,10 +10,10 @@ NAV_BAR_LINKS: #Links or subsite names for navigation panel section
 	- "Ana Sayfa", "https://osman.guru"
 	- "Robotlar", "/robots.txt"
 	- "Harita", "/haritalar"
-COPYRIGHT_YEAR: "2026" #Current Year For The Copyright Section
 SOCIAL_LINKS: #Links for social medias
 	- "Buy Me A Coffee", "https://buymeacoffee.com/mtbbk"
 	- "Github", "https://github.com/MTBBK"
+COPYRIGHT_YEAR: "2026" #Current Year For The Copyright Section
 
 INDEX:
 WELCOME_TITLE: "Osman'ın Sitesi" #Main greeting title.
