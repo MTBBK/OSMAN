@@ -14,7 +14,6 @@ The following placeholders should be detected and replaced by the Java Builder u
 - `{{ THEME_NAME }}`: Name for the selected theme.
 
 ### Layout & Navigation
-- `{{ LOGO_AREA }}`: Injected HTML for the site logo (either an <img> tag or plain text).
 - `{{ NAV_BAR_LINKS }}`: A collection of <a> tags for the top navigation menu.
 - `{{ CONTENT }}`: The primary injection point for page-specific HTML content.
 
