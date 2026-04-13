@@ -10,48 +10,109 @@ public class Builder {
     private static Strategy strategy;
 
     public static void main(String args[]) {
-
+        long startTime = System.currentTimeMillis();
         try {
             // sets error's print location to log.txt in ErrorLogs
-            writeFile("Project/ErrorLogs/log.txt", null);
-            PrintStream err = new PrintStream(new FileOutputStream("Project/ErrorLogs/log.txt"));
+            writeFile("OSMAN/Project/ErrorLogs/errorLog.txt", null);
+            PrintStream err = new PrintStream(new FileOutputStream("OSMAN/Project/ErrorLogs/errorLog.txt"));
             System.setErr(err);
+            writeFile("OSMAN/Project/ErrorLogs/log.txt", null);
+            PrintStream out = new PrintStream(new FileOutputStream("OSMAN/Project/ErrorLogs/log.txt"));
+            System.setOut(out);
+            System.out.println("main: Begin.");
+
+            // print to confirm that System.err.println functions properly
+            System.err.println("Error's Stack Trace Will Be Below:");
+
+            // clean the Output folder for the new output
+            File folder = new File("OSMAN/Project/Output");
+            for (File file : folder.listFiles()) {
+                // ignore .gitignore because duh.
+                if (file.getName().equals(".gitignore")) {
+                    continue;
+                }
+
+                if (file.delete()) {
+                    System.out.println("main: Successfully deleted file \"" + file.getName() + "\" in Output folder.");
+                } else {
+                    throw new IOException("Could not clear the OSMAN/Project/Output folder");
+                }
+            }
 
             // begin site building process
             buildSite();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println(
+                "main: Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+        System.out.println("main: End.");
     }
 
     static void buildSite() throws Exception {
+        System.out.println("\nbuildFile: Begin.");
         // this string will be specified in config.toml later on
-        String config = readFile("Project/config.toml");
-        System.out.println(config);
-        // index of THEME_NAME in the config file.
-        int THEME_NAMEindex = config.indexOf("THEME_NAME");
-        if (-1 == THEME_NAMEindex) {
-            throw new Exception("Failed to find \"THEME_NAME\" in the config file.");
-        }
-        // index of the first " after THEME_NAME
-        int kesme1Index = config.indexOf('"', THEME_NAMEindex);
-        // selected theme's name
-        // "Project/Themes/" + themeName + "/" + themeName + ".css"
-        String themeName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
-        if (!(new File("Project/Themes/" + themeName + "/" + themeName + ".css")).exists()) {
-            throw new Exception("Selected theme could not be found in Themes folder.");
-        }
+        String config = readFile("OSMAN/Project/config.toml");
+        System.out.println("buildSite: Successfully read the config.");
+
         // [i][0] - file name, [i][1] file content
-        // String[][] contents = parseContentFiles("Project/Content/Texts/");
-        String[][] templates = parseContentFiles("Project/Templates/");
+        // String[][] contents = parseContentFiles("OSMAN/Project/Content/Texts/");
+        String[][] templates = parseContentFiles("OSMAN/Project/Templates/");
+        System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Templates/\").");
 
-        for (int i = 0; 0 != i; i++) {
-            ;
-            writeFile("Project/Output/" + templates[i][0], makeFile(templates[i], config).toString());
+        String[][] textContent = parseContentFiles("OSMAN/Project/Content/Texts/");
+        System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Content/Texts/\").");
+
+        StringBuilder base = new StringBuilder();
+        StringBuilder index = new StringBuilder();
+        String page = "";
+
+        for (int i = 0; templates.length > i; i++) {
+            if (templates[i][0].equals("base.html")) {
+                base = makeFile(templates[i], config);
+                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
+                        + "\".");
+            }
+            if (templates[i][0].equals("index.html")) {
+                index = makeFile(templates[i], config);
+                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
+                        + "\".");
+            }
+            if (templates[i][0].equals("page.html")) {
+                page = templates[i][1];
+                System.out.println("buildSite: Successfully grabbed \"" + templates[i][0] + "\".");
+            }
         }
 
-        throw new Exception("buildSite FONKSİYONU HAZIR DEĞİL");
+        // handling page.htmls
+        System.out.println("buildSite: Starting to make site pages.");
+        StringBuilder[] pages = new StringBuilder[textContent.length];
+        for (int i = 0; i < textContent.length; i++) {
+            String[] arr = { textContent[i][0], page };
+            pages[i] = new StringBuilder(base);
+            stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
+            System.out.println("buildSite: Successfully \"" + textContent[i][0] + "\" page.");
+        }
+        System.out.println("buildSite: Successfully made all of the site pages.");
+
+        // handle index.html
+        StringBuilder indexPage = new StringBuilder(base);
+        stringEditor("{{ CONTENT }}", index.toString(), indexPage);
+        System.out.println("buildSite: Successfully merged base and index.");
+        stringEditor("{{ TOTAL_POSTS_COUNT }}", "" + pages.length, indexPage);
+
+        writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
+
+        System.out.println("buildSite: Successfully made \"index.html\".");
+
+        for (int i = 0; i < textContent.length; i++) {
+            String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            writeFile("OSMAN/Project/Output/" + fileName + ".html", pages[i].toString());
+            System.out.println("buildSite: Successfully made \"" + fileName + "\".");
+        }
+
+        System.out.println("buildFile: End.\n");
     }
 
     static String[][] parseContentFiles(String folderPath) throws IOException {
@@ -83,7 +144,7 @@ public class Builder {
     }
 
     // takes text file's name and reads text file and return its contents as a sting
-    static String readFile(String filePath) throws IOException {
+    public static String readFile(String filePath) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         try {
             StringBuilder sb = new StringBuilder();
@@ -105,7 +166,7 @@ public class Builder {
 
     // takes a file path and file's text contents and creates an output in "Output"
     // folder. WORKS
-    static void writeFile(String filePath, String fileContent) throws IOException {
+    public static void writeFile(String filePath, String fileContent) throws IOException {
         // Checks if the file path exists for the file.
         // Creates required folders ifthe don't already exist.
         // Currently requires filepaths to not end with a '/' so that
@@ -143,41 +204,58 @@ public class Builder {
     // replaces file[1]'s with the appropriate parts in config and returns the
     // result as a StringBuilder
     static StringBuilder makeFile(String[] file, String config) throws Exception {
+        System.out.println("\nmakeFile: Begin.");
         StringBuilder sbFile = new StringBuilder(file[1]);
         int index = 0;
 
         if (-1 != file[0].indexOf("base")) { // for base
             index = config.indexOf("BASE");
+            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
         } else if (-1 != file[0].indexOf("index")) { // for index
             index = config.indexOf("INDEX");
+            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
         } else { // for unknown templates
             // cut file[0] from 0 to first '.' to remove extension and make it all uppercase
             // then look for it in config
             index = config.indexOf(file[0].substring(0, file[0].indexOf('.')).toUpperCase());
+            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
             if (-1 == index) {
-                throw new Exception("Could not find the mention in the config for the file \"" + file[0] + "\"");
+                System.out.println(
+                        "makeFile: Failed to find the start of \"" + file[0]
+                                + "\" file's part. Will begin from the top of the file");
             }
         }
 
-        index = config.indexOf('\n', index) + 1;
-        while (-1 != index) {
-            int nextLine = config.indexOf('\n', index) + 1;
-            int nextDots = config.indexOf(config.indexOf(':', index));
-
-            // check if there is a variable to read and skip to the next iteration if there
-            // isnt
-            if (nextDots > nextLine) {
+        if (-1 != index) {
+            index = config.indexOf('\n', index);
+        } else {
+            index = -1;
+        }
+        int nextLine;
+        int nextColon = 0;
+        int nextDash;
+        do {
+            nextLine = config.indexOf('\n', index + 1);
+            nextDash = config.indexOf('-', index + 1);
+            nextColon = config.indexOf(':', index + 1);
+            // check if there is a variable to read and skip to the next iteration if so
+            if ((nextColon > nextDash && -1 != nextDash) || nextColon > nextLine || -1 == nextColon) {
                 index = nextLine;
-                continue;
+                System.out.println("makeFile: Successfully skipped to the next line.");
+            } else {
+                String option = config.substring(index + 1, nextColon);
+                System.out.println("makeFile: Successfully found the option: \"" + option + "\".");
+                setStrategy(option);
+                System.out.println("makeFile: Successfully executed setStrategy(\"" + option + "\") on the file.");
+                performStrategy(sbFile, config);
+                System.out.println("makeFile: Successfully executed performStrategy(\"" + option + "\") on the file.");
+                index = nextLine;
+                System.out.println("makeFile: Successfully finished changing \"" + option + "\" in the file.");
             }
-
-            String option = config.substring(index, nextDots);
-            setStrategy(option);
-            performStrategy(sbFile, config);
-            index = nextLine;
-        }
-
-        throw new Exception("makeFile METODU HAZIR DEĞİL");
+        } while (-1 != index && -1 != nextColon);
+        System.out.println("makeFile: Successfully finished making the file.");
+        System.out.println("makeFile: End.\n");
+        return sbFile;
     }
 
     // takes current file's content, the part that will be changed and the new part
@@ -211,39 +289,32 @@ abstract class Strategy {
 class NavbarStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        // TODO Auto-generated method stub
-    }
-}
+        System.out.println("\nNavbarStrategy: Begin.");
 
-class SocialLinksStrategy extends Strategy {
-    @Override
-    public void makeChanges(StringBuilder file, String config) throws Exception {
-        // <a href="{{ SOCIAL_ICONS }}"><img src="{{ SOCIAL_LINKS }}"
-        // style="width:2rem;height:2rem;"></a>
+        String sl = "{{ " + option + " }}";
 
-        int lIndex = config.indexOf('\n', config.indexOf("SOCIAL_LINKS")) + 1;
-        int iIndex = config.indexOf('\n', config.indexOf("SOCIAL_ICONS")) + 1;
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "NavbarStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+        int iIndex = config.indexOf(',', lIndex);
 
         if (-1 == lIndex) {
-            throw new Exception("Could not find SOCIAL_LINKS in config.toml");
-        }
-        if (-1 == iIndex) {
-            throw new Exception("Could not find SOCIAL_ICONS in config.toml");
+            throw new Exception("Could not find NAV_BAR_LINKS in config.toml");
         }
 
         boolean nextExists = true;
-
-        String sl = "{{ SOCIAL_LINKS }}";
-        String si = "{{ SOCIAL_ICONS }}";
 
         StringBuilder result = new StringBuilder();
 
         while (nextExists) {
             int nextLQuote = config.indexOf('"', lIndex) + 1;
-            int nextLDash = config.indexOf(config.indexOf('-', lIndex));
+            int nextLDash = config.indexOf('-', lIndex);
 
             int nextIQuote = config.indexOf('"', iIndex) + 1;
-            int nextIDash = config.indexOf(config.indexOf('-', iIndex));
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
@@ -251,70 +322,339 @@ class SocialLinksStrategy extends Strategy {
                 nextExists = false;
                 continue;
             }
-            if (nextIDash > nextIQuote || -1 == nextIDash) {
-                throw new Exception("SOCIAL_LINKS and SOCIAL_ICONS have different amount of elements");
+
+            StringBuilder ref = new StringBuilder(
+                    "<a href=\"{{ NAV_BAR_LINK2 }}\">{{ NAV_BAR_LINK1 }}</a>\n\t\t\t");
+
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+
+            String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
+
+            lIndex = config.indexOf('\n', lIndex) + 1;
+            iIndex = config.indexOf(',', lIndex) + 1;
+
+            Builder.stringEditor("{{ NAV_BAR_LINK2 }}", iValue, ref);
+            Builder.stringEditor("{{ NAV_BAR_LINK1 }}", lValue, ref);
+
+            result.append(ref);
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+
+        System.out.println("NavbarStrategy: End.\n");
+    }
+}
+
+class SocialLinksStrategy extends Strategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        // <a href="{{ SOCIAL_LINKS2 }}">{{ SOCIAL_LINKS1 }}</a>
+        System.out.println("\nSocialLinksStrategy: Begin.");
+
+        String sl = "{{ SOCIAL_LINKS }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "SocialLinksStrategy: Could not find \"SOCIAL_LINKS\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf("SOCIAL_LINKS")) + 1;
+        int iIndex = config.indexOf(',', lIndex);
+
+        if (-1 == lIndex) {
+            throw new Exception("Could not find SOCIAL_LINKS in config.toml");
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+
+            int nextIQuote = config.indexOf('"', iIndex) + 1;
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || -1 == nextLDash) {
+                nextExists = false;
+                continue;
             }
 
             StringBuilder ref = new StringBuilder(
-                    "<a href=\"{{ SOCIAL_ICONS }}\"><img src=\"{{ SOCIAL_LINKS }}\" style=\"width:2rem;height:2rem;\"></a>");
+                    "<a href=\"{{ SOCIAL_LINKS2 }}\">{{ SOCIAL_LINKS1 }}</a>\n\t\t\t");
 
-            int firstLQuote = config.indexOf('"', nextLDash) + 1;
-            String lValue = config.substring(firstLQuote, config.indexOf('"', firstLQuote));
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
 
-            int firstIQuote = config.indexOf('"', nextIDash) + 1;
-            String iValue = config.substring(firstIQuote, config.indexOf('"', firstIQuote));
+            String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
 
-            lIndex = nextLQuote;
-            iIndex = nextIQuote;
+            lIndex = config.indexOf('\n', lIndex) + 1;
+            iIndex = config.indexOf(',', lIndex) + 1;
 
-            ref.replace(ref.indexOf(si), ref.indexOf(si) + si.length(), iValue);
-            ref.replace(ref.indexOf(sl), ref.indexOf(sl) + sl.length(), lValue);
+            Builder.stringEditor("{{ SOCIAL_LINKS2 }}", iValue, ref);
+            Builder.stringEditor("{{ SOCIAL_LINKS1 }}", lValue, ref);
 
             result.append(ref);
-            result.append('\n');
         }
 
-        file.replace(file.indexOf("SOCIAL_LINKS"), file.indexOf("SOCIAL_LINKS") + 12, result.toString());
+        Builder.stringEditor("{{ SOCIAL_LINKS }}", result.toString(), file);
+
+        System.out.println("SocialLinksStrategy: End.\n");
+    }
+}
+
+class SocialIconsStrategy extends Strategy {
+    @Override
+    void makeChanges(StringBuilder file, String config) throws Exception {
+        System.out.println("\nSocialIconsStrategy: Begin.");
+
+        String sl = "{{ " + option + " }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "SocialIconsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+        int iIndex = config.indexOf(',', lIndex);
+
+        if (-1 == lIndex) {
+            throw new Exception("Could not find SOCIAL_ICONS in config.toml");
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+
+            int nextIQuote = config.indexOf('"', iIndex) + 1;
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || -1 == nextLDash) {
+                nextExists = false;
+                continue;
+            }
+
+            StringBuilder ref = new StringBuilder(
+                    "<a href=\"{{ SOCIAL_ICONS2 }}\"><img src=\"{{ SOCIAL_ICONS1 }}\"style=\"width:2rem;height:2rem;\"></a>\n\t\t\t");
+
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+
+            String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
+
+            lIndex = config.indexOf('\n', lIndex) + 1;
+            iIndex = config.indexOf(',', lIndex) + 1;
+
+            Builder.stringEditor("{{ SOCIAL_ICONS2 }}", iValue, ref);
+            Builder.stringEditor("{{ SOCIAL_ICONS1 }}", lValue, ref);
+
+            result.append(ref);
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+
+        System.out.println("SocialIconsStrategy: End.\n");
     }
 }
 
 class ThemeNameStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        // TODO Auto-generated method stub
+        System.out.println("\nThemeNameStrategy: Begin.");
+        int THEME_NAMEindex = config.indexOf(option);
+
+        if (-1 == file.indexOf("{{ " + option + " }}")) {
+            System.out.println(
+                    "ThemeNameStrategy: Could not find both \"THEME_NAME\" AND \"SOCIAL_LINKS\" in the file, they will be skipped.");
+            return;
+        }
+
+        if (-1 == THEME_NAMEindex) {
+            throw new Exception("Failed to find \"THEME_NAME\" in the config file.");
+        }
+
+        // index of the first " after THEME_NAME
+        int kesme1Index = config.indexOf('"', THEME_NAMEindex);
+        // selected theme's name
+        // "Project/Themes/" + themeName + "/" + themeName + ".css"
+        String themeName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
+        String themePath = "OSMAN/Project/Themes/" + themeName + "/" + themeName + ".css";
+        if (!(new File(themePath)).exists()) {
+            throw new Exception("Selected theme could not be found in Themes folder.");
+        }
+
+        // copy theme file to Output folder
+        System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
+        String themeFile = Builder.readFile(themePath);
+        Builder.writeFile("OSMAN/Project/Output/" + themeName + ".css", themeFile);
+        System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
+
+        option = "{{ " + option + " }}";
+        Builder.stringEditor(option, themeName + ".css", file);
+        System.out.println("ThemeNameStrategy: End.\n");
     }
 }
 
 class NonArrayStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
+        System.out.println("\nNonArrayStrategy: Begin.");
         int firstQuote = config.indexOf('"', config.indexOf(option)) + 1;
         String value = config.substring(firstQuote, config.indexOf('"', firstQuote));
         option = "{{ " + option + " }}";
-        file.replace(file.indexOf(option), file.indexOf(option) + option.length(), value);
+        if (-1 == file.indexOf(option)) {
+            System.out.println(
+                    "NonArrayStrategy: Could not find the option \"" + option + "\" in the file, it will be skipped.");
+            System.out.println("NonArrayStrategy: End.\n");
+            return;
+        } else {
+            Builder.stringEditor(option, value, file);
+            System.out.println("NonArrayStrategy: End.\n");
+        }
+
+    }
+}
+
+class PostTagsStrategy extends Strategy {
+
+    @Override
+    void makeChanges(StringBuilder file, String config) throws Exception {
+        System.out.println("\nPostTagsStrategy: Begin.");
+        String sl = "{{ " + option + " }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "PostTagsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+
+        if (-1 == lIndex) {
+            throw new Exception("Could not find POST_TAGS in given text content.");
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || -1 == nextLDash) {
+                nextExists = false;
+                continue;
+            }
+
+            StringBuilder ref = new StringBuilder(
+                    "Place Holder Text: {{ POST_TAGS }}\n\t\t\t");
+
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+
+            lIndex = config.indexOf('\n', lIndex) + 1;
+
+            Builder.stringEditor("{{ POST_TAGS }}", lValue, ref);
+
+            result.append(ref);
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+        System.out.println("PostTagsStrategy: End.\n");
+    }
+
+}
+
+class PostContentStrategy extends Strategy {
+    @Override
+    void makeChanges(StringBuilder file, String config) throws Exception {
+        System.out.println("\nPostContentStrategy: Begin.");
+        int contentStart = config.indexOf('\n', config.indexOf(option)) + 1;
+        String value = config.substring(contentStart);
+        option = "{{ " + option + " }}";
+
+        if (-1 == file.indexOf(option)) {
+            // if the option isnt available in the file
+            System.out.println(
+                    "PostContentStrategy: Could not find the option \"" + option
+                            + "\" in the file, it will be skipped.");
+            System.out.println("PostContentStrategy: End.\n");
+            return;
+        } else {
+
+            // {{ POST_READ_TIME }} handling part. (Yes, it just counts spaces.
+            // Yes, I trust people to not leave ten thousand spaces.)
+            System.out.println("PostContentStrategy: Starting to calculate \"POST_READ_TIME\".");
+            int wordNum = 0;
+            int index = value.indexOf(' ');
+            while (-1 != index) {
+                wordNum++;
+                index = value.indexOf(' ', index + 1);
+            }
+            wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
+
+            if (wordNum > 0) {
+                Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: " + wordNum + " minutes", file);
+            } else {
+                Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: Under one minute.", file);
+            }
+            System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
+
+            Builder.stringEditor(option, value, file);
+            System.out.println("PostContentStrategy: End.\n");
+        }
+        System.out.println("PostContentStrategy: End.\n");
     }
 }
 
 class Factory {
     // factory to decide which strategy is selected in which scenario
     static Strategy decideStrategy(String option) throws Exception {
+        System.out.println("\nFactory: Begin.");
+
         Strategy strategy;
         switch (option) {
             case "NAV_BAR_LINKS":
                 strategy = new NavbarStrategy();
+                System.out.println("Factory: Chose NavbarStrategy.");
+                break;
+            case "SOCIAL_ICONS":
+                strategy = new SocialIconsStrategy();
+                System.out.println("Factory: Chose SocialIconsStrategy.");
                 break;
             case "SOCIAL_LINKS":
                 strategy = new SocialLinksStrategy();
+                System.out.println("Factory: Chose SocialLinksStrategy.");
                 break;
             case "THEME_NAME":
                 strategy = new ThemeNameStrategy();
+                System.out.println("Factory: Chose ThemeNameStrategy.");
+                break;
+            case "POST_CONTENT":
+                strategy = new PostContentStrategy();
+                System.out.println("Factory: Chose PostContentStrategy.");
+                break;
+            case "POST_TAGS":
+                strategy = new PostTagsStrategy();
+                System.out.println("Factory: Chose PostTagsStrategy.");
                 break;
             case "":
                 throw new Exception("Could not detect the next config variable.");
             default:
                 strategy = new NonArrayStrategy();
+                System.out.println("Factory: Chose NonArrayStrategy.");
         }
         strategy.option = option;
+        System.out.println("Factory: End.\n");
         return strategy;
     }
 }

@@ -4,3 +4,5 @@ Project/Templates/page.css
 Project/Output/*
 !Project/Output/readme.txt
 Old_Files/
+Project/Content/Texts/*
+!Project/Content/Texts/ElHamraSarayiGezisi.md
