@@ -61,9 +61,14 @@ public class Builder {
         String[][] templates = parseContentFiles("OSMAN/Project/Templates/");
         System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Templates/\").");
 
+        String[][] textContent = parseContentFiles("OSMAN/Project/Content/Texts/");
+        System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Content/Texts/\").");
+
         StringBuilder base = new StringBuilder();
         StringBuilder index = new StringBuilder();
-        for (int i = 0; templates.length != i; i++) {
+        String page = "";
+
+        for (int i = 0; templates.length > i; i++) {
             if (templates[i][0].equals("base.html")) {
                 base = makeFile(templates[i], config);
                 System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
@@ -74,12 +79,35 @@ public class Builder {
                 System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
                         + "\".");
             }
+            if (templates[i][0].equals("page.html")) {
+                page = templates[i][1];
+                System.out.println("buildSite: Successfully grabbed \"" + templates[i][0] + "\".");
+            }
         }
+
+        // handling page.htmls
+        System.out.println("buildSite: Starting to make site pages.");
+        StringBuilder[] pages = new StringBuilder[textContent.length];
+        for (int i = 0; i < textContent.length; i++) {
+            String[] arr = { textContent[i][0], page };
+            pages[i] = new StringBuilder(base);
+            stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
+            System.out.println("buildSite: Successfully \"" + textContent[i][0] + "\" page.");
+        }
+        System.out.println("buildSite: Successfully made all of the site pages.");
+
         StringBuilder indexPage = new StringBuilder(base);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         System.out.println("buildSite: Successfully merged base and index.");
 
         writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
+        System.out.println("buildSite: Successfully made \"index.html\".");
+
+        for (int i = 0; i < textContent.length; i++) {
+            String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            writeFile("OSMAN/Project/Output/" + fileName + ".html", pages[i].toString());
+            System.out.println("buildSite: Successfully made \"" + fileName + "\".");
+        }
 
         System.out.println("buildFile: End.\n");
     }
@@ -179,34 +207,40 @@ public class Builder {
 
         if (-1 != file[0].indexOf("base")) { // for base
             index = config.indexOf("BASE");
-            System.out.println("makeFile: Successfully found the start of base file's part.");
+            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
         } else if (-1 != file[0].indexOf("index")) { // for index
             index = config.indexOf("INDEX");
-            System.out.println("makeFile: Successfully found the start of index file's part.");
+            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
         } else { // for unknown templates
             // cut file[0] from 0 to first '.' to remove extension and make it all uppercase
             // then look for it in config
             index = config.indexOf(file[0].substring(0, file[0].indexOf('.')).toUpperCase());
-            System.out.println("makeFile: Successfully found the start of file's part.");
+            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
             if (-1 == index) {
-                throw new Exception("Could not find the mention in the config for the file \"" + file[0] + "\"");
+                System.out.println(
+                        "makeFile: Failed to find the start of \"" + file[0]
+                                + "\" file's part. Will begin from the top of the file");
             }
         }
 
-        index = config.indexOf('\n', index) + 1;
+        if (-1 != index) {
+            index = config.indexOf('\n', index);
+        } else {
+            index = -1;
+        }
         int nextLine;
         int nextColon = 0;
         int nextDash;
-        while (0 != index && -1 != nextColon) {
-            nextLine = config.indexOf('\n', index) + 1;
-            nextDash = config.indexOf('-', index);
-            nextColon = config.indexOf(':', index);
+        do {
+            nextLine = config.indexOf('\n', index + 1);
+            nextDash = config.indexOf('-', index + 1);
+            nextColon = config.indexOf(':', index + 1);
             // check if there is a variable to read and skip to the next iteration if so
             if ((nextColon > nextDash && -1 != nextDash) || nextColon > nextLine || -1 == nextColon) {
                 index = nextLine;
                 System.out.println("makeFile: Successfully skipped to the next line.");
             } else {
-                String option = config.substring(index, nextColon);
+                String option = config.substring(index + 1, nextColon);
                 System.out.println("makeFile: Successfully found the option: \"" + option + "\".");
                 setStrategy(option);
                 System.out.println("makeFile: Successfully performed setStrategy(\"" + option + "\") in the file.");
@@ -215,7 +249,7 @@ public class Builder {
                 index = nextLine;
                 System.out.println("makeFile: Successfully finished changing \"" + option + "\" in the file.");
             }
-        }
+        } while (-1 != index && -1 != nextColon);
         System.out.println("makeFile: Successfully finished making the file.");
         System.out.println("makeFile: End.\n");
         return sbFile;
@@ -490,8 +524,50 @@ class PostTagsStrategy extends Strategy {
 
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'makeChanges'");
+        System.out.println("\nPostTagsStrategy: Begin.");
+        String sl = "{{ " + option + " }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "PostTagsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+
+        if (-1 == lIndex) {
+            throw new Exception("Could not find POST_TAGS in given text content.");
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || -1 == nextLDash) {
+                nextExists = false;
+                continue;
+            }
+
+            StringBuilder ref = new StringBuilder(
+                    "Place Holder Text: {{ POST_TAGS }}\n\t\t\t");
+
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+
+            lIndex = config.indexOf('\n', lIndex) + 1;
+
+            Builder.stringEditor("{{ POST_TAGS }}", lValue, ref);
+
+            result.append(ref);
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+        System.out.println("PostTagsStrategy: End.\n");
     }
 
 }
@@ -499,8 +575,9 @@ class PostTagsStrategy extends Strategy {
 class PostContentStrategy extends Strategy {
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'makeChanges'");
+        System.out.println("\nPostContentStrategy: Begin.");
+        System.out.println("PostContentStrategy: PostContentStrategy is not ready yet.");
+        System.out.println("PostContentStrategy: End.\n");
     }
 }
 
@@ -529,11 +606,11 @@ class Factory {
                 break;
             case "POST_CONTENT":
                 strategy = new PostContentStrategy();
-                System.out.println("Factory: Chose ThemeNameStrategy.");
+                System.out.println("Factory: Chose PostContentStrategy.");
                 break;
             case "POST_TAGS":
                 strategy = new PostTagsStrategy();
-                System.out.println("Factory: Chose ThemeNameStrategy.");
+                System.out.println("Factory: Chose PostTagsStrategy.");
                 break;
             case "":
                 throw new Exception("Could not detect the next config variable.");
