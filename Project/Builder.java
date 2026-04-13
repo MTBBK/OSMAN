@@ -486,6 +486,24 @@ class NonArrayStrategy extends Strategy {
     }
 }
 
+class PostTagsStrategy extends Strategy {
+
+    @Override
+    void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'makeChanges'");
+    }
+
+}
+
+class PostContentStrategy extends Strategy {
+    @Override
+    void makeChanges(StringBuilder file, String config) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'makeChanges'");
+    }
+}
+
 class Factory {
     // factory to decide which strategy is selected in which scenario
     static Strategy decideStrategy(String option) throws Exception {
@@ -507,6 +525,14 @@ class Factory {
                 break;
             case "THEME_NAME":
                 strategy = new ThemeNameStrategy();
+                System.out.println("Factory: Chose ThemeNameStrategy.");
+                break;
+            case "POST_CONTENT":
+                strategy = new PostContentStrategy();
+                System.out.println("Factory: Chose ThemeNameStrategy.");
+                break;
+            case "POST_TAGS":
+                strategy = new PostTagsStrategy();
                 System.out.println("Factory: Chose ThemeNameStrategy.");
                 break;
             case "":
