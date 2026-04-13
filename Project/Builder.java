@@ -576,7 +576,20 @@ class PostContentStrategy extends Strategy {
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
         System.out.println("\nPostContentStrategy: Begin.");
-        System.out.println("PostContentStrategy: PostContentStrategy is not ready yet.");
+        int contentStart = config.indexOf('\n', config.indexOf(option)) + 1;
+        String value = config.substring(contentStart);
+        option = "{{ " + option + " }}";
+        int fOptionIndex = file.indexOf(option);
+        if (-1 == fOptionIndex) {
+            System.out.println(
+                    "PostContentStrategy: Could not find the option \"" + option
+                            + "\" in the file, it will be skipped.");
+            System.out.println("PostContentStrategy: End.\n");
+            return;
+        } else {
+            file.replace(fOptionIndex, fOptionIndex + option.length(), value);
+            System.out.println("PostContentStrategy: End.\n");
+        }
         System.out.println("PostContentStrategy: End.\n");
     }
 }
