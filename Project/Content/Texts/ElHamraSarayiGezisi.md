@@ -2,7 +2,7 @@ FEATURED_IMAGE_URL: "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020
 POST_TITLE: "El Hamra Sarayı Gezisi"
 POST_DATE: "19/10/2020"
 POST_AUTHOR: "Büyük Albert"
-POST_TAGS: albertP.png
+POST_TAGS:
 	- "İspanya"
 	- "Saray"
 
