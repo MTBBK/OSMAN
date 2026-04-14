@@ -1,0 +1,15 @@
+Tema Adı: Forest Theme (Orman Teması)
+Yazar: Mahmut TOSUN
+Tarih: 24.03.2026
+Version: 1.0
+
+Renk Paleti:
+- Background: #f2f7f0
+- Text Primary: #2c3e2d
+- Container BG: #ffffff
+- Borders/Lines: #c8dfc0
+- Title Green: #1e3d20
+- Meta/Secondary Text: #5a7a5c
+- Link/Accent: #3a7d44
+- Muted Text: #8aab8c
+- Nav/Tag Color: #a8cfa0

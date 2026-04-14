@@ -1,0 +1,14 @@
+Tema Adı: Newspaper Theme (Gazete Teması)
+Yazar: Mahmut TOSUN
+Tarih: 24.03.2026
+Version: 1.0
+
+Renk Paleti:
+- Background: #f9f6f0
+- Text Primary: #1a1a1a
+- Container BG: transparent
+- Borders/Lines: #ccc
+- Footer BG: #1a1a1a
+- Footer Text: #f9f6f0
+- Meta/Secondary Text: #444
+- Muted Text: #888
