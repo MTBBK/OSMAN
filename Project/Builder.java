@@ -425,8 +425,6 @@ class NavbarStrategy extends Strategy {
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
-            System.out.println("SocialLinksStrategy: nextLDash = " + nextLDash + "\tnextLQuote = " + nextLDash
-                    + "\tnextLLine = " + nextLLine + "\tlIndex: " + lIndex);
             if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
                 nextExists = false;
                 continue;
