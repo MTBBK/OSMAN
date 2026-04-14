@@ -6,8 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -154,13 +154,129 @@ public class Builder {
             }
         });
 
+        // --------------------------------------------------------------------------------------------
+        // get pages' dates begin
         String[] pageDates = new String[textContent.length];
         for (int i = 0; i < textContent.length; i++) {
-            int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_DATE")) + 1;
-            pageDates[i] = textContent[i][1].substring(first1Quote, textContent[1][1].indexOf('"', first1Quote));
+            if (textContent[i][1].indexOf("POST_DATE") == -1) {
+                pageDates[i] = "";
+            } else {
+                int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_DATE")) + 1;
+                pageDates[i] = textContent[i][1].substring(first1Quote, textContent[1][1].indexOf('"', first1Quote));
+            }
         }
+        // get pages' dates end
 
-        // handling page.htmls
+        // --------------------------------------------------------------------------------------------
+        // get pages' titles begin
+        String[] pageTitles = new String[textContent.length];
+        for (int i = 0; i < textContent.length; i++) {
+            if (textContent[i][1].indexOf("POST_TITLE") == -1) {
+                pageTitles[i] = "";
+            } else {
+                int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_TITLE")) + 1;
+                pageTitles[i] = textContent[i][1].substring(first1Quote, textContent[1][1].indexOf('"', first1Quote));
+            }
+        }
+        // get pages' titles end
+
+        // --------------------------------------------------------------------------------------------
+        // get pages' tags begin
+        String[][] pageTags = new String[textContent.length][];
+        for (int j = 0; j < textContent.length; j++) {
+            String option = "POST_TAGS";
+            ArrayList<String> list = new ArrayList<>();
+            String configPlus = textContent[j][1];
+            int lIndex = configPlus.indexOf('\n', configPlus.indexOf(option)) + 1;
+
+            if (-1 == lIndex) {
+                System.out.println(
+                        "buildSite: Could not find \"" + option + "\" in the text content, it will be skipped.");
+                pageTags[j] = new String[0];
+                return;
+            }
+
+            boolean nextExists = true;
+
+            while (nextExists) {
+                int nextLQuote = configPlus.indexOf('"', lIndex) + 1;
+                int nextLDash = configPlus.indexOf('-', lIndex);
+                int nextLLine = configPlus.indexOf('\n', lIndex);
+
+                // check if there is a variable to read and skip to the next iteration if there
+                // isnt
+
+                if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
+                    nextExists = false;
+                    continue;
+                }
+
+                String lValue = configPlus.substring(nextLQuote, configPlus.indexOf('"', nextLQuote));
+
+                lIndex = configPlus.indexOf('\n', lIndex) + 1;
+                lIndex = nextLLine + 1;
+
+                list.add(lValue);
+            }
+            pageTags[j] = new String[list.size()];
+            pageTags[j] = (list.toArray(pageTags[j]));
+        }
+        // get pages' tags end
+
+        // --------------------------------------------------------------------------------------------
+        // get pages' summaries begin
+        String[] pageSummary = new String[textContent.length];
+        for (int i = 0; i < textContent.length; i++) {
+            if (-1 == textContent[i][1].indexOf("POST_CONTENT")) {
+                pageSummary[i] = "";
+            } else {
+                int firstNextLine = textContent[i][1].indexOf('\n', textContent[i][1].indexOf("POST_CONTENT")) + 1;
+                String content = textContent[i][1].substring(firstNextLine);
+                int spaces = 0;
+                int spaceIndex = 0;
+                while (-1 != spaceIndex && 20 > spaces) {
+                    spaces++;
+                    spaceIndex = content.indexOf(' ', spaceIndex + 1);
+                }
+                if (-1 == spaceIndex) {
+                    pageSummary[i] = content;
+                } else {
+                    pageSummary[i] = content.substring(0, spaceIndex);
+                }
+            }
+
+        }
+        // get pages' summaries end
+
+        // POST_LIST template
+        String postListTemplate = "<div class=\"post-card\">\n" + //
+                "                    <a href=\"{{ POST_PATH }}\" class=\"post-card-title\">{{ POST_TITLE }}</a>\n" + //
+                "                    <p class=\"post-card-excerpt\">{{ POST_SUMMARY }}</p>\n" + //
+                "                    <div class=\"post-card-meta\">{{ POST_DATE }}</div>\n" + //
+                "                    <div class=\"post-card-categories\">{{ POST_TAGS }}</div>\n" + //
+                "                </div>";
+
+        // POST_LIST maker start
+        StringBuilder[] postLists = new StringBuilder[textContent.length];
+        for (int i = 0; i < postLists.length; i++) {
+            postLists[i] = new StringBuilder(postListTemplate);
+            String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            stringEditor("{{ POST_PATH }}", fileName + ".html", postLists[i]);
+            stringEditor("{{ POST_TITLE }}", pageTitles[i], postLists[i]);
+            stringEditor("{{ POST_DATE }}", pageDates[i], postLists[i]);
+            stringEditor("{{ POST_SUMMARY }}", pageSummary[i], postLists[i]);
+            StringBuilder pTags = new StringBuilder();
+            for (int j = 0; j < pageTags[i].length; j++) {
+                pTags.append(pageTags[i][j]);
+                if (j != pageTags[i].length - 1) {
+                    pTags.append(", ");
+                }
+            }
+            stringEditor("{{ POST_TAGS }}", pTags.toString(), postLists[i]);
+        }
+        // POST_LIST maker end
+
+        // handling page.htmls begin
         System.out.println("buildSite: Starting to make site pages.");
         StringBuilder[] pages = new StringBuilder[textContent.length];
         for (int i = 0; i < textContent.length; i++) {
@@ -197,14 +313,54 @@ public class Builder {
 
         }
         System.out.println("buildSite: Successfully made all of the site pages.");
+        // handling page.htmls end
 
-        // handle index.html
+        // handle index.html begin
         StringBuilder indexPage = new StringBuilder(base);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         System.out.println("buildSite: Successfully merged base and index.");
+
         stringEditor("{{ TOTAL_POSTS_COUNT }}", "Total Posts: " + pages.length, indexPage);
 
+        // make POST_LIST for index begin.
+        {
+            StringBuilder megaPostList = new StringBuilder();
+            for (int i = postLists.length - 1; i > 0; i--) {
+                megaPostList.append(postLists[i]);
+            }
+            stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
+        }
+        // make POST_LIST for index end.
+
+        // make TAG_CLOUD for index.html begin.
+        {
+            StringBuilder tagCloud = new StringBuilder();
+            ArrayList<String> existingTags = new ArrayList<>();
+            for (int i = 0; i < pageTags.length; i++) {
+                for (int j = 0; j < pageTags[i].length; j++) {
+                    boolean alreadyExists = false;
+                    for (int k = 0; k < existingTags.size() && !alreadyExists; k++) {
+                        if (existingTags.get(k).equals(pageTags[i][j])) {
+                            alreadyExists = true;
+                        }
+                    }
+                    if (!alreadyExists)
+                        existingTags.add(pageTags[i][j]);
+                }
+
+            }
+            String tagCloudTemplate = "<a href=\"#\">{{ POST_TAGS }}</a>\t\t\t\n";
+            for (int i = 0; i < existingTags.size(); i++) {
+                StringBuilder toBeAdded = new StringBuilder(tagCloudTemplate);
+                stringEditor("{{ POST_TAGS }}", existingTags.get(i), toBeAdded);
+                tagCloud.append(toBeAdded);
+            }
+            stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), indexPage);
+        }
+        // make TAG_CLOUD for index.html end.
+
         writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
+        // handle index.html end
 
         System.out.println("buildSite: Successfully made \"index.html\".");
 
@@ -678,7 +834,7 @@ class PostTagsStrategy extends Strategy {
             }
 
             StringBuilder ref = new StringBuilder(
-                    "Place Holder Text: {{ POST_TAGS }}\n\t\t\t");
+                    "<a href=\"#\">{{ POST_TAGS }}</a>\n\t\t\t");
 
             String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
 
