@@ -406,7 +406,10 @@ class NavbarStrategy extends Strategy {
         int iIndex = config.indexOf(',', lIndex);
 
         if (-1 == lIndex) {
-            throw new Exception("Could not find NAV_BAR_LINKS in config.toml");
+            System.out.println(
+                    "NavbarStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
         }
 
         boolean nextExists = true;
@@ -416,12 +419,15 @@ class NavbarStrategy extends Strategy {
         while (nextExists) {
             int nextLQuote = config.indexOf('"', lIndex) + 1;
             int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
 
             int nextIQuote = config.indexOf('"', iIndex) + 1;
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
-            if (nextLDash > nextLQuote || -1 == nextLDash) {
+            System.out.println("SocialLinksStrategy: nextLDash = " + nextLDash + "\tnextLQuote = " + nextLDash
+                    + "\tnextLLine = " + nextLLine + "\tlIndex: " + lIndex);
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
                 nextExists = false;
                 continue;
             }
@@ -433,7 +439,7 @@ class NavbarStrategy extends Strategy {
 
             String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
 
-            lIndex = config.indexOf('\n', lIndex) + 1;
+            lIndex = nextLLine + 1;
             iIndex = config.indexOf(',', lIndex) + 1;
 
             Builder.stringEditor("{{ NAV_BAR_LINK2 }}", iValue, ref);
@@ -466,7 +472,10 @@ class SocialLinksStrategy extends Strategy {
         int iIndex = config.indexOf(',', lIndex);
 
         if (-1 == lIndex) {
-            throw new Exception("Could not find SOCIAL_LINKS in config.toml");
+            System.out.println(
+                    "SocialLinksStrategy: Could not find \"SOCIAL_LINKS\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
         }
 
         boolean nextExists = true;
@@ -476,12 +485,13 @@ class SocialLinksStrategy extends Strategy {
         while (nextExists) {
             int nextLQuote = config.indexOf('"', lIndex) + 1;
             int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
 
             int nextIQuote = config.indexOf('"', iIndex) + 1;
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
-            if (nextLDash > nextLQuote || -1 == nextLDash) {
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
                 nextExists = false;
                 continue;
             }
@@ -493,7 +503,7 @@ class SocialLinksStrategy extends Strategy {
 
             String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
 
-            lIndex = config.indexOf('\n', lIndex) + 1;
+            lIndex = nextLLine + 1;
             iIndex = config.indexOf(',', lIndex) + 1;
 
             Builder.stringEditor("{{ SOCIAL_LINKS2 }}", iValue, ref);
@@ -508,7 +518,6 @@ class SocialLinksStrategy extends Strategy {
     }
 }
 
-// TODO: array's read other arrays directly below them so go fix that
 class SocialIconsStrategy extends Strategy {
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
@@ -526,7 +535,10 @@ class SocialIconsStrategy extends Strategy {
         int iIndex = config.indexOf(',', lIndex);
 
         if (-1 == lIndex) {
-            throw new Exception("Could not find SOCIAL_ICONS in config.toml");
+            System.out.println(
+                    "SocialIconsStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
         }
 
         boolean nextExists = true;
@@ -536,12 +548,13 @@ class SocialIconsStrategy extends Strategy {
         while (nextExists) {
             int nextLQuote = config.indexOf('"', lIndex) + 1;
             int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
 
             int nextIQuote = config.indexOf('"', iIndex) + 1;
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
-            if (nextLDash > nextLQuote || -1 == nextLDash) {
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
                 nextExists = false;
                 continue;
             }
@@ -553,7 +566,7 @@ class SocialIconsStrategy extends Strategy {
 
             String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
 
-            lIndex = config.indexOf('\n', lIndex) + 1;
+            lIndex = nextLLine + 1;
             iIndex = config.indexOf(',', lIndex) + 1;
 
             Builder.stringEditor("{{ SOCIAL_ICONS2 }}", iValue, ref);
@@ -644,7 +657,10 @@ class PostTagsStrategy extends Strategy {
         int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
 
         if (-1 == lIndex) {
-            throw new Exception("Could not find POST_TAGS in given text content.");
+            System.out.println(
+                    "PostTagsStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
         }
 
         boolean nextExists = true;
@@ -654,10 +670,11 @@ class PostTagsStrategy extends Strategy {
         while (nextExists) {
             int nextLQuote = config.indexOf('"', lIndex) + 1;
             int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
 
             // check if there is a variable to read and skip to the next iteration if there
             // isnt
-            if (nextLDash > nextLQuote || -1 == nextLDash) {
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
                 nextExists = false;
                 continue;
             }
@@ -668,6 +685,7 @@ class PostTagsStrategy extends Strategy {
             String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
 
             lIndex = config.indexOf('\n', lIndex) + 1;
+            lIndex = nextLLine + 1;
 
             Builder.stringEditor("{{ POST_TAGS }}", lValue, ref);
 
