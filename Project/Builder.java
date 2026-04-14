@@ -6,10 +6,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Builder {
     private static Strategy strategy;
@@ -35,32 +39,17 @@ public class Builder {
                 folder.mkdir();
             }
 
-            // clean the Output/Images folder to be able to delete Output's contents
-            folder = new File("Output/Images");
-            if (folder.isDirectory()) {
-                for (File file : folder.listFiles()) {
-                    if (file.delete()) {
-                        System.out.println(
-                                "main: Successfully deleted file \"" + file.getName() + "\" in Output/Images folder.");
-                    } else {
-                        throw new IOException("Could not clear the Output/Images folder");
-                    }
-                }
+            Path rootPath = Paths.get("Output");
+            final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder())
+                    .collect(Collectors.toList());
+            for (Path path : pathsToDelete) {
+                Files.deleteIfExists(path);
             }
+            // https://stackoverflow.com/questions/35988192/java-nio-most-concise-recursive-directory-delete
 
-            // clean the Output folder for the new output
-            folder = new File("Output");
-            for (File file : folder.listFiles()) {
-                // ignore .gitignore because duh.
-                if (file.getName().equals(".gitignore")) {
-                    continue;
-                }
-
-                if (file.delete()) {
-                    System.out.println("main: Successfully deleted file \"" + file.getName() + "\" in Output folder.");
-                } else {
-                    throw new IOException("Could not clear the /Output folder");
-                }
+            folder = new File("Output/");
+            if (!folder.exists()) {
+                folder.mkdir();
             }
 
             // begin site building process
@@ -88,22 +77,43 @@ public class Builder {
         String[][] textContent = parseContentFiles("Content/Texts/");
         System.out.println("buildSite: Successfully run parseContentFiles(\"/Content/Texts/\").");
 
-        // copy images to the Output/Images folder
-        if ((new File("Content/Images/")).exists()) {
-            File imagesCFolder = new File("Content/Images/");
+        // Copy all files and folders in Content folder into Output
+        // except Content/Texts
+        {
+            Path sourceFol = Paths.get("Content");
+            Path targetFol = Paths.get("Output");
+            Path excludeFol = Paths.get("Content", "Texts");
 
-            File imagesOFolder = new File("Output/Images/");
-            // check if the Output/Images folder exists and make one if not.
-            if (!imagesOFolder.exists()) {
-                imagesOFolder.mkdirs();
-            }
+            try {
+                Files.walk(sourceFol).forEach(source -> {
+                    if (source.startsWith(excludeFol)) {
+                        return;
+                    }
 
-            for (String file : imagesCFolder.list()) {
-                Files.copy(Paths.get("Content/Images/" + file),
-                        Paths.get("Output/Images/" + file));
-                System.out.println("buildSite: Successfully copied image \"" + file + "\".");
+                    // 1. Relativize: Finds the difference between the root and the current file
+                    // 2. Resolve: Appends that difference to the target directory
+                    Path relativePath = sourceFol.relativize(source);
+                    Path destination = targetFol.resolve(relativePath);
+
+                    try {
+                        if (Files.isDirectory(source)) {
+                            // Create the directory in the output folder if it doesn't exist
+                            if (!Files.exists(destination)) {
+                                Files.createDirectories(destination);
+                            }
+                        } else {
+                            // Copy the file, replacing it if it already exists
+                            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+                        }
+                    } catch (IOException e) {
+                        System.err.println("Failed to copy: " + source);
+                        e.printStackTrace();
+                    }
+                });
+            } catch (IOException e) {
+                System.err.println("Failed to walk directory.");
+                e.printStackTrace();
             }
-            System.out.println("buildSite: Successfully copied all images.");
         }
 
         StringBuilder base = new StringBuilder();
@@ -126,9 +136,6 @@ public class Builder {
                 System.out.println("buildSite: Successfully grabbed \"" + templates[i][0] + "\".");
             }
         }
-
-        // TODO: we need to get page titles, page dates, page tags and page contents'
-        // first 20 words. to put them in the stupid index posts section thingamabob
 
         // Sort textContent based on POST_DATEs.
         Arrays.sort(textContent, new Comparator<String[]>() {
