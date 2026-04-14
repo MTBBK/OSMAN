@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -26,15 +29,16 @@ public class Builder {
             // print to confirm that System.err.println functions properly
             System.err.println("Error's Stack Trace Will Be Below:");
 
+            // create an Output folder in the case that it doesn't exist.
+            File folder = new File("OSMAN/Project/Output/");
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+
             // clean the Output/Images folder to be able to delete Output's contents
-            File folder = new File("OSMAN/Project/Output/Images");
+            folder = new File("OSMAN/Project/Output/Images");
             if (folder.isDirectory()) {
                 for (File file : folder.listFiles()) {
-                    // ignore .gitignore because duh.
-                    if (file.getName().equals(".gitignore")) {
-                        continue;
-                    }
-
                     if (file.delete()) {
                         System.out.println(
                                 "main: Successfully deleted file \"" + file.getName() + "\" in Output/Images folder.");
@@ -83,6 +87,24 @@ public class Builder {
 
         String[][] textContent = parseContentFiles("OSMAN/Project/Content/Texts/");
         System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Content/Texts/\").");
+
+        // copy images to the Output/Images folder
+        if ((new File("OSMAN/Project/Content/Images/")).exists()) {
+            File imagesCFolder = new File("OSMAN/Project/Content/Images/");
+
+            File imagesOFolder = new File("OSMAN/Project/Output/Images/");
+            // check if the Output/Images folder exists and make one if not.
+            if (!imagesOFolder.exists()) {
+                imagesOFolder.mkdirs();
+            }
+
+            for (String file : imagesCFolder.list()) {
+                Files.copy(Paths.get("OSMAN/Project/Content/Images/" + file),
+                        Paths.get("OSMAN/Project/Output/Images/" + file));
+                System.out.println("buildSite: Successfully copied image \"" + file + "\".");
+            }
+            System.out.println("buildSite: Successfully copied all images.");
+        }
 
         StringBuilder base = new StringBuilder();
         StringBuilder index = new StringBuilder();
@@ -205,9 +227,10 @@ public class Builder {
 
         File[] files = folder.listFiles();
 
-        // throw an IOException if the folder is empty
+        // return an empty array if the folder is empty and send a log about it.
         if (null == files || 0 == files.length) {
-            throw new IOException("Folder \"" + folderPath + "\" Is Empty\n");
+            System.out.println("parseContentFiles: Folder \"" + folderPath + "\" is empty.");
+            return new String[0][0];
         }
 
         String[][] fileContents = new String[files.length][2]; // [i][0] - dosyanın adı, [i][1] - dosyanın içeriği
