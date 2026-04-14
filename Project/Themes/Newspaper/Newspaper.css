@@ -1,0 +1,328 @@
+/* ── 1. GENEL AYARLAR ── */
+
+body {
+    background-color: #f9f6f0;
+    color: #1a1a1a;
+    font-family: Georgia, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.content {
+    min-height: 60vh;
+}
+
+a {
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+/* Sans-serif font gereken tüm kısımlar - body Georgia kullandığı için
+   nav, footer, meta gibi küçük bilgi alanlarını ayrıca belirtiyoruz */
+.nav-bar a,
+.footer-links a,
+.footer-copy,
+.tag-cloud a,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-meta,
+.post-updated,
+.post-tags a,
+.prev-post,
+.next-post {
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Büyük harf olmasını istediğimiz tüm kısımlar */
+.nav-bar a,
+.footer-links a,
+.tag-cloud a,
+.post-count,
+.post-card-categories,
+.post-meta,
+.post-tags a,
+.prev-post,
+.next-post {
+    text-transform: uppercase;
+}
+
+
+/* ── 2. HEADER & NAV ── */
+
+.header {
+    padding: 20px 24px;
+    border-top: 6px solid #1a1a1a;
+    border-bottom: 3px solid #1a1a1a;
+    background-color: #f9f6f0;
+}
+
+.site-branding {
+    margin-bottom: 10px;
+}
+
+.site-title {
+    color: #1a1a1a;
+    font-size: 1.8rem;
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.nav-bar {
+    margin-top: 10px;
+}
+
+.nav-bar a {
+    color: #1a1a1a;
+    padding: 6px 14px;
+    border: 1px solid #ccc;
+    font-size: 0.75rem;
+}
+
+
+/* ── 3. FOOTER ── */
+
+.footer hr {
+    border: none;
+    border-top: 3px solid #1a1a1a;
+    margin: 0;
+}
+
+.footer {
+    margin-top: 60px;
+    background-color: #1a1a1a;
+    color: #f9f6f0;
+    padding: 24px;
+    text-align: center;
+}
+
+.footer-links {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #ccc;
+    font-size: 0.75rem;
+    margin: 0 10px;
+}
+
+.footer-copy {
+    font-size: 0.75rem;
+}
+
+.footer-copy p {
+    margin: 4px 0;
+}
+
+
+/* ── 4. INDEX SAYFASI ── */
+
+.index-page {
+    padding: 40px 0;
+}
+
+.index-welcome {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #ccc;
+}
+
+.welcome-header {
+    margin-bottom: 20px;
+}
+
+.welcome-header img {
+    width: 90px;
+    height: 90px;
+    border: 2px solid #1a1a1a;
+    margin: 0 0 16px 0;
+}
+
+.welcome-title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    font-style: italic;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.welcome-intro {
+    max-width: 540px;
+    margin: 0 auto 24px;
+    color: #444;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.welcome-socials {
+    margin-bottom: 24px;
+}
+
+.welcome-socials a {
+    color: #444;
+    margin: 0 8px;
+}
+
+.tag-cloud {
+    margin-bottom: 16px;
+}
+
+.tag-cloud a {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border: 1px solid #999;
+    color: #444;
+    margin: 3px;
+}
+
+.index-stats {
+    margin-bottom: 8px;
+}
+
+.post-count {
+    display: block;
+    padding: 10px 0;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.post-feed {
+    margin-top: 8px;
+}
+
+.post-card {
+    padding: 18px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.post-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.post-card-excerpt {
+    color: #444;
+    font-size: 0.9rem;
+    margin: 6px 0;
+}
+
+.post-card-meta {
+    font-size: 0.78rem;
+}
+
+.post-card-categories {
+    font-size: 0.75rem;
+}
+
+
+/* ── 5. POST / MAKALE SAYFASI ── */
+
+.post {
+    max-width: 750px;
+    margin: 48px auto;
+}
+
+.post > img {
+    width: 100%;
+    margin: 0 0 32px 0;
+    border: none;
+    border-bottom: 3px solid #1a1a1a;
+}
+
+.post-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 0 0 16px;
+    line-height: 1.2;
+}
+
+.post-meta {
+    font-size: 0.78rem;
+    margin-bottom: 10px;
+}
+
+/* Gri renk olmasını istediğimiz tüm kısımlar */
+.footer-copy,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-read-time,
+.post-updated,
+.prev-post,
+.next-post {
+    color: #888;
+}
+
+.post-date   { color: #444; }
+.post-author { color: #1a1a1a; font-weight: bold; }
+
+.post-updated {
+    font-size: 0.75rem;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.post-header {
+    border-bottom: 3px solid #1a1a1a;
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+}
+
+.post-content {
+    line-height: 1.85;
+    font-size: 17px;
+    color: #1a1a1a;
+}
+
+.post-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 3px solid #1a1a1a;
+}
+
+.post-tags {
+    margin-bottom: 28px;
+}
+
+.post-tags a {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border: 1px solid #1a1a1a;
+    color: #1a1a1a;
+    margin-right: 4px;
+}
+
+.post-pagination {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    overflow: hidden;
+}
+
+.prev-post, .next-post {
+    font-size: 0.8rem;
+}
+
+.prev-post { float: left; }
+.next-post { float: right; }
+
+.post-pagination div {
+    color: #1a1a1a;
+    font-weight: bold;
+    cursor: pointer;
+}
