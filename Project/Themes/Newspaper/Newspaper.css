@@ -152,6 +152,11 @@ img {
     margin: 0 0 16px 0;
 }
 
+.profile-avatar {
+    max-width: 120px;
+    border-radius: 12px;
+}
+
 .welcome-title {
     font-size: 2.4rem;
     font-weight: bold;
