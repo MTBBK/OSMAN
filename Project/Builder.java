@@ -18,11 +18,11 @@ public class Builder {
         long startTime = System.currentTimeMillis();
         try {
             // sets error's print location to log.txt in ErrorLogs
-            writeFile("OSMAN/Project/ErrorLogs/errorLog.txt", null);
-            PrintStream err = new PrintStream(new FileOutputStream("OSMAN/Project/ErrorLogs/errorLog.txt"));
+            writeFile("ErrorLogs/errorLog.txt", null);
+            PrintStream err = new PrintStream(new FileOutputStream("ErrorLogs/errorLog.txt"));
             System.setErr(err);
-            writeFile("OSMAN/Project/ErrorLogs/log.txt", null);
-            PrintStream out = new PrintStream(new FileOutputStream("OSMAN/Project/ErrorLogs/log.txt"));
+            writeFile("ErrorLogs/log.txt", null);
+            PrintStream out = new PrintStream(new FileOutputStream("ErrorLogs/log.txt"));
             System.setOut(out);
             System.out.println("main: Begin.");
 
@@ -30,26 +30,26 @@ public class Builder {
             System.err.println("Error's Stack Trace Will Be Below:");
 
             // create an Output folder in the case that it doesn't exist.
-            File folder = new File("OSMAN/Project/Output/");
+            File folder = new File("Output/");
             if (!folder.exists()) {
                 folder.mkdir();
             }
 
             // clean the Output/Images folder to be able to delete Output's contents
-            folder = new File("OSMAN/Project/Output/Images");
+            folder = new File("Output/Images");
             if (folder.isDirectory()) {
                 for (File file : folder.listFiles()) {
                     if (file.delete()) {
                         System.out.println(
                                 "main: Successfully deleted file \"" + file.getName() + "\" in Output/Images folder.");
                     } else {
-                        throw new IOException("Could not clear the OSMAN/Project/Output/Images folder");
+                        throw new IOException("Could not clear the Output/Images folder");
                     }
                 }
             }
 
             // clean the Output folder for the new output
-            folder = new File("OSMAN/Project/Output");
+            folder = new File("Output");
             for (File file : folder.listFiles()) {
                 // ignore .gitignore because duh.
                 if (file.getName().equals(".gitignore")) {
@@ -59,7 +59,7 @@ public class Builder {
                 if (file.delete()) {
                     System.out.println("main: Successfully deleted file \"" + file.getName() + "\" in Output folder.");
                 } else {
-                    throw new IOException("Could not clear the OSMAN/Project/Output folder");
+                    throw new IOException("Could not clear the /Output folder");
                 }
             }
 
@@ -77,30 +77,30 @@ public class Builder {
     static void buildSite() throws Exception {
         System.out.println("\nbuildFile: Begin.");
 
-        String config = readFile("OSMAN/Project/config.osman");
+        String config = readFile("config.osman");
         System.out.println("buildSite: Successfully read the config.");
 
         // [i][0] - file name, [i][1] file content
-        // String[][] contents = parseContentFiles("OSMAN/Project/Content/Texts/");
-        String[][] templates = parseContentFiles("OSMAN/Project/Templates/");
-        System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Templates/\").");
+        // String[][] contents = parseContentFiles("/Content/Texts/");
+        String[][] templates = parseContentFiles("Templates/");
+        System.out.println("buildSite: Successfully run parseContentFiles(\"/Templates/\").");
 
-        String[][] textContent = parseContentFiles("OSMAN/Project/Content/Texts/");
-        System.out.println("buildSite: Successfully run parseContentFiles(\"OSMAN/Project/Content/Texts/\").");
+        String[][] textContent = parseContentFiles("Content/Texts/");
+        System.out.println("buildSite: Successfully run parseContentFiles(\"/Content/Texts/\").");
 
         // copy images to the Output/Images folder
-        if ((new File("OSMAN/Project/Content/Images/")).exists()) {
-            File imagesCFolder = new File("OSMAN/Project/Content/Images/");
+        if ((new File("Content/Images/")).exists()) {
+            File imagesCFolder = new File("Content/Images/");
 
-            File imagesOFolder = new File("OSMAN/Project/Output/Images/");
+            File imagesOFolder = new File("Output/Images/");
             // check if the Output/Images folder exists and make one if not.
             if (!imagesOFolder.exists()) {
                 imagesOFolder.mkdirs();
             }
 
             for (String file : imagesCFolder.list()) {
-                Files.copy(Paths.get("OSMAN/Project/Content/Images/" + file),
-                        Paths.get("OSMAN/Project/Output/Images/" + file));
+                Files.copy(Paths.get("Content/Images/" + file),
+                        Paths.get("Output/Images/" + file));
                 System.out.println("buildSite: Successfully copied image \"" + file + "\".");
             }
             System.out.println("buildSite: Successfully copied all images.");
@@ -162,7 +162,7 @@ public class Builder {
                 pageDates[i] = "";
             } else {
                 int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_DATE")) + 1;
-                pageDates[i] = textContent[i][1].substring(first1Quote, textContent[1][1].indexOf('"', first1Quote));
+                pageDates[i] = textContent[i][1].substring(first1Quote, textContent[i][1].indexOf('"', first1Quote));
             }
         }
         // get pages' dates end
@@ -175,7 +175,7 @@ public class Builder {
                 pageTitles[i] = "";
             } else {
                 int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_TITLE")) + 1;
-                pageTitles[i] = textContent[i][1].substring(first1Quote, textContent[1][1].indexOf('"', first1Quote));
+                pageTitles[i] = textContent[i][1].substring(first1Quote, textContent[i][1].indexOf('"', first1Quote));
             }
         }
         // get pages' titles end
@@ -325,7 +325,7 @@ public class Builder {
         // make POST_LIST for index begin.
         {
             StringBuilder megaPostList = new StringBuilder();
-            for (int i = postLists.length - 1; i > 0; i--) {
+            for (int i = postLists.length - 1; i > -1; i--) {
                 megaPostList.append(postLists[i]);
             }
             stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
@@ -359,14 +359,14 @@ public class Builder {
         }
         // make TAG_CLOUD for index.html end.
 
-        writeFile("OSMAN/Project/Output/index.html", indexPage.toString());
+        writeFile("Output/index.html", indexPage.toString());
         // handle index.html end
 
         System.out.println("buildSite: Successfully made \"index.html\".");
 
         for (int i = 0; i < textContent.length; i++) {
             String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
-            writeFile("OSMAN/Project/Output/" + fileName + ".html", pages[i].toString());
+            writeFile("Output/" + fileName + ".html", pages[i].toString());
             System.out.println("buildSite: Successfully made \"" + fileName + "\".");
         }
 
@@ -756,7 +756,7 @@ class ThemeNameStrategy extends Strategy {
         // selected theme's name
         // "Project/Themes/" + themeName + "/" + themeName + ".css"
         String themeName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
-        String themePath = "OSMAN/Project/Themes/" + themeName + "/" + themeName + ".css";
+        String themePath = "Themes/" + themeName + "/" + themeName + ".css";
         if (!(new File(themePath)).exists()) {
             throw new Exception("Selected theme could not be found in Themes folder.");
         }
@@ -764,7 +764,7 @@ class ThemeNameStrategy extends Strategy {
         // copy theme file to Output folder
         System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
         String themeFile = Builder.readFile(themePath);
-        Builder.writeFile("OSMAN/Project/Output/" + themeName + ".css", themeFile);
+        Builder.writeFile("Output/" + themeName + ".css", themeFile);
         System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
 
         option = "{{ " + option + " }}";

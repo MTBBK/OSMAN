@@ -6,3 +6,4 @@ Project/Output/*
 Old_Files/
 Project/Content/Texts/*
 !Project/Content/Texts/ElHamraSarayiGezisi.md
+Project/*.class
