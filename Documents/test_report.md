@@ -1,7 +1,5 @@
 # OSMAN Test Report
 
-*Bu belge, yalnızca sağlanan "Quality Assurance Plan" verilerine sadık kalınarak oluşturulmuştur. Planda yer almayan veya henüz gerçekleşmemiş test verileri (test tarihi, fiili test sonuçları ve dağıtım diyagramı) eksik bilgi olarak açıkça belirtilmiştir.*
-
 ## 1. Test Responsibles (Test Sorumluları)
 - **Mesut Barbaros Köş:** Genel Kontrol, Metriklerin Belirlenmesi, Hata Takibi
 - **Melih Efe Tursun:** Test Metotları, Hata Takibi
