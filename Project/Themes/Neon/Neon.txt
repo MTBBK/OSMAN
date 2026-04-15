@@ -1,0 +1,13 @@
+Tema Adı: Neon Theme
+Yazar: Mahmut TOSUN
+Tarih: 24.03.2026
+Version: 1.0
+
+Renk Paleti:
+- Background (Carbon): #111111
+- NOS Cyan: #00ffcc
+- Redline: #ff003c
+- Chrome White: #ffffff
+- Metallic Silver: #d1d5db
+- Street Black: #050505
+- Underglow Alpha: rgba(0, 255, 204, 0.6)
