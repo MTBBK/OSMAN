@@ -3,10 +3,10 @@
 ## 1. Test Responsibles (Test Sorumluları)
 - **Mesut Barbaros Köş:** Genel Kontrol, Metriklerin Belirlenmesi, Hata Takibi
 - **Melih Efe Tursun:** Test Metotları, Hata Takibi
-*(Not: Katkıda bulunan diğer isimler Mahmut Tosun ve Ahmet Taha Kılınç olmakla birlikte, spesifik test sorumlulukları Task Matrix'te Mesut ve Melih olarak atanmıştır.)*
+*(Not: Katkıda bulunan diğer isimler Mahmut Tosun ve Ahmet Taha Kılınç olmakla birlikte, spesifik test sorumlulukları Task Matrix'te Mesut Barbaros Köş ve Melih Efe Tursun olarak atanmıştır.)*
 
 ## 2. Test Date (Test Tarihi)
-- 15.04.2026
+- 15/04/2026
 
 ## 3. Test Configuration (Test Konfigürasyonu)
 Proje, hızı değil doğruluğu önceleyen bir stratejiyle konfigüre edilmiştir. Test konfigürasyon detayları şunlardır:
