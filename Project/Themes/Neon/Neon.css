@@ -1,0 +1,381 @@
+/* =============================================
+   FAST & FURIOUS (TUNING) THEME - Static Site Generator
+   Karbon fiber, NOS neonları, asfalt karanlığı ve sokak yarışı estetiği.
+   ============================================= */
+
+/* ── 0. CSS VARIABLES (THEME TOKENS) ── */
+:root {
+    --street-black: #050505;       /* Gece asfaltı */
+    --carbon-base: #111111;        /* Karbon fiber zemin */
+    --carbon-weave: #1a1a1a;       /* Karbon fiber dokusu */
+    --nos-cyan: #00ffcc;           /* NOS neon mavisi/yeşili */
+    --brake-red: #ff003c;          /* Fren lambası / Redline kırmızısı */
+    --metallic-silver: #d1d5db;    /* Krom/Metalik metin */
+    --chrome-white: #ffffff;       /* Parlak beyaz başlıklar */
+}
+
+/* ── 1. GENEL AYARLAR ── */
+
+body {
+    background-color: var(--carbon-base);
+    color: var(--metallic-silver);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    /* Sentetik Karbon Fiber Dokusu */
+    background-image: 
+        linear-gradient(45deg, var(--carbon-weave) 25%, transparent 25%, transparent 75%, var(--carbon-weave) 75%, var(--carbon-weave)), 
+        linear-gradient(45deg, var(--carbon-weave) 25%, transparent 25%, transparent 75%, var(--carbon-weave) 75%, var(--carbon-weave));
+    background-size: 10px 10px;
+    background-position: 0 0, 5px 5px;
+}
+
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.content {
+    min-height: 60vh;
+}
+
+a {
+    color: var(--nos-cyan);
+    text-decoration: none;
+    transition: all 0.15s cubic-bezier(0.4, 0, 1, 1); /* NOS gibi ani tepki */
+}
+
+a:hover {
+    color: var(--chrome-white);
+    text-shadow: 0 0 10px var(--nos-cyan), 0 0 20px var(--nos-cyan);
+}
+
+img {
+    max-width: 100%;
+    border: 2px solid #333;
+    border-bottom: 4px solid var(--nos-cyan);
+    border-radius: 4px;
+    margin: 15px 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Gösterge paneli soluk metinleri */
+.footer-copy,
+.footer-links a,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-read-time,
+.post-updated {
+    color: #888;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* ── 2. HEADER & NAV ── */
+
+.header {
+    padding: 20px 24px;
+    background: linear-gradient(to bottom, #000000 0%, transparent 100%);
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+}
+
+.site-branding {
+    margin-bottom: 10px;
+}
+
+.site-title {
+    color: var(--chrome-white);
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic; /* Hız hissi */
+    letter-spacing: 2px;
+    text-shadow: 0px 4px 0px var(--brake-red); /* 3D Krom Hissi */
+}
+
+.site-title::before {
+    content: "10SEC // ";
+    color: var(--nos-cyan);
+    font-size: 1rem;
+    text-shadow: none;
+}
+
+.nav-bar {
+    margin-top: 15px;
+}
+
+.nav-bar a {
+    color: var(--metallic-silver);
+    padding: 6px 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-style: italic;
+    letter-spacing: 1px;
+    border-bottom: 2px solid transparent;
+}
+
+.nav-bar a:hover {
+    color: var(--chrome-white);
+    border-bottom: 2px solid var(--nos-cyan);
+    box-shadow: inset 0 -10px 10px -10px var(--nos-cyan);
+}
+
+/* ── 3. FOOTER ── */
+
+.footer {
+    margin-top: 80px;
+    padding: 40px 24px;
+    background-color: var(--street-black);
+    border-top: 2px solid var(--brake-red);
+    text-align: center;
+}
+
+.footer hr {
+    display: none;
+}
+
+.footer-links {
+    margin-bottom: 16px;
+}
+
+.footer-links a {
+    font-size: 0.9rem;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+/* ── 4. INDEX SAYFASI ── */
+
+.index-page {
+    padding: 50px 0;
+}
+
+.index-welcome {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.welcome-header svg {
+    border: 3px solid #333;
+    border-radius: 10px;
+    background-color: var(--street-black);
+    box-shadow: 0 0 15px rgba(255, 0, 60, 0.3); /* Fren lambası yansıması */
+}
+
+.welcome-title {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--chrome-white);
+    text-transform: uppercase;
+    font-style: italic;
+    margin: 15px 0 10px;
+    letter-spacing: -1px;
+}
+
+.welcome-title::after {
+    content: "_";
+    color: var(--nos-cyan);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.welcome-intro {
+    max-width: 540px;
+    margin: 0 auto 24px;
+    color: var(--metallic-silver);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.tag-cloud {
+    margin-bottom: 16px;
+}
+
+/* Tagler motor gösterge ışıkları (Dashboard indicators) gibi */
+.tag-cloud a {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 2px;
+    border: 1px solid #333;
+    color: var(--metallic-silver);
+    background-color: var(--street-black);
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.tag-cloud a:hover {
+    border-color: var(--brake-red);
+    background-color: rgba(255, 0, 60, 0.1);
+    color: var(--brake-red);
+    box-shadow: 0 0 8px rgba(255, 0, 60, 0.5);
+}
+
+.index-stats {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.post-count {
+    background-color: var(--nos-cyan);
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 900;
+}
+
+.post-count::before {
+    content: "RPM: ";
+}
+
+/* Post Kartları (Garajdaki Araçlar) */
+.post-card {
+    background-color: rgba(10, 10, 10, 0.85); /* Cam filmi etkisi */
+    padding: 24px;
+    border: 1px solid #222;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Neon Underglow Etkisi (Sadece Alt Kısımda) */
+.post-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--nos-cyan);
+    box-shadow: 0 -5px 15px rgba(0, 255, 204, 0.0);
+    transition: box-shadow 0.2s;
+}
+
+.post-card:hover {
+    transform: translateX(10px) skewX(-2deg); /* Vites atıp ileri atılma hissi */
+    border-color: #444;
+}
+
+.post-card:hover::after {
+    box-shadow: 0 -10px 25px rgba(0, 255, 204, 0.6); /* Underglow'un yanması */
+}
+
+.post-card-title {
+    font-size: 1.4rem;
+    color: var(--chrome-white);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.post-card-excerpt {
+    color: var(--metallic-silver);
+    font-size: 1rem;
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+.post-card-categories {
+    color: var(--brake-red);
+}
+
+/* ── 5. POST / MAKALE SAYFASI ── */
+
+.post {
+    background-color: var(--street-black);
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 48px;
+    border: 1px solid #333;
+    border-top: 5px solid var(--nos-cyan); /* Kaput şeridi */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+}
+
+.post-title {
+    color: var(--chrome-white);
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin: 0 0 16px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-style: italic;
+    text-shadow: 2px 2px 0px #333;
+}
+
+.post-meta {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.post-date   { color: var(--metallic-silver); }
+.post-author { color: var(--nos-cyan); font-weight: bold; }
+
+.post-header {
+    border-bottom: 1px solid #333;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+}
+
+.post-content {
+    line-height: 1.8;
+    font-size: 17px;
+    color: var(--metallic-silver);
+}
+
+/* Makale içi başlıklar için metalik görünüm */
+.post-content h1, .post-content h2, .post-content h3 {
+    color: var(--chrome-white);
+    text-transform: uppercase;
+    font-style: italic;
+    border-left: 4px solid var(--brake-red);
+    padding-left: 10px;
+}
+
+.post-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #333;
+}
+
+.post-pagination {
+    border-top: 1px solid #333;
+    padding-top: 20px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+}
+
+.prev-post, .next-post {
+    padding: 12px 24px;
+    background-color: #111;
+    border: 1px solid #333;
+    color: var(--metallic-silver);
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic;
+    transition: all 0.2s ease;
+}
+
+.prev-post:hover, .next-post:hover {
+    background-color: var(--nos-cyan);
+    color: #000;
+    border-color: var(--nos-cyan);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+    transform: scale(1.05);
+}
