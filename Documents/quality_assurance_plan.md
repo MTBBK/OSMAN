@@ -25,7 +25,7 @@ EndUserLike Test: Aracın nihai çıktısının son kullanıcının gözünden g
 | Usability | System is easy to learn and use | User score from surveys over 75% |
 | Reliability | System works without crashes or unexpected failures | No critical system crashes during test period |
 | Compatibility | System works across different operating systems | Tests for Windows and Linux but no Mac support for arbitrary reasons |
-| Usability | Ease of use for users | User satisfaction score from surveys |
+| Consistency | Log is made correctly and successfully | Manually checking if log is correct |
 
 <a name="test-plan"></a>
 ## Test Plan:

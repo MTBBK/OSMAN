@@ -8,8 +8,8 @@ AUTHOR_NAME: "Barbaros Köş (MTBBK)"
 FAVICON_URL: "./Images/osman2.png"
 NAV_BAR_LINKS:
 	- "Ana Sayfa", "https://osman.guru"
-	- "Robotlar", "/robots.txt"
-	- "Harita", "/haritalar"
+	- "Robotlar", "./robots.txt"
+	- "Harita", "./haritalar"
 COPYRIGHT_YEAR: "2026"
 SOCIAL_LINKS:
 	- "Buy Me A Coffee", "https://buymeacoffee.com/mtbbk"
