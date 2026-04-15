@@ -20,7 +20,7 @@ Sağlanan metin bir "Plan" olduğu için, gerçek test sonuçları bulunmamaktad
 |---|---|---|---|---|
 | **Test 1** | Usability | Kullanıcının kendi Content'ini ekleyip Builder.jar'ı çalıştırması. | Gerekli dosyaların Output klasöründe sorunsuz bir şekilde oluşmuş olması. | Gerek dosyaların Output klasöründe sorunsuz bir şekilde oluşmuş olması. |
 | **Test 2** | Reliability | Kullanıcının kendi Content'ini ekleyip Builder.jar'ı çalıştırması. | Herhangi bir hata olmadan, gerekli dosyaların Output klasöründe sorunsuz bir şekilde oluşmuş olması. | Herhangi bir hata olmadan, gerekli dosyaların Output klasöründe sorunsuz bir şekilde oluşmuş olması. |
-| **Test 3** | Compatibility | Kullanıcının Linux'tan ve Windows'tan kendi Content'ini ekleyip Builder.jar'ı çalıştırması | Hem Windows'ta hem de Linux'ta, gerekli dosyaların Output klasöründe sorunsuz birebir aynı olacak şekilde oluşmuş olması. | *Eksik Veri* |
+| **Test 3** | Compatibility | Kullanıcının Linux'tan ve Windows'tan kendi Content'ini ekleyip Builder.jar'ı çalıştırması | Hem Windows'ta hem de Linux'ta, gerekli dosyaların Output klasöründe sorunsuz birebir aynı olacak şekilde oluşmuş olması. | Hem Windows'ta hem de Linux'ta, gerekli dosyaların Output klasöründe sorunsuz birebir aynı olacak şekilde oluşmuş olması. |
 | **Test 4** | Consistency | Kullanıcının kendi Content'ini ekleyip Builder.jar'ı çalıştırması. | Programın sorunsuz bir şekilde log çıktısı vermesi. | Programın sorunsuz bir şekilde log çıktısı vermesi. |
 | **Test 5** | Agility | Kullanıcının kendi 10000 tane dosyayı Content olarak verip Builder.jar'ı çalıştırması  |  Written process time in the log is below 1 second. | Written process time in the log is 0.907 second. |
 
