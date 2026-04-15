@@ -1,0 +1,13 @@
+Tema Adı: ChocolateIce Theme
+Yazar: Ahmet Taha Kılınç
+Tarih: 13.04.2026
+Version: v1.0
+
+Renk Paleti :
+- Background: #1a1b1e
+- Text Primary: #e0d7ff
+- Borders/Lines:  #3d3e4d
+- Text Area:  #121214
+- Title: #c0c0c0
+- Meta/Secondary Text: #a699cc
+- Link/Pagination: #8b8ea1
