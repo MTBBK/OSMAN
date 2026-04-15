@@ -26,6 +26,7 @@ EndUserLike Test: Aracın nihai çıktısının son kullanıcının gözünden g
 | Reliability | System works without crashes or unexpected failures | No critical system crashes during test period |
 | Compatibility | System works across different operating systems | Tests for Windows and Linux but no Mac support for arbitrary reasons |
 | Consistency | Log is made correctly and successfully | Manually checking if log is correct |
+| Agility | System completes its process under 1 second. | Manually checking written time in the log to see how long the process lasted |
 
 <a name="test-plan"></a>
 ## Test Plan:
