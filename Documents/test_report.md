@@ -11,7 +11,7 @@
 ## 3. Test Configuration (Test Konfigürasyonu)
 Proje, hızı değil doğruluğu önceleyen bir stratejiyle konfigüre edilmiştir. Test konfigürasyon detayları şunlardır:
 - **Çalışma Ortamı:** JVM (Java Virtual Machine) üzerinden çalışacak şekilde ayarlanmıştır. Windows ve Linux işletim sistemleri desteklenmektedir (Mac desteği bilerek eklenmemiştir).
-- **Manuel Konfigürasyonlar:** `config` (ayarlar) dosyası, `Images` (resim) ve `Texts` (metin) klasörleri.
+- **Manuel Konfigürasyonlar:** `config.osman` (ayarlar) dosyası, `Images` (resim) ve `Texts` (metin) klasörleri.
 
 ## 4. Test Inputs & Test Results (Test Girdileri ve Sonuçları)
 Sağlanan metin bir "Plan" olduğu için, gerçek test sonuçları bulunmamaktadır. Sistem girdileri (Inputs) ve beklenen sonuçlar plan dahilinde aşağıya çıkarılmıştır:
