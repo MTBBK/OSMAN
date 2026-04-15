@@ -1,0 +1,14 @@
+Tema Adı: MerhabaKedi Theme
+Yazar: Mahmut TOSUN
+Tarih: 24.03.2026
+Version: 1.0
+
+Renk Paleti:
+- Background: #fff5f7
+- Text Primary: #4a4a4a
+- Primary Pink: #ff1493
+- Secondary Pink: #ff69b4
+- Border/Lines: #ffccde
+- Footer BG: #ffffff
+- Tag/Stat BG: #ffe6f0
+- Muted Text: #ff99c2

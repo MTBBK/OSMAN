@@ -1,0 +1,406 @@
+/* =============================================
+   CARS THEME (McQueen & Mater) - Static Site Generator
+   Asfalt karanlığı, yarış kırmızısı, paslı kahverengi ve hız hissiyatı.
+   ============================================= */
+
+/* ── 0. CSS VARIABLES (THEME TOKENS) ── */
+:root {
+    --mcqueen-red: #e53935;
+    --mcqueen-dark: #b71c1c;
+    --mcqueen-yellow: #ffb300;
+    --mater-rust: #8a5a44;
+    --mater-teal: #4db6ac;
+    --asphalt-bg: #121212;
+    --asphalt-card: #1e1e1e;
+    --text-main: #e0e0e0;
+    --text-muted: #9e9e9e;
+    --tire-black: #0a0a0a;
+}
+
+/* ── 1. GENEL AYARLAR ── */
+
+body {
+    background-color: var(--asphalt-bg);
+    color: var(--text-main);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
+    background-size: 20px 20px; /* Asfalt dokusu illüzyonu */
+}
+
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.content {
+    min-height: 60vh;
+}
+
+a {
+    color: var(--mcqueen-red);
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+a:hover {
+    color: var(--mcqueen-yellow);
+}
+
+img {
+    max-width: 100%;
+    border: 4px solid var(--tire-black);
+    border-bottom: 4px solid var(--mcqueen-red);
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+/* Metadata ve ikincil bilgiler (Mater tonları) */
+.footer-copy,
+.footer-links a,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-read-time,
+.post-updated {
+    color: var(--text-muted);
+}
+
+/* ── 2. HEADER & NAV ── */
+
+.header {
+    padding: 18px 24px;
+    border-bottom: 3px solid var(--mcqueen-red);
+    background-color: var(--tire-black);
+    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.2);
+}
+
+.site-branding {
+    margin-bottom: 10px;
+}
+
+.site-title {
+    color: var(--text-main);
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-style: italic; /* Hız hissiyatı için italik */
+    letter-spacing: 1.5px;
+}
+
+.site-title::before {
+    content: "🏁 ";
+}
+
+.nav-bar {
+    margin-top: 8px;
+}
+
+.nav-bar a {
+    color: var(--text-main);
+    padding: 6px 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.nav-bar a:hover {
+    color: var(--mcqueen-yellow);
+}
+
+.nav-bar a::before {
+    content: "⚡ ";
+    color: var(--mcqueen-yellow);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.nav-bar a:hover::before {
+    opacity: 1;
+}
+
+/* ── 3. FOOTER ── */
+
+.footer {
+    margin-top: 80px;
+    padding: 40px 24px;
+    border-top: 3px solid var(--mater-rust);
+    background-color: var(--tire-black);
+    text-align: center;
+}
+
+.footer hr {
+    display: none;
+}
+
+.footer-links {
+    margin-bottom: 16px;
+}
+
+.footer-links a {
+    font-size: 0.9rem;
+    margin: 0 10px;
+    font-weight: bold;
+    color: var(--mater-teal);
+}
+
+.footer-links a:hover {
+    color: var(--mcqueen-yellow);
+}
+
+.footer-copy {
+    font-size: 0.85rem;
+}
+
+/* ── 4. INDEX SAYFASI ── */
+
+.index-page {
+    padding: 50px 0;
+}
+
+.index-welcome {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.welcome-header {
+    margin-bottom: 20px;
+}
+
+.welcome-header svg {
+    border: 3px solid var(--mcqueen-red);
+    border-radius: 12px;
+    background-color: var(--tire-black);
+}
+
+.welcome-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--text-main);
+    text-transform: uppercase;
+    font-style: italic;
+    margin: 15px 0 5px;
+    text-shadow: 2px 2px 0px var(--mcqueen-red);
+}
+
+.welcome-title::before {
+    content: "🏎️ ";
+}
+
+.welcome-title::after {
+    content: " 🛻";
+}
+
+.welcome-intro {
+    max-width: 540px;
+    margin: 0 auto 24px;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.welcome-socials {
+    margin-bottom: 28px;
+}
+
+.welcome-socials a {
+    color: var(--mcqueen-yellow);
+    margin: 0 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.tag-cloud {
+    margin-bottom: 16px;
+}
+
+.tag-cloud a {
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--mater-rust);
+    color: var(--text-main);
+    background-color: transparent;
+    font-family: monospace;
+}
+
+.tag-cloud a:hover {
+    background-color: var(--mater-rust);
+    color: #fff;
+}
+
+.index-stats {
+    padding-bottom: 16px;
+    border-bottom: 2px dashed var(--mater-rust);
+    margin-bottom: 24px;
+}
+
+.post-count {
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.post-count::before {
+    content: "PIT STOP: ";
+    color: var(--mcqueen-yellow);
+}
+
+.post-feed {
+    margin-top: 16px;
+}
+
+/* Post Kartları */
+.post-card {
+    background-color: var(--asphalt-card);
+    padding: 24px;
+    border-left: 5px solid var(--mcqueen-red);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.15s ease, border-left-color 0.15s ease;
+}
+
+.post-card:hover {
+    transform: translateX(5px); /* İleri atılma hissi */
+    border-left-color: var(--mcqueen-yellow);
+}
+
+.post-card-title {
+    font-size: 1.3rem;
+    color: var(--text-main);
+    font-weight: 800;
+}
+
+.post-card-title::before {
+    content: "⚡ ";
+    color: var(--mcqueen-yellow);
+}
+
+.post-card-excerpt {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.post-card-meta {
+    font-family: monospace;
+    color: var(--mater-teal);
+}
+
+.post-card-categories {
+    font-family: monospace;
+    color: var(--mater-rust);
+    text-transform: uppercase;
+}
+
+/* ── 5. POST / MAKALE SAYFASI ── */
+
+.post {
+    background-color: var(--asphalt-card);
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 48px;
+    border-top: 8px solid var(--mcqueen-red);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.post > img {
+    width: 100%;
+    margin: 0 0 36px 0;
+    border: none;
+    border-bottom: 4px solid var(--mater-rust);
+    border-radius: 0;
+    display: block;
+}
+
+.post-title {
+    color: var(--text-main);
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin: 0 0 16px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    font-style: italic;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    font-family: monospace;
+}
+
+.post-date   { color: var(--mater-teal); }
+.post-author { color: var(--mcqueen-yellow); font-weight: bold; }
+
+.post-updated {
+    font-size: 0.8rem;
+    margin-bottom: 28px;
+}
+
+.post-header {
+    border-bottom: 2px dashed var(--mater-rust);
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+}
+
+.post-content {
+    line-height: 1.8;
+    font-size: 17px;
+    color: var(--text-main);
+}
+
+.post-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 2px solid var(--mcqueen-dark);
+}
+
+.post-tags {
+    margin-bottom: 24px;
+}
+
+.post-tags a {
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border-radius: 2px;
+    border: 1px solid var(--mater-rust);
+    color: var(--text-main);
+    background-color: transparent;
+    margin-right: 6px;
+    font-family: monospace;
+}
+
+.post-pagination {
+    border-top: 2px dashed var(--mater-rust);
+    padding-top: 20px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+}
+
+.prev-post, .next-post {
+    padding: 14px 20px;
+    border: 2px solid var(--mcqueen-red);
+    background-color: var(--tire-black);
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 800;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.prev-post:hover, .next-post:hover {
+    background-color: var(--mcqueen-dark);
+    transform: scale(1.05);
+}
+
+.post-pagination div {
+    color: var(--text-main);
+    cursor: pointer;
+}

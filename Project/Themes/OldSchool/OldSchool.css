@@ -1,0 +1,52 @@
+/* 1. GENEL AYARLAR */
+body {
+    background-color: #fdf6e3; /* Solarized light / Cream */
+    color: #2c3e50;
+    font-family: 'Georgia', serif; /* Serif for readability */
+}
+
+a {
+    color: #b58900; /* Gold/Bronze accent */
+}
+
+/* Gri renk kısımlar */
+.footer-copy, .footer-links a, .post-count, .post-card-meta,
+.post-card-categories, .post-read-time, .post-updated {
+    color: #93a1a1;
+}
+
+/* 2. HEADER */
+.header {
+    background-color: #eee8d5;
+    border-bottom: 1px solid #d5ccb2;
+}
+
+.site-title {
+    color: #2c3e50;
+    font-style: italic;
+}
+
+/* 4. INDEX */
+.tag-cloud a {
+    background-color: #eee8d5;
+    border: 1px solid #d5ccb2;
+    color: #586e75;
+}
+
+/* 5. POST SAYFASI */
+.post {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.post-title {
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+}
+
+.post-content {
+    color: #333333;
+    line-height: 1.9;
+}

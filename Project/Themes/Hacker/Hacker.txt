@@ -1,0 +1,12 @@
+- Hacker Theme
+- Mahmut TOSUN
+- 14.04.2026
+
+- Temada kullanılan renkler (Renk Paleti):
+- - #0a0a0a
+- - #0d1a0d
+- - #00ff41
+- - #00cc33
+- - #2d8a2d
+- - #1a5a1a
+- - #1a3a1a

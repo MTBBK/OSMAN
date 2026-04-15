@@ -1,0 +1,14 @@
+Tema Adı: Car Theme
+Yazar: Mahmut TOSUN
+Tarih: 24.03.2026
+Version: 1.0
+
+Renk Paleti:
+- Background (Asphalt): #121212
+- Card BG: #1e1e1e
+- McQueen Red: #e53935
+- McQueen Yellow: #ffb300
+- Mater Rust: #8a5a44
+- Mater Teal: #4db6ac
+- Text Main: #e0e0e0
+- Text Muted: #9e9e9e
