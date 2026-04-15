@@ -1,0 +1,329 @@
+/* =============================================
+   HACKER THEME - Static Site Generator
+   Terminal/Matrix tarzı yeşil-siyah hacker estetiği.
+   ============================================= */
+
+
+/* ── 1. GENEL AYARLAR ── */
+
+body {
+    background-color: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', 'Lucida Console', monospace;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.content {
+    min-height: 60vh;
+}
+
+a {
+    color: #00cc33;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    border: 1px solid #1a3a1a;
+    margin: 10px 0;
+    filter: grayscale(30%);
+}
+
+/* Koyu yeşil / soluk renk olmasını istediğimiz tüm kısımlar */
+.footer-copy,
+.footer-links a,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-read-time,
+.post-updated {
+    color: #2d8a2d;
+}
+
+
+/* ── 2. HEADER & NAV ── */
+
+.header {
+    padding: 18px 24px;
+    border-bottom: 1px solid #1a3a1a;
+    background-color: #0a0a0a;
+}
+
+.site-branding {
+    margin-bottom: 10px;
+}
+
+.site-title {
+    color: #00ff41;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.site-title::before {
+    content: "> ";
+    color: #2d8a2d;
+}
+
+.nav-bar {
+    margin-top: 8px;
+}
+
+.nav-bar a {
+    color: #2d8a2d;
+    padding: 6px 14px;
+    border: 1px solid transparent;
+}
+
+.nav-bar a::before {
+    content: "$ ";
+    color: #1a5a1a;
+}
+
+
+/* ── 3. FOOTER ── */
+
+.footer {
+    margin-top: 80px;
+    padding: 40px 24px;
+    border-top: 1px solid #1a3a1a;
+    text-align: center;
+}
+
+.footer hr {
+    display: none;
+}
+
+.footer-links {
+    margin-bottom: 16px;
+}
+
+.footer-links a {
+    font-size: 0.85rem;
+    margin: 0 10px;
+}
+
+.footer-copy {
+    font-size: 0.8rem;
+}
+
+.footer-copy p {
+    margin: 4px 0;
+}
+
+
+/* ── 4. INDEX SAYFASI ── */
+
+.index-page {
+    padding: 50px 0;
+}
+
+.index-welcome {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.welcome-header {
+    margin-bottom: 20px;
+}
+
+.profile-avatar{
+       max-width:200px ;
+}
+
+.welcome-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #00ff41;
+    margin: 0;
+}
+
+.welcome-title::before {
+    content: "[ ";
+    color: #1a5a1a;
+}
+
+.welcome-title::after {
+    content: " ]";
+    color: #1a5a1a;
+}
+
+.welcome-intro {
+    max-width: 540px;
+    margin: 0 auto 24px;
+    color: #2d8a2d;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.welcome-socials {
+    margin-bottom: 28px;
+}
+
+.welcome-socials a {
+    color: #2d8a2d;
+    margin: 0 8px;
+}
+
+.tag-cloud {
+    margin-bottom: 16px;
+}
+
+.tag-cloud a {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 0;
+    border: 1px solid #1a3a1a;
+    color: #00cc33;
+    background-color: #0d1a0d;
+}
+
+.index-stats {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #1a3a1a;
+    margin-bottom: 24px;
+}
+
+.post-count {
+    font-size: 0.8rem;
+}
+
+.post-count::before {
+    content: "// ";
+}
+
+.post-feed {
+    margin-top: 8px;
+}
+
+/* Builder'ın POST_LIST için ürettiği post kartları */
+.post-card {
+    padding: 16px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #1a3a1a;
+}
+
+.post-card-title {
+    font-size: 1rem;
+    color: #00ff41;
+}
+
+.post-card-title::before {
+    content: "./";
+    color: #1a5a1a;
+}
+
+.post-card-excerpt {
+    color: #2d8a2d;
+    font-size: 0.9rem;
+    margin: 6px 0;
+}
+
+.post-card-meta {
+    font-size: 0.75rem;
+}
+
+.post-card-categories {
+    font-size: 0.75rem;
+}
+
+
+/* ── 5. POST / MAKALE SAYFASI ── */
+
+.post {
+    background-color: #0d1a0d;
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 48px;
+    border: 1px solid #1a3a1a;
+}
+
+.post > img {
+    width: 100%;
+    margin: 0 0 36px 0;
+    border: none;
+    border-bottom: 1px solid #1a3a1a;
+    display: block;
+    filter: grayscale(100%) brightness(0.8) contrast(1.2);
+}
+
+.post-title {
+    color: #00ff41;
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0 0 16px;
+    line-height: 1.2;
+}
+
+.post-meta {
+    font-size: 0.82rem;
+    margin-bottom: 10px;
+}
+
+.post-date   { color: #2d8a2d; }
+.post-author { color: #00cc33; }
+
+.post-updated {
+    font-size: 0.78rem;
+    margin-bottom: 28px;
+}
+
+.post-header {
+    border-bottom: 1px solid #1a3a1a;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+}
+
+.post-content {
+    line-height: 1.8;
+    font-size: 16px;
+    color: #00ff41;
+}
+
+.post-footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #1a3a1a;
+}
+
+.post-tags {
+    margin-bottom: 24px;
+}
+
+.post-tags a {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 0;
+    border: 1px solid #1a3a1a;
+    color: #00cc33;
+    background-color: #0a0a0a;
+    margin-right: 4px;
+}
+
+.post-pagination {
+    border-top: 1px solid #1a3a1a;
+    padding-top: 20px;
+    overflow: hidden;
+}
+
+.prev-post, .next-post {
+    padding: 14px 18px;
+    border: 1px solid #1a3a1a;
+    background-color: #0d1a0d;
+}
+
+.prev-post { float: left; }
+.next-post { float: right; text-align: right; }
+
+.post-pagination div {
+    color: #00cc33;
+    font-weight: bold;
+    cursor: pointer;
+}
