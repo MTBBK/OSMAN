@@ -4,7 +4,7 @@ This document explains the placeholders and design principles used in the `page.
 
 ## Placeholders Logic
 
-The following placeholders should be detected and replaced by the Java Builder using data from `config.toml`:
+The following placeholders should be detected and replaced by the Java Builder using data from the markdown files in `Content/Texts`:
 
 ### Core Content Placeholders
 - `{{ POST_TITLE }}`: The main heading of the post (H1).
@@ -24,4 +24,4 @@ The following placeholders should be detected and replaced by the Java Builder u
 - `{{ FEATURED_IMAGE_URL }}`: Placeholder for a hero image at the top of the article.
 
 ---
-*Note: The Java Builder handles the replacement of these placeholders based on the metadata found in `Content` folders markdown files.*
+*Note: The Java Builder handles the replacement of these placeholders based on the metadata found in `Content/Texts` folder's markdown files.*

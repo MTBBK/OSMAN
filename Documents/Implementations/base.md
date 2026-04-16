@@ -4,7 +4,7 @@ This document explains the placeholders and design principles used in the `base.
 
 ## Placeholders Logic
 
-The following placeholders should be detected and replaced by the Java Builder using data from `config.toml`:
+The following placeholders should be detected and replaced by the Java Builder using data from `config.osman`:
 
 ### Identity & SEO
 - `{{ SITE_TITLE }}`: The main title of the website.
