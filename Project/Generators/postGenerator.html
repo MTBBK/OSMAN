@@ -1,0 +1,114 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OSMAN post generator">
+    <title>Osman Post Generator</title>
+    <link rel="icon" type="image/x-icon" href="osman.png">
+<style>
+	body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+	.section { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+	.row { margin-bottom: 5px; display: flex; gap: 10px; align-items: center; }
+	textarea, input { display: block; margin-bottom: 5px; width: 300px; }
+	.array-container { background: #f9f9f9; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+	button { cursor: pointer; padding: 5px 10px; }
+	.remove-btn { background: #ff4444; color: white; border: none; border-radius: 3px; }
+	.type-switch { font-size: 0.8em; display: flex; align-items: center; gap: 5px; background: #eee; padding: 2px 8px; border-radius: 10px; }
+	.type-switch input { width: auto; margin: 0; }
+	h2 { font-size: 1em; margin-bottom: 2px; }
+	h2 p{ font-size: 0.8em; color: #707070; }
+	h2 p b{ color: #FF0000; }
+	h3 { font-size: 1.5em; margin-bottom: 0px; }
+</style>
+</head>
+<body>
+   <h1>OSMAN Post Generator</h1>
+
+   <div class="section">
+   <h3>Settings</h3>
+
+   <h2>Featured Image: <p>URL or path to your posts cover image which is in Content/Images/</p></h2>
+   <div class="row">
+   <input id="FEATURED_IMAGE" placeholder="kostebekgiller.png">
+   <label class="type-switch"><input type="checkbox" id="IMAGE_IS_URL"> Is URL?</label>
+   </div>
+
+   <h2>Post Title: <p>Your Posts Title</p></h2><input id="POST_TITLE" placeholder="Osman Site">
+   <h2>Post Date: <p>Written Day Of The Post. The format is <b>day/month/year</b></p></h2><input id="POST_DATE" placeholder="19/10/2020">
+   <h2>Author Name: <p>Author Of The Post</p></h2><input id="POST_AUTHOR" placeholder="Barbaros Köş (MTBBK)">
+
+   <h2>Post Tags: <p>Tags Related To This Post</p></h2>
+   <div id="POST_TAGS" class="array-container"></div>
+   <button onclick="addTagRow('POST_TAGS', 'Tag Name')">+ Add New Tag</button>
+   </div>
+
+   </div>
+
+   <div class="section">
+   <h3>Content</h3>
+   <h2><p>This Posts Content</p></h2><textarea id="POST_CONTENT" placeholder="Güzel geziydi doğrusu. Harika gezdik. Ama nasıl gezdik bir bilseniz... Bir ara o kadar gezdik ki gezmekten sıkılacak olduk ama sıkıntımız geçsin diye biraz daha gezdik."></textarea>
+   </div>
+
+   <br/>
+   <button onclick="downloadFile()" style="font-size: 1.2em; background: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 20px;">Save Post</button>
+   <script>
+        const addTagRow = (containerId, placeholder = "Value") => {
+            const container = document.getElementById(containerId);
+            const div = document.createElement("div");
+            div.className = "row";
+            div.innerHTML = `
+                <input type="text" class="tag-input" placeholder="${placeholder}" style="width: 200px;">
+                <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
+            `;
+            container.appendChild(div);
+        };
+
+        const processPath = (text, isUrl) => {
+            if (!text) return "";
+            if (isUrl) return text;
+            return text.startsWith("./Images/") ? text : `./Images/${text}`;
+        };
+
+        const getSingleArrayData = (containerId) => {
+            const container = document.getElementById(containerId);
+            const inputs = container.querySelectorAll(".tag-input");
+            let output = "";
+            inputs.forEach(input => {
+                if (input.value.trim()) {
+                    output += `\t- "${input.value.trim()}"\n`;
+                }
+            });
+            return output;
+        };
+
+        const downloadFile = () => {
+            const isUrl = document.getElementById("IMAGE_IS_URL").checked;
+            const featuredImage = processPath(document.getElementById("FEATURED_IMAGE").value, isUrl);
+
+            const title = document.getElementById("POST_TITLE").value;
+            const date = document.getElementById("POST_DATE").value;
+            const author = document.getElementById("POST_AUTHOR").value;
+            const tags = getSingleArrayData("POST_TAGS");
+            const content = document.getElementById("POST_CONTENT").value;
+
+            let configText = `FEATURED_IMAGE: "${featuredImage}"\n`;
+            configText += `POST_TITLE: "${title}"\n`;
+            configText += `POST_DATE: "${date}"\n`;
+            configText += `POST_AUTHOR: "${author}"\n`;
+            configText += `POST_TAGS:\n${tags}\n`;
+            configText += `POST_CONTENT:\n${content}`;
+
+            const blob = new Blob([configText], { type: 'text/plain' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `${title}.md`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        };
+
+        window.onload = () => {
+            addTagRow('POST_TAGS', 'Tag (e.g. Zürafa)');
+        };
+    </script>
+</body>
+</html>

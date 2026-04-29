@@ -1,5 +1,10 @@
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OSMAN config generator">
+    <title>Osman Config Generator</title>
+    <link rel="icon" type="image/x-icon" href="osman.png">
 <style>
 	body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
 	.section { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
@@ -17,8 +22,8 @@
 </style>
 </head>
 <body>
-   <h1>OSMAN config generator</h1>
-   
+   <h1>OSMAN Config Generator</h1>
+
    <div class="section">
    <h3>Base Settings</h3>
    <h2>Base URL: <p>Your Websites URL</p></h2><input id="baseURL" placeholder="https://osman.guru">
@@ -27,7 +32,7 @@
    <h2>Site Title: <p>Your Websites Title</p></h2><input id="SITE_TITLE" placeholder="Osman Site">
    <h2>Site Description: <p>Your Websites Description</p></h2><textarea id="SITE_DESCRIPTION" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
    <h2>Author Name: <p>Main Author Of The Website</p></h2><input id="AUTHOR_NAME" placeholder="Barbaros Köş (MTBBK)">
-   
+
    <h2>Favicon URL: <p>URL or path to your favicon which is in Content/Images/</p></h2>
    <div class="row">
    <input id="FAVICON_URL" placeholder="kostebekgiller.png">
@@ -36,24 +41,24 @@
 
    <h2>Copyright Year: <p>Year For The Copyright Section</p></h2><input id="COPYRIGHT_YEAR" placeholder="2026">
    </div>
-   
+
    <div class="section">
    <h2>Navigation Links <p>Links or subsite names for navigation panel section</p></h2>
    <div id="NAV_BAR_LINKS" class="array-container"></div>
    <button onclick="addRow('NAV_BAR_LINKS', false, '', '', 'Name', 'Target URL')">+ Add New Link</button>
    </div>
-   
+
    <div class="section">
    <h2>Social Links <p>Links of social medias (Please add "<b>mailto:</b>" before mail addresses)</p></h2>
    <div id="SOCIAL_LINKS" class="array-container"></div>
    <button onclick="addRow('SOCIAL_LINKS', false, '', '', 'Name', 'Target URL')">+ Add New Link</button>
    </div>
-   
+
    <div class="section">
    <h3>Index Settings</h3>
    <h2>Welcome Title: <p>Main Greeting Title</p></h2><input id="WELCOME_TITLE" placeholder="Osman'ın Sitesi">
    <h2>About Me: <p>Short Intro Text</p></h2><textarea id="INTRO_ABOUT_ME" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
-   
+
    <h2>Author Avatar URL: <p>URL or path to your avatar which is in Content/Images/</p></h2>
    <div class="row">
 	   <input id="AUTHOR_AVATAR_URL" placeholder="osman.png">
@@ -66,7 +71,7 @@
        <div id="SOCIAL_ICONS" class="array-container"></div>
        <button onclick="addRow('SOCIAL_ICONS', true, '', '', 'URL/Path', 'Target URL')">+ Add New Icon</button>
    </div>
-   
+
    <br/>
    <button onclick="downloadFile()" style="font-size: 1.2em; background: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 20px;">Save config.osman</button>
 
@@ -75,9 +80,9 @@
           const container = document.getElementById(containerId);
           const div = document.createElement("div");
           div.className = "row";
-          
+
           let toggleHtml = hasToggle ? `<label class="type-switch"><input type="checkbox" class="is-url"> Is URL?</label>` : '';
-          
+
           div.innerHTML = `
               <input type="text" class="key" placeholder="${p1}" value="${val1}">
               ${toggleHtml}
@@ -115,14 +120,14 @@
 
       const downloadFile = () => {
           const link = document.createElement("a");
-          
+
           const faviconVal = processPath(
-              document.getElementById("FAVICON_URL").value, 
+              document.getElementById("FAVICON_URL").value,
               document.getElementById("FAVICON_IS_URL").checked
           );
-          
+
           const avatarVal = processPath(
-              document.getElementById("AUTHOR_AVATAR_URL").value, 
+              document.getElementById("AUTHOR_AVATAR_URL").value,
               document.getElementById("AVATAR_IS_URL").checked
           );
 
@@ -149,7 +154,7 @@
           configText += `NAV_BAR_LINKS:\n${getArrayData('NAV_BAR_LINKS')}`;
           configText += `COPYRIGHT_YEAR: "${data.COPYRIGHT_YEAR}"\n`;
           configText += `SOCIAL_LINKS:\n${getArrayData('SOCIAL_LINKS')}\n`;
-          
+
           configText += `INDEX:\n`;
           configText += `WELCOME_TITLE: "${data.WELCOME_TITLE}"\n`;
           configText += `INTRO_ABOUT_ME: "${data.INTRO_ABOUT_ME}"\n`;
@@ -162,7 +167,7 @@
          link.click();
          URL.revokeObjectURL(link.href);
       };
-      
+
       window.onload = () => {
           addRow('NAV_BAR_LINKS', false, '', '', 'Name', 'Target URL');
           addRow('SOCIAL_LINKS', false, '', '', 'Name', 'Target URL');

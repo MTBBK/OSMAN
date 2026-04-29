@@ -1,0 +1,563 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OSMAN GUI config generator">
+    <title>Osman GUI Config Generator</title>
+    <link rel="icon" type="image/x-icon" href="osman.png">
+<style>/* ── 1. GENEL AYARLAR ── */
+
+body {
+    background-color: #f9f6f0;
+    color: #1a1a1a;
+    font-family: Georgia, 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.content {
+    min-height: 60vh;
+}
+
+a {
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+/* Sans-serif font gereken tüm kısımlar - body Georgia kullandığı için
+   nav, footer, meta gibi küçük bilgi alanlarını ayrıca belirtiyoruz */
+.nav-bar a,
+.footer-links a,
+.footer-copy,
+.tag-cloud a,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-meta,
+.post-updated,
+.post-tags a,
+.prev-post,
+.next-post {
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Büyük harf olmasını istediğimiz tüm kısımlar */
+.nav-bar a,
+.footer-links a,
+.tag-cloud a,
+.post-count,
+.post-card-categories,
+.post-meta,
+.post-tags a,
+.prev-post,
+.next-post {
+    text-transform: uppercase;
+}
+
+
+/* ── 2. HEADER & NAV ── */
+
+.header {
+    padding: 20px 24px;
+    border-top: 6px solid #1a1a1a;
+    border-bottom: 3px solid #1a1a1a;
+    background-color: #f9f6f0;
+}
+
+.site-branding {
+    margin-bottom: 10px;
+}
+
+.site-title {
+    color: #1a1a1a;
+    font-size: 1.8rem;
+    font-weight: bold;
+    font-style: italic;
+    text-decoration: none;
+}
+
+.nav-bar {
+    margin-top: 10px;
+}
+
+.nav-bar a {
+    color: #1a1a1a;
+    padding: 6px 14px;
+    border: 1px solid #ccc;
+    font-size: 0.75rem;
+}
+
+
+/* ── 3. FOOTER ── */
+
+.footer hr {
+    border: none;
+    border-top: 3px solid #1a1a1a;
+    margin: 0;
+}
+
+.footer {
+    margin-top: 60px;
+    background-color: #1a1a1a;
+    color: #f9f6f0;
+    padding: 24px;
+    text-align: center;
+}
+
+.footer-links {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #ccc;
+    font-size: 0.75rem;
+    margin: 0 10px;
+}
+
+.footer-copy {
+    font-size: 0.75rem;
+}
+
+.footer-copy p {
+    margin: 4px 0;
+}
+
+
+/* ── 4. INDEX SAYFASI ── */
+
+.index-page {
+    padding: 40px 0;
+}
+
+.index-welcome {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #ccc;
+}
+
+.welcome-header {
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    max-width: 120px;
+    border-radius: 12px;
+}
+
+.welcome-title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    font-style: italic;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.welcome-intro {
+    max-width: 540px;
+    margin: 0 auto 24px;
+    color: #444;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.welcome-socials {
+    margin-bottom: 24px;
+}
+
+.welcome-socials a {
+    color: #444;
+    margin: 0 8px;
+}
+
+.tag-cloud {
+    margin-bottom: 16px;
+}
+
+.tag-cloud a {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border: 1px solid #999;
+    color: #444;
+    margin: 3px;
+}
+
+.index-stats {
+    margin-bottom: 8px;
+}
+
+.post-count {
+    display: block;
+    padding: 10px 0;
+    font-size: 0.75rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.post-feed {
+    margin-top: 8px;
+}
+
+.post-card {
+    padding: 18px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.post-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.post-card-excerpt {
+    color: #444;
+    font-size: 0.9rem;
+    margin: 6px 0;
+}
+
+.post-card-meta {
+    font-size: 0.78rem;
+}
+
+.post-card-categories {
+    font-size: 0.75rem;
+}
+
+
+/* ── 5. POST / MAKALE SAYFASI ── */
+
+.post {
+    max-width: 750px;
+    margin: 48px auto;
+}
+
+.post > img {
+    width: 100%;
+    margin: 0 0 32px 0;
+    border: none;
+    border-bottom: 3px solid #1a1a1a;
+}
+
+.post-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin: 0 0 16px;
+    line-height: 1.2;
+}
+
+.post-meta {
+    font-size: 0.78rem;
+    margin-bottom: 10px;
+}
+
+/* Gri renk olmasını istediğimiz tüm kısımlar */
+.footer-copy,
+.post-count,
+.post-card-meta,
+.post-card-categories,
+.post-read-time,
+.post-updated,
+.prev-post,
+.next-post {
+    color: #888;
+}
+
+.post-date   { color: #444; }
+.post-author { color: #1a1a1a; font-weight: bold; }
+
+.post-updated {
+    font-size: 0.75rem;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.post-header {
+    border-bottom: 3px solid #1a1a1a;
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+}
+
+.post-content {
+    line-height: 1.85;
+    font-size: 17px;
+    color: #1a1a1a;
+}
+
+.post-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 3px solid #1a1a1a;
+}
+
+.post-tags {
+    margin-bottom: 28px;
+}
+
+.post-tags a {
+    font-size: 0.72rem;
+    padding: 3px 10px;
+    border: 1px solid #1a1a1a;
+    color: #1a1a1a;
+    margin-right: 4px;
+}
+
+.post-pagination {
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+    overflow: hidden;
+}
+
+.prev-post, .next-post {
+    font-size: 0.8rem;
+}
+
+.prev-post { float: left; }
+.next-post { float: right; }
+
+.post-pagination div {
+    color: #1a1a1a;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+
+	body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+	.section { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+	.row { margin-bottom: 5px; display: flex; gap: 10px; align-items: center; }
+	textarea, input { margin-bottom: 5px;font-size: 0.8em; height: 40px; width: 150px; }
+	.key, .val, .is-url { height: 20px; width: 80px; }
+	#WELCOME_TITLE { width:300px; height: 50px;}
+	#INTRO_ABOUT_ME { width:400px; height: 50px;}
+	.remove-btn { background: #ff4444; color: white; border: none; border-radius: 3px; margin-right:10px;}
+	.type-switch { color: #000000; font-size: 0.8em; display: flex; align-items: center; gap: 5px; background: #eee; padding: 2px 8px; border-radius: 10px; }
+	.type-switch input { width: auto; margin: 0; }
+	.array-container { display: flex; }
+	h2 { font-size: 1em; margin-bottom: 2px; }
+	h2 p{ font-size: 0.8em; color: #707070; }
+	h2 p b{ color: #FF0000; }
+	h3 { font-size: 1.5em; margin-bottom: 0px; }
+	.insidebox {
+    border-color:red;
+    border:10px;
+    width: 90%;
+    max-width: 60rem;
+    max-height: 80vh;
+    border-radius: 16px;
+	padding: 0.1rem 1rem;
+	margin: 2rem auto;
+    overflow-y: auto;
+  }
+</style>
+</head>
+   <h1>OSMAN Config Generator</h1>
+
+   <div class="section">
+   <h3>Base Settings</h3>
+   <h2>Base URL: <p>Your Websites URL</p></h2><input id="baseURL" placeholder="https://osman.guru">
+   <h2>Site Language: <p>Your Websites Main Lanuage</p></h2><input id="SITE_LANGUAGE" placeholder="tr">
+   <h2>Theme Name: <p>Selected Theme Name (You can find more on our website)</p></h2><input id="THEME_NAME" placeholder="Space">
+   <h2>Site Description: <p>Your Websites Description</p></h2><textarea id="SITE_DESCRIPTION" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
+   <h2>Author Name: <p>Main Author Of The Website</p></h2><input id="AUTHOR_NAME" placeholder="Barbaros Köş (MTBBK)">
+
+   <h2>Favicon URL: <p>URL or path to your favicon which is in Content/Images/</p></h2>
+	   <div class="row">
+	   <input id="FAVICON_URL" placeholder="kostebekgiller.png">
+	   <label class="type-switch"><input type="checkbox" id="FAVICON_IS_URL"> Is URL?</label>
+	   </div>
+   </div>
+
+<div class="insidebox">
+
+<body>
+    <header class="header container">
+        <div class="site-branding">
+            <a href="/" class="site-title"><h2>Site Title: </h2><input id="SITE_TITLE" placeholder="Osman Site"></a>
+        </div>
+        <nav class="nav-bar">
+		   <div id="NAV_BAR_LINKS" class="array-container"></div>
+		   <button onclick="addRow('NAV_BAR_LINKS', false, '', '', 'Name', 'Target URL')">+ Add New Link</button>
+        </nav>
+    </header>
+
+    <main class="content container">
+        <section class="index-page">
+    <header class="index-welcome">
+        <div class="welcome-header">
+            <img src="./Images/osman.png" alt="Author Avatar" class="profile-avatar">         <div class="row">
+		   <input id="AUTHOR_AVATAR_URL" placeholder="osman.png">
+		   <label class="type-switch"><input type="checkbox" id="AVATAR_IS_URL"> Is URL?</label>
+		 </div></img>
+
+            <h1 class="welcome-title"><input id="WELCOME_TITLE" placeholder="Osman'ın Sitesi"></h1>
+        </div>
+        <div class="welcome-intro">
+            <textarea id="INTRO_ABOUT_ME" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
+        </div>
+        <div class="welcome-socials">
+       <h2>Social Icons <p>Links of social media icons and social media links (Please add "<b>mailto:</b>" before mail addresses)</p></h2>
+       <div id="SOCIAL_ICONS" class="array-container"></div>
+       <button onclick="addRow('SOCIAL_ICONS', true, '', '', 'URL/Path', 'Target URL')">+ Add New Icon</button>
+        </div>
+        <div class="tag-cloud">
+            <a href="#">İspanya</a>
+<a href="#">Saray</a>
+<a href="#">A</a>
+<a href="#">vv</a>
+<a href="#">b</a>
+
+        </div>
+    </header>
+
+    <div class="index-stats">
+        <span class="post-count">Total Posts: 2</span>
+    </div>
+
+    <div class="post-feed">
+        <div class="post-card">
+                    <a href="Naber.html" class="post-card-title">Naber</a>
+                    <p class="post-card-excerpt">OOOOO Gezi <b>KOYU</b> gez
+</p>
+                    <div class="post-card-meta">19/10/2027</div>
+                    <div class="post-card-categories">A, vv, b</div>
+                </div><div class="post-card">
+                    <a href="ElHamraSarayiGezisi.html" class="post-card-title">El Hamra Sarayı Gezisi</a>
+                    <p class="post-card-excerpt">Güzel geziydi doğrusu. Harika gezdik. Ama nasıl gezdik bir bilseniz... Bir ara o kadar gezdik ki gezmekten sıkılacak olduk ama</p>
+                    <div class="post-card-meta">19/10/2020</div>
+                    <div class="post-card-categories">İspanya, Saray</div>
+                </div>
+    </div>
+</section>
+
+    </main>
+
+    <footer class="footer container">
+        <hr>
+        <div class="footer-links">
+   <h2>Social Links <p>Links of social medias (Please add "<b>mailto:</b>" before mail addresses)</p></h2>
+   <div id="SOCIAL_LINKS" class="array-container"></div>
+   <button onclick="addRow('SOCIAL_LINKS', false, '', '', 'Name', 'Target URL')">+ Add New Link</button>
+        </div>
+        <div class="footer-copy">
+            <p>&copy; <input id="COPYRIGHT_YEAR" placeholder="2026"> <input id="AUTHOR_NAME" placeholder="Barbaros Köş (MTBBK)"></p>
+            <p>&copy; OSMAN</p>
+        </div>
+    </footer>
+</body>
+
+</div>
+
+   <button onclick="downloadFile()" style="font-size: 1.2em; background: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 20px;">Save config.osman</button>
+
+   <script>
+      const addRow = (containerId, hasToggle = false, val1 = "", val2 = "", p1 = "Name", p2 = "URL") => {
+          const container = document.getElementById(containerId);
+          const div = document.createElement("div");
+          div.className = "row";
+
+          let toggleHtml = hasToggle ? `<label class="type-switch"><input type="checkbox" class="is-url"> Is URL?</label>` : '';
+
+          div.innerHTML = `
+              <input type="text" class="key" placeholder="${p1}" value="${val1}">
+              ${toggleHtml}
+              <input type="text" class="val" placeholder="${p2}" value="${val2}">
+              <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
+          `;
+          container.appendChild(div);
+      };
+
+      const processPath = (text, isUrl) => {
+          if (!text) return "";
+          if (isUrl) return text;
+          return text.startsWith("./Images/") ? text : `./Images/${text}`;
+      };
+
+      const getArrayData = (containerId) => {
+          const container = document.getElementById(containerId);
+          const rows = container.querySelectorAll(".row");
+          let output = "";
+          rows.forEach(row => {
+              let k = row.querySelector(".key").value;
+              const v = row.querySelector(".val").value;
+              const toggle = row.querySelector(".is-url");
+
+              if (toggle) {
+                  k = processPath(k, toggle.checked);
+              }
+
+              if(k && v) {
+                  output += `\t- "${k}", "${v}"\n`;
+              }
+          });
+          return output;
+      };
+
+      const downloadFile = () => {
+          const link = document.createElement("a");
+
+          const faviconVal = processPath(
+              document.getElementById("FAVICON_URL").value,
+              document.getElementById("FAVICON_IS_URL").checked
+          );
+
+          const avatarVal = processPath(
+              document.getElementById("AUTHOR_AVATAR_URL").value,
+              document.getElementById("AVATAR_IS_URL").checked
+          );
+
+          const data = {
+              baseURL: document.getElementById("baseURL").value,
+              SITE_LANGUAGE: document.getElementById("SITE_LANGUAGE").value,
+              THEME_NAME: document.getElementById("THEME_NAME").value,
+              SITE_TITLE: document.getElementById("SITE_TITLE").value,
+              SITE_DESCRIPTION: document.getElementById("SITE_DESCRIPTION").value,
+              AUTHOR_NAME: document.getElementById("AUTHOR_NAME").value,
+              COPYRIGHT_YEAR: document.getElementById("COPYRIGHT_YEAR").value,
+              WELCOME_TITLE: document.getElementById("WELCOME_TITLE").value,
+              INTRO_ABOUT_ME: document.getElementById("INTRO_ABOUT_ME").value
+          };
+
+          let configText = `BASE:\n`;
+          configText += `baseURL: "${data.baseURL}"\n`;
+          configText += `SITE_LANGUAGE: "${data.SITE_LANGUAGE}"\n`;
+          configText += `THEME_NAME: "${data.THEME_NAME}"\n`;
+          configText += `SITE_TITLE: "${data.SITE_TITLE}"\n`;
+          configText += `SITE_DESCRIPTION: "${data.SITE_DESCRIPTION}"\n`;
+          configText += `AUTHOR_NAME: "${data.AUTHOR_NAME}"\n`;
+          configText += `FAVICON_URL: "${faviconVal}"\n`;
+          configText += `NAV_BAR_LINKS:\n${getArrayData('NAV_BAR_LINKS')}`;
+          configText += `COPYRIGHT_YEAR: "${data.COPYRIGHT_YEAR}"\n`;
+          configText += `SOCIAL_LINKS:\n${getArrayData('SOCIAL_LINKS')}\n`;
+
+          configText += `INDEX:\n`;
+          configText += `WELCOME_TITLE: "${data.WELCOME_TITLE}"\n`;
+          configText += `INTRO_ABOUT_ME: "${data.INTRO_ABOUT_ME}"\n`;
+          configText += `AUTHOR_AVATAR_URL: "${avatarVal}"\n`;
+          configText += `SOCIAL_ICONS:\n${getArrayData('SOCIAL_ICONS')}`;
+
+         const file = new Blob([configText], { type: 'text/plain' });
+         link.href = URL.createObjectURL(file);
+         link.download = "config.osman";
+         link.click();
+         URL.revokeObjectURL(link.href);
+      };
+
+      window.onload = () => {
+          addRow('NAV_BAR_LINKS', false, '', '', 'Name', 'Target URL');
+          addRow('SOCIAL_LINKS', false, '', '', 'Name', 'Target URL');
+          addRow('SOCIAL_ICONS', true, '', '', 'URL/Path', 'Target URL');
+      };
+   </script>
+</html>
