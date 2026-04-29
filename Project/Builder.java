@@ -79,42 +79,7 @@ public class Builder {
 
         // Copy all files and folders in Content folder into Output
         // except Content/Texts
-        {
-            Path sourceFol = Paths.get("Content");
-            Path targetFol = Paths.get("Output");
-            Path excludeFol = Paths.get("Content", "Texts");
-
-            try {
-                Files.walk(sourceFol).forEach(source -> {
-                    if (source.startsWith(excludeFol)) {
-                        return;
-                    }
-
-                    // 1. Relativize: Finds the difference between the root and the current file
-                    // 2. Resolve: Appends that difference to the target directory
-                    Path relativePath = sourceFol.relativize(source);
-                    Path destination = targetFol.resolve(relativePath);
-
-                    try {
-                        if (Files.isDirectory(source)) {
-                            // Create the directory in the output folder if it doesn't exist
-                            if (!Files.exists(destination)) {
-                                Files.createDirectories(destination);
-                            }
-                        } else {
-                            // Copy the file, replacing it if it already exists
-                            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
-                        }
-                    } catch (IOException e) {
-                        System.err.println("Failed to copy: " + source);
-                        e.printStackTrace();
-                    }
-                });
-            } catch (IOException e) {
-                System.err.println("Failed to walk directory.");
-                e.printStackTrace();
-            }
-        }
+        copyDirectory(Paths.get("Content"), Paths.get("Output"), Paths.get("Content", "Texts"));
 
         StringBuilder base = new StringBuilder();
         StringBuilder index = new StringBuilder();
@@ -467,6 +432,42 @@ public class Builder {
         }
     }
 
+    // takes source folder's path and the destination folder's path to then copy all
+    // files in the source folder including folders and their contents but excluding
+    // excludeFol.
+    public static void copyDirectory(Path sourceFol, Path targetFol, Path excludeFol) {
+        try {
+            Files.walk(sourceFol).forEach(source -> {
+                if (null != excludeFol && source.startsWith(excludeFol)) {
+                    return;
+                }
+
+                // 1. Relativize: Finds the difference between the root and the current file
+                // 2. Resolve: Appends that difference to the target directory
+                Path relativePath = sourceFol.relativize(source);
+                Path destination = targetFol.resolve(relativePath);
+
+                try {
+                    if (Files.isDirectory(source)) {
+                        // Create the directory in the output folder if it doesn't exist
+                        if (!Files.exists(destination)) {
+                            Files.createDirectories(destination);
+                        }
+                    } else {
+                        // Copy the file, replacing it if it already exists
+                        Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                } catch (IOException e) {
+                    System.err.println("Failed to copy: " + source);
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            System.err.println("Failed to walk directory.");
+            e.printStackTrace();
+        }
+    }
+
     // replaces file[1]'s with the appropriate parts in config and returns the
     // result as a StringBuilder
     static StringBuilder makeFile(String[] file, String config) throws Exception {
@@ -552,196 +553,6 @@ abstract class Strategy {
     abstract void makeChanges(StringBuilder file, String config) throws Exception;
 }
 
-class NavbarStrategy extends Strategy {
-    @Override
-    public void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nNavbarStrategy: Begin.");
-
-        String sl = "{{ " + option + " }}";
-
-        if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "NavbarStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
-            return;
-        }
-
-        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
-        int iIndex = config.indexOf(',', lIndex);
-
-        if (-1 == lIndex) {
-            System.out.println(
-                    "NavbarStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
-            Builder.stringEditor("{{ " + option + " }}", "", file);
-            return;
-        }
-
-        boolean nextExists = true;
-
-        StringBuilder result = new StringBuilder();
-
-        while (nextExists) {
-            int nextLQuote = config.indexOf('"', lIndex) + 1;
-            int nextLDash = config.indexOf('-', lIndex);
-            int nextLLine = config.indexOf('\n', lIndex);
-
-            int nextIQuote = config.indexOf('"', iIndex) + 1;
-
-            // check if there is a variable to read and skip to the next iteration if there
-            // isnt
-            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
-                nextExists = false;
-                continue;
-            }
-
-            StringBuilder ref = new StringBuilder(
-                    "<a href=\"{{ NAV_BAR_LINK2 }}\">{{ NAV_BAR_LINK1 }}</a>\n\t\t\t");
-
-            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
-
-            String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
-
-            lIndex = nextLLine + 1;
-            iIndex = config.indexOf(',', lIndex) + 1;
-
-            Builder.stringEditor("{{ NAV_BAR_LINK2 }}", iValue, ref);
-            Builder.stringEditor("{{ NAV_BAR_LINK1 }}", lValue, ref);
-
-            result.append(ref);
-        }
-
-        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
-
-        System.out.println("NavbarStrategy: End.\n");
-    }
-}
-
-class SocialLinksStrategy extends Strategy {
-    @Override
-    public void makeChanges(StringBuilder file, String config) throws Exception {
-        // <a href="{{ SOCIAL_LINKS2 }}">{{ SOCIAL_LINKS1 }}</a>
-        System.out.println("\nSocialLinksStrategy: Begin.");
-
-        String sl = "{{ SOCIAL_LINKS }}";
-
-        if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "SocialLinksStrategy: Could not find \"SOCIAL_LINKS\" in the file, it will be skipped.");
-            return;
-        }
-
-        int lIndex = config.indexOf('\n', config.indexOf("SOCIAL_LINKS")) + 1;
-        int iIndex = config.indexOf(',', lIndex);
-
-        if (-1 == lIndex) {
-            System.out.println(
-                    "SocialLinksStrategy: Could not find \"SOCIAL_LINKS\" in the config, it will be skipped.");
-            Builder.stringEditor("{{ " + option + " }}", "", file);
-            return;
-        }
-
-        boolean nextExists = true;
-
-        StringBuilder result = new StringBuilder();
-
-        while (nextExists) {
-            int nextLQuote = config.indexOf('"', lIndex) + 1;
-            int nextLDash = config.indexOf('-', lIndex);
-            int nextLLine = config.indexOf('\n', lIndex);
-
-            int nextIQuote = config.indexOf('"', iIndex) + 1;
-
-            // check if there is a variable to read and skip to the next iteration if there
-            // isnt
-            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
-                nextExists = false;
-                continue;
-            }
-
-            StringBuilder ref = new StringBuilder(
-                    "<a href=\"{{ SOCIAL_LINKS2 }}\">{{ SOCIAL_LINKS1 }}</a>\n\t\t\t");
-
-            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
-
-            String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
-
-            lIndex = nextLLine + 1;
-            iIndex = config.indexOf(',', lIndex) + 1;
-
-            Builder.stringEditor("{{ SOCIAL_LINKS2 }}", iValue, ref);
-            Builder.stringEditor("{{ SOCIAL_LINKS1 }}", lValue, ref);
-
-            result.append(ref);
-        }
-
-        Builder.stringEditor("{{ SOCIAL_LINKS }}", result.toString(), file);
-
-        System.out.println("SocialLinksStrategy: End.\n");
-    }
-}
-
-class SocialIconsStrategy extends Strategy {
-    @Override
-    void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nSocialIconsStrategy: Begin.");
-
-        String sl = "{{ " + option + " }}";
-
-        if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "SocialIconsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
-            return;
-        }
-
-        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
-        int iIndex = config.indexOf(',', lIndex);
-
-        if (-1 == lIndex) {
-            System.out.println(
-                    "SocialIconsStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
-            Builder.stringEditor("{{ " + option + " }}", "", file);
-            return;
-        }
-
-        boolean nextExists = true;
-
-        StringBuilder result = new StringBuilder();
-
-        while (nextExists) {
-            int nextLQuote = config.indexOf('"', lIndex) + 1;
-            int nextLDash = config.indexOf('-', lIndex);
-            int nextLLine = config.indexOf('\n', lIndex);
-
-            int nextIQuote = config.indexOf('"', iIndex) + 1;
-
-            // check if there is a variable to read and skip to the next iteration if there
-            // isnt
-            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
-                nextExists = false;
-                continue;
-            }
-
-            StringBuilder ref = new StringBuilder(
-                    "<a href=\"{{ SOCIAL_ICONS2 }}\"><img src=\"{{ SOCIAL_ICONS1 }}\"style=\"width:2rem;height:2rem;\"></a>\n\t\t\t");
-
-            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
-
-            String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
-
-            lIndex = nextLLine + 1;
-            iIndex = config.indexOf(',', lIndex) + 1;
-
-            Builder.stringEditor("{{ SOCIAL_ICONS2 }}", iValue, ref);
-            Builder.stringEditor("{{ SOCIAL_ICONS1 }}", lValue, ref);
-
-            result.append(ref);
-        }
-
-        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
-
-        System.out.println("SocialIconsStrategy: End.\n");
-    }
-}
-
 class ThemeNameStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
@@ -802,63 +613,6 @@ class NonArrayStrategy extends Strategy {
     }
 }
 
-class PostTagsStrategy extends Strategy {
-
-    @Override
-    void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nPostTagsStrategy: Begin.");
-        String sl = "{{ " + option + " }}";
-
-        if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "PostTagsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
-            return;
-        }
-
-        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
-
-        if (-1 == lIndex) {
-            System.out.println(
-                    "PostTagsStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
-            Builder.stringEditor("{{ " + option + " }}", "", file);
-            return;
-        }
-
-        boolean nextExists = true;
-
-        StringBuilder result = new StringBuilder();
-
-        while (nextExists) {
-            int nextLQuote = config.indexOf('"', lIndex) + 1;
-            int nextLDash = config.indexOf('-', lIndex);
-            int nextLLine = config.indexOf('\n', lIndex);
-
-            // check if there is a variable to read and skip to the next iteration if there
-            // isnt
-            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
-                nextExists = false;
-                continue;
-            }
-
-            StringBuilder ref = new StringBuilder(
-                    "<a href=\"#\">{{ POST_TAGS }}</a>\n\t\t\t");
-
-            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
-
-            lIndex = config.indexOf('\n', lIndex) + 1;
-            lIndex = nextLLine + 1;
-
-            Builder.stringEditor("{{ POST_TAGS }}", lValue, ref);
-
-            result.append(ref);
-        }
-
-        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
-        System.out.println("PostTagsStrategy: End.\n");
-    }
-
-}
-
 class PostContentStrategy extends Strategy {
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
@@ -898,6 +652,165 @@ class PostContentStrategy extends Strategy {
             System.out.println("PostContentStrategy: End.\n");
         }
         System.out.println("PostContentStrategy: End.\n");
+    }
+}
+
+abstract class SingleArrayStrategy extends Strategy {
+    String codePiece;
+
+    @Override
+    void makeChanges(StringBuilder file, String config) throws Exception {
+        System.out.println("\nSingleArrayStrategy: Begin.");
+        String sl = "{{ " + option + " }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "SingleArrayStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+
+        if (-1 == lIndex) {
+            System.out.println(
+                    "SingleArrayStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
+                nextExists = false;
+                continue;
+            }
+
+            StringBuilder ref = new StringBuilder(codePiece);
+
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+
+            lIndex = config.indexOf('\n', lIndex) + 1;
+            lIndex = nextLLine + 1;
+
+            Builder.stringEditor(sl, lValue, ref);
+
+            result.append(ref);
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+        System.out.println("SingleArrayStrategy: End.\n");
+    }
+}
+
+class PostTagsStrategy extends SingleArrayStrategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        codePiece = "<a href=\"#\">{{ POST_TAGS }}</a>\n\t\t\t";
+        // \n's and \t's to allign it better. It is just visual.
+        super.makeChanges(file, config);
+    }
+}
+
+abstract class DoubleArrayStrategy extends Strategy {
+    String codePiece;
+    // codePiece's options must contain second array part before first one.
+    // Example: ... {{ VERY_COOL2 }} ... {{ VERY_COOL1 }} ...
+    // this can be achieved by swapping their places in config
+    // VERY_COOL in the given example is the option.
+
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        System.out.println("\nDoubleArrayStrategy: Begin.");
+
+        String sl = "{{ " + option + " }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "DoubleArrayStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+        int iIndex = config.indexOf(',', lIndex);
+
+        if (-1 == lIndex) {
+            System.out.println(
+                    "DoubleArrayStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
+
+            int nextIQuote = config.indexOf('"', iIndex) + 1;
+
+            // check if there is a variable to read, skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
+                nextExists = false;
+            } else {
+                StringBuilder ref = new StringBuilder(codePiece);
+
+                String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+
+                String iValue = config.substring(nextIQuote, config.indexOf('"', nextIQuote));
+
+                lIndex = nextLLine + 1;
+                iIndex = config.indexOf(',', lIndex) + 1;
+
+                Builder.stringEditor("{{ " + option + "2 }}", iValue, ref);
+                Builder.stringEditor("{{ " + option + "1 }}", lValue, ref);
+
+                result.append(ref);
+            }
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+
+        System.out.println("DoubleArrayStrategy:: End.\n");
+    }
+}
+
+class NavbarStrategy extends DoubleArrayStrategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        codePiece = "<a href=\"{{ NAV_BAR_LINKS2 }}\">{{ NAV_BAR_LINKS1 }}</a>\n\t\t\t";
+        // \n's and \t's to allign it better. It is just visual.
+        super.makeChanges(file, config);
+    }
+}
+
+class SocialLinksStrategy extends DoubleArrayStrategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        codePiece = "<a href=\"{{ SOCIAL_LINKS2 }}\">{{ SOCIAL_LINKS1 }}</a>\n\t\t\t";
+        // \n's and \t's to allign it better. It is just visual.
+        super.makeChanges(file, config);
+    }
+}
+
+class SocialIconsStrategy extends DoubleArrayStrategy {
+    @Override
+    public void makeChanges(StringBuilder file, String config) throws Exception {
+        codePiece = "<a href=\"{{ SOCIAL_ICONS2 }}\"><img src=\"{{ SOCIAL_ICONS1 }}\"style=\"width:2rem;height:2rem;\"></a>\n\t\t\t";
+        // \n's and \t's to allign it better. It is just visual.
+        super.makeChanges(file, config);
     }
 }
 
