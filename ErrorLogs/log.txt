@@ -1,0 +1,485 @@
+main: Begin.
+
+buildFile: Begin.
+buildSite: Successfully read the config.
+buildSite: Successfully run parseContentFiles("/Templates/").
+buildSite: Successfully run parseContentFiles("/Content/Texts/").
+
+makeFile: Begin.
+makeFile: Successfully found the start of "index.html" file's part.
+makeFile: Successfully found the option: "WELCOME_TITLE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("WELCOME_TITLE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("WELCOME_TITLE") on the file.
+makeFile: Successfully finished changing "WELCOME_TITLE" in the file.
+makeFile: Successfully found the option: "INTRO_ABOUT_ME".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("INTRO_ABOUT_ME") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("INTRO_ABOUT_ME") on the file.
+makeFile: Successfully finished changing "INTRO_ABOUT_ME" in the file.
+makeFile: Successfully found the option: "AUTHOR_AVATAR_URL".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("AUTHOR_AVATAR_URL") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("AUTHOR_AVATAR_URL") on the file.
+makeFile: Successfully finished changing "AUTHOR_AVATAR_URL" in the file.
+makeFile: Successfully found the option: "SOCIAL_ICONS".
+
+Factory: Begin.
+Factory: Chose SocialIconsStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("SOCIAL_ICONS") on the file.
+
+SocialIconsStrategy: Begin.
+SocialIconsStrategy: End.
+
+makeFile: Successfully executed performStrategy("SOCIAL_ICONS") on the file.
+makeFile: Successfully finished changing "SOCIAL_ICONS" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully finished making the file.
+makeFile: End.
+
+buildSite: Successfully run makeFile on "index.html".
+buildSite: Successfully grabbed "page.html".
+
+makeFile: Begin.
+makeFile: Successfully found the start of "base.html" file's part.
+makeFile: Successfully found the option: "baseURL".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("baseURL") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: Could not find the option "{{ baseURL }}" in the file, it will be skipped.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("baseURL") on the file.
+makeFile: Successfully finished changing "baseURL" in the file.
+makeFile: Successfully found the option: "SITE_LANGUAGE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("SITE_LANGUAGE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("SITE_LANGUAGE") on the file.
+makeFile: Successfully finished changing "SITE_LANGUAGE" in the file.
+makeFile: Successfully found the option: "THEME_NAME".
+
+Factory: Begin.
+Factory: Chose ThemeNameStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("THEME_NAME") on the file.
+
+ThemeNameStrategy: Begin.
+ThemeNameStrategy: Starting copying "FreshPistachio.css" to the Output folder.
+ThemeNameStrategy: Starting copying "FreshPistachio.css" to the Output folder.
+ThemeNameStrategy: End.
+
+makeFile: Successfully executed performStrategy("THEME_NAME") on the file.
+makeFile: Successfully finished changing "THEME_NAME" in the file.
+makeFile: Successfully found the option: "SITE_TITLE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("SITE_TITLE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("SITE_TITLE") on the file.
+makeFile: Successfully finished changing "SITE_TITLE" in the file.
+makeFile: Successfully found the option: "SITE_DESCRIPTION".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("SITE_DESCRIPTION") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("SITE_DESCRIPTION") on the file.
+makeFile: Successfully finished changing "SITE_DESCRIPTION" in the file.
+makeFile: Successfully found the option: "AUTHOR_NAME".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("AUTHOR_NAME") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("AUTHOR_NAME") on the file.
+makeFile: Successfully finished changing "AUTHOR_NAME" in the file.
+makeFile: Successfully found the option: "FAVICON_URL".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("FAVICON_URL") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("FAVICON_URL") on the file.
+makeFile: Successfully finished changing "FAVICON_URL" in the file.
+makeFile: Successfully found the option: "NAV_BAR_LINKS".
+
+Factory: Begin.
+Factory: Chose NavbarStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("NAV_BAR_LINKS") on the file.
+
+NavbarStrategy: Begin.
+NavbarStrategy: End.
+
+makeFile: Successfully executed performStrategy("NAV_BAR_LINKS") on the file.
+makeFile: Successfully finished changing "NAV_BAR_LINKS" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully found the option: "COPYRIGHT_YEAR".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("COPYRIGHT_YEAR") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("COPYRIGHT_YEAR") on the file.
+makeFile: Successfully finished changing "COPYRIGHT_YEAR" in the file.
+makeFile: Successfully found the option: "SOCIAL_LINKS".
+
+Factory: Begin.
+Factory: Chose SocialLinksStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("SOCIAL_LINKS") on the file.
+
+SocialLinksStrategy: Begin.
+SocialLinksStrategy: End.
+
+makeFile: Successfully executed performStrategy("SOCIAL_LINKS") on the file.
+makeFile: Successfully finished changing "SOCIAL_LINKS" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully found the option: "INDEX".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("INDEX") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: Could not find the option "{{ INDEX }}" in the file, it will be skipped.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("INDEX") on the file.
+makeFile: Successfully finished changing "INDEX" in the file.
+makeFile: Successfully found the option: "WELCOME_TITLE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("WELCOME_TITLE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: Could not find the option "{{ WELCOME_TITLE }}" in the file, it will be skipped.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("WELCOME_TITLE") on the file.
+makeFile: Successfully finished changing "WELCOME_TITLE" in the file.
+makeFile: Successfully found the option: "INTRO_ABOUT_ME".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("INTRO_ABOUT_ME") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: Could not find the option "{{ INTRO_ABOUT_ME }}" in the file, it will be skipped.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("INTRO_ABOUT_ME") on the file.
+makeFile: Successfully finished changing "INTRO_ABOUT_ME" in the file.
+makeFile: Successfully found the option: "AUTHOR_AVATAR_URL".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("AUTHOR_AVATAR_URL") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: Could not find the option "{{ AUTHOR_AVATAR_URL }}" in the file, it will be skipped.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("AUTHOR_AVATAR_URL") on the file.
+makeFile: Successfully finished changing "AUTHOR_AVATAR_URL" in the file.
+makeFile: Successfully found the option: "SOCIAL_ICONS".
+
+Factory: Begin.
+Factory: Chose SocialIconsStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("SOCIAL_ICONS") on the file.
+
+SocialIconsStrategy: Begin.
+SocialIconsStrategy: Could not find "SOCIAL_ICONS" in the file, it will be skipped.
+makeFile: Successfully executed performStrategy("SOCIAL_ICONS") on the file.
+makeFile: Successfully finished changing "SOCIAL_ICONS" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully finished making the file.
+makeFile: End.
+
+buildSite: Successfully run makeFile on "base.html".
+buildSite: Starting to make site pages.
+
+makeFile: Begin.
+makeFile: Successfully found the start of "ElHamraSarayiGezisi.md" file's part.
+makeFile: Failed to find the start of "ElHamraSarayiGezisi.md" file's part. Will begin from the top of the file
+makeFile: Successfully found the option: "FEATURED_IMAGE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("FEATURED_IMAGE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("FEATURED_IMAGE") on the file.
+makeFile: Successfully finished changing "FEATURED_IMAGE" in the file.
+makeFile: Successfully found the option: "POST_TITLE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_TITLE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_TITLE") on the file.
+makeFile: Successfully finished changing "POST_TITLE" in the file.
+makeFile: Successfully found the option: "POST_DATE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_DATE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_DATE") on the file.
+makeFile: Successfully finished changing "POST_DATE" in the file.
+makeFile: Successfully found the option: "POST_AUTHOR".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_AUTHOR") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_AUTHOR") on the file.
+makeFile: Successfully finished changing "POST_AUTHOR" in the file.
+makeFile: Successfully found the option: "POST_TAGS".
+
+Factory: Begin.
+Factory: Chose PostTagsStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_TAGS") on the file.
+
+PostTagsStrategy: Begin.
+PostTagsStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_TAGS") on the file.
+makeFile: Successfully finished changing "POST_TAGS" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully found the option: "POST_CONTENT".
+
+Factory: Begin.
+Factory: Chose PostContentStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_CONTENT") on the file.
+
+PostContentStrategy: Begin.
+PostContentStrategy: Starting to calculate "POST_READ_TIME".
+PostContentStrategy: Successfully calculated "POST_READ_TIME".
+PostContentStrategy: End.
+
+PostContentStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_CONTENT") on the file.
+makeFile: Successfully finished changing "POST_CONTENT" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully finished making the file.
+makeFile: End.
+
+buildSite: Successfully made "ElHamraSarayiGezisi.md" page.
+
+makeFile: Begin.
+makeFile: Successfully found the start of "Naber.md" file's part.
+makeFile: Failed to find the start of "Naber.md" file's part. Will begin from the top of the file
+makeFile: Successfully found the option: "FEATURED_IMAGE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("FEATURED_IMAGE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("FEATURED_IMAGE") on the file.
+makeFile: Successfully finished changing "FEATURED_IMAGE" in the file.
+makeFile: Successfully found the option: "POST_TITLE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_TITLE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_TITLE") on the file.
+makeFile: Successfully finished changing "POST_TITLE" in the file.
+makeFile: Successfully found the option: "POST_DATE".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_DATE") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_DATE") on the file.
+makeFile: Successfully finished changing "POST_DATE" in the file.
+makeFile: Successfully found the option: "POST_AUTHOR".
+
+Factory: Begin.
+Factory: Chose NonArrayStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_AUTHOR") on the file.
+
+NonArrayStrategy: Begin.
+NonArrayStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_AUTHOR") on the file.
+makeFile: Successfully finished changing "POST_AUTHOR" in the file.
+makeFile: Successfully found the option: "POST_TAGS".
+
+Factory: Begin.
+Factory: Chose PostTagsStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_TAGS") on the file.
+
+PostTagsStrategy: Begin.
+PostTagsStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_TAGS") on the file.
+makeFile: Successfully finished changing "POST_TAGS" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully found the option: "POST_CONTENT".
+
+Factory: Begin.
+Factory: Chose PostContentStrategy.
+Factory: End.
+
+makeFile: Successfully executed setStrategy("POST_CONTENT") on the file.
+
+PostContentStrategy: Begin.
+PostContentStrategy: Starting to calculate "POST_READ_TIME".
+PostContentStrategy: Successfully calculated "POST_READ_TIME".
+PostContentStrategy: End.
+
+PostContentStrategy: End.
+
+makeFile: Successfully executed performStrategy("POST_CONTENT") on the file.
+makeFile: Successfully finished changing "POST_CONTENT" in the file.
+makeFile: Successfully skipped to the next line.
+makeFile: Successfully finished making the file.
+makeFile: End.
+
+buildSite: Successfully made "Naber.md" page.
+buildSite: Successfully made all of the site pages.
+buildSite: Successfully merged base and index.
+buildSite: Successfully made "index.html".
+buildSite: Successfully made "ElHamraSarayiGezisi".
+buildSite: Successfully made "Naber".
+buildFile: End.
+
+main: Finished the process in 33 milliseconds.
+main: End.
