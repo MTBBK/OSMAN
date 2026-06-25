@@ -1,8 +1,10 @@
 Output/*
+Output/
 !Output/readme.txt
 Old_Files/
 Content/Texts/*
 !Content/Texts/ElHamraSarayiGezisi.md
 *.class
 ErrorLogs/*
+ErrorLogs/
 makeJarFile.bat
