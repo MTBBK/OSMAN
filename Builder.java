@@ -1,10 +1,9 @@
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,24 +68,24 @@ public class Builder {
         String config = readFile("config.osman");
         System.out.println("buildSite: Successfully read the config.");
 
-		// Choose Template according to Config
-		String templatePath = "";
-		int TEMPLATE_NAMEindex = config.indexOf("TEMPLATE_NAME");
-		if (-1 == TEMPLATE_NAMEindex) {
-			System.out.println("buildSite: Cannot find config option for TEMPLATE_NAME");
-			return;
-        }else{
-			// index of the first " after TEMPLATE_NAME
-			int kesme1Index = config.indexOf('"', TEMPLATE_NAMEindex);
-			// selected templates's name
-			// "Templates/" + templateName"
-			String templateName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
-			templatePath = "Templates/" + templateName + "/";
-			if (!(new File(templatePath + "base.html")).exists()) {
-				throw new Exception("Selected template could not be found in Templates folder.");
-			}
-		}
-		
+        // Choose Template according to Config
+        String templatePath = "";
+        int TEMPLATE_NAMEindex = config.indexOf("TEMPLATE_NAME");
+        if (-1 == TEMPLATE_NAMEindex) {
+            System.out.println("buildSite: Cannot find config option for TEMPLATE_NAME");
+            return;
+        } else {
+            // index of the first " after TEMPLATE_NAME
+            int kesme1Index = config.indexOf('"', TEMPLATE_NAMEindex);
+            // selected templates's name
+            // "Templates/" + templateName"
+            String templateName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
+            templatePath = "Templates/" + templateName + "/";
+            if (!(new File(templatePath + "base.html")).exists()) {
+                throw new Exception("Selected template could not be found in Templates folder.");
+            }
+        }
+
         // [i][0] - file name, [i][1] file content
         // String[][] contents = parseContentFiles("/Content/Texts/");
         String[][] templates = parseContentFiles(templatePath);
@@ -393,44 +392,29 @@ public class Builder {
         return fileContents;
     }
 
-    // takes text file's name and reads text file and return its contents as a string
+    // takes text file's name and reads text file and return its contents as a
+    // string
     public static String readFile(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
         try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (null != line) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-
-            return sb.toString();
+            Path path = Paths.get(filePath);
+            return Files.readString(path);
         } catch (IOException e) {
             throw new IOException("Failed To Read File " + filePath);
-        } finally {
-            br.close();
         }
     }
 
     // takes a file path and file's text contents and creates an output in "Output"
     // folder. WORKS
     public static void writeFile(String filePath, String fileContent) throws IOException {
-        // Checks if the file path exists for the file.
-        // Creates required folders ifthe don't already exist.
-        // Currently requires filepaths to not end with a '/' so that
-        // file's name can be extracted.
-        File folder = new File(filePath.substring(0, filePath.lastIndexOf('/')));
-        if (!folder.isDirectory()) {
-            folder.mkdirs();
-        }
+        // Creates required folders if they don't already exist.
 
-        // checks if the file exists, tries to make a new file and throws an exception
-        // if it fails.
-        File file = new File(filePath);
-        if (!file.exists() && !file.createNewFile()) {
-            throw new IOException("File: " + filePath + " could not be created on the given path.");
+        Path path = Paths.get(filePath);
+        System.out.println(path.getParent());
+        Files.createDirectories(path.getParent());
+        try {
+            Files.createFile(path);
+        } catch (FileAlreadyExistsException e) {
+            // expected exception maybe add Expected exception or smt idk
         }
 
         // creates an empty file if the content is null
@@ -438,17 +422,7 @@ public class Builder {
             return;
         }
 
-        // tries to write "fileContent" into the created file.
-        // throws an exception if it fails.
-        FileWriter fw = new FileWriter(filePath);
-        try {
-            fw.write(fileContent);
-            fw.flush();
-        } catch (IOException e) {
-            throw new IOException("File: " + filePath + " could not be written over.");
-        } finally {
-            fw.close();
-        }
+        Files.writeString(path, fileContent, StandardCharsets.UTF_8);
     }
 
     // takes source folder's path and the destination folder's path to then copy all
