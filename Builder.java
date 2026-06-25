@@ -69,9 +69,27 @@ public class Builder {
         String config = readFile("config.osman");
         System.out.println("buildSite: Successfully read the config.");
 
+		// Choose Template according to Config
+		String templatePath = "";
+		int TEMPLATE_NAMEindex = config.indexOf("TEMPLATE_NAME");
+		if (-1 == TEMPLATE_NAMEindex) {
+			System.out.println("buildSite: Cannot find config option for TEMPLATE_NAME");
+			return;
+        }else{
+			// index of the first " after TEMPLATE_NAME
+			int kesme1Index = config.indexOf('"', TEMPLATE_NAMEindex);
+			// selected templates's name
+			// "Templates/" + templateName"
+			String templateName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
+			templatePath = "Templates/" + templateName + "/";
+			if (!(new File(templatePath + "base.html")).exists()) {
+				throw new Exception("Selected template could not be found in Templates folder.");
+			}
+		}
+		
         // [i][0] - file name, [i][1] file content
         // String[][] contents = parseContentFiles("/Content/Texts/");
-        String[][] templates = parseContentFiles("Templates/");
+        String[][] templates = parseContentFiles(templatePath);
         System.out.println("buildSite: Successfully run parseContentFiles(\"/Templates/\").");
 
         String[][] textContent = parseContentFiles("Content/Texts/");
@@ -206,6 +224,7 @@ public class Builder {
                 String content = textContent[i][1].substring(firstNextLine);
                 int spaces = 0;
                 int spaceIndex = 0;
+                // Writes first 20 word as summary
                 while (-1 != spaceIndex && 20 > spaces) {
                     spaces++;
                     spaceIndex = content.indexOf(' ', spaceIndex + 1);
@@ -374,7 +393,7 @@ public class Builder {
         return fileContents;
     }
 
-    // takes text file's name and reads text file and return its contents as a sting
+    // takes text file's name and reads text file and return its contents as a string
     public static String readFile(String filePath) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(filePath));
         try {
@@ -566,7 +585,7 @@ class ThemeNameStrategy extends Strategy {
         }
 
         if (-1 == THEME_NAMEindex) {
-            throw new Exception("Failed to find \"THEME_NAME\" in the config file.");
+            throw new Exception("ThemeNameStrategy: Failed to find \"THEME_NAME\" in the config file.");
         }
 
         // index of the first " after THEME_NAME
@@ -583,7 +602,7 @@ class ThemeNameStrategy extends Strategy {
         System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
         String themeFile = Builder.readFile(themePath);
         Builder.writeFile("Output/" + themeName + ".css", themeFile);
-        System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
+        System.out.println("ThemeNameStrategy: Finished copying \"" + themeName + ".css\" to the Output folder.");
 
         option = "{{ " + option + " }}";
         Builder.stringEditor(option, themeName + ".css", file);

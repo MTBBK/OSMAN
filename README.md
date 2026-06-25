@@ -1,3 +1,32 @@
-OSMAN / Otomatic Site Manifacturer
+# OSMAN
 
-https://osman.guru/
+**Otomatic Site Manifacturer**
+
+[https://osman.guru/](https://osman.guru/)
+
+OSMAN is a static website builder written in Java, optimized for speed, and designed for flexibility. With a wide range of theme options and user-friendly features, it simplifies website creation, reducing it to just a few clicks. Users can create a static website in seconds using their existing content.
+
+Anyone who wants to create a website can do this easily and quickly. Especially bloggers, columnists, travel writers, photographers, and students.
+
+# Installation
+
+Download the project:
+
+```
+git clone https://github.com/MTBBK/OSMAN.git
+cd OSMAN
+```
+
+Decide the theme you want to use from the `Themes` folder.
+
+Create the configuration file either directly writting in the `config.osman` file or via `configGenerator.html`.
+
+Add your content, according to the example writting format, to the `Content/Texts` folder.
+
+You can add images if you want to the `Content/Images` folder. (optional)
+
+You can add any additional files (such as a custom-created page, robots.txt file, etc.) to the `Content` folder. (optional)
+
+For Windows: double-click the `Builder.jar` file directly. For Linux: run the command `java -jar Builder.jar` while in the `OSMAN` folder.
+
+You static website will generate in `Output` folder. You can copy the files in the resulting `Output` folder to your desired location and use them directly for your website, or you can link a domain name and redirect directly to this folder.

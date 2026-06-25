@@ -1,0 +1,25 @@
+<section class="index-page">
+    <header class="index-welcome">
+        <div class="welcome-header">
+            <img src="{{ AUTHOR_AVATAR_URL }}" alt="Author Avatar" class="profile-avatar">
+            <h1 class="welcome-title">{{ WELCOME_TITLE }}</h1>
+        </div>
+        <div class="welcome-intro">
+            {{ INTRO_ABOUT_ME }}
+        </div>
+        <div class="welcome-socials">
+            {{ SOCIAL_ICONS }}
+        </div>
+        <div class="tag-cloud">
+            {{ TAG_CLOUD }}
+        </div>
+    </header>
+
+    <div class="index-stats">
+        <span class="post-count">{{ TOTAL_POSTS_COUNT }}</span>
+    </div>
+
+    <div class="post-feed">
+        {{ POST_LIST }}
+    </div>
+</section>

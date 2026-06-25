@@ -366,9 +366,10 @@ img {
 
    <div class="section">
    <h3>Base Settings</h3>
+   <h2>Template Name: <p>Selected Template Name (You can find more on our website or Templates folder)</p></h2><input id="TEMPLATE_NAME" placeholder="tr">
    <h2>Base URL: <p>Your Websites URL</p></h2><input id="baseURL" placeholder="https://osman.guru">
    <h2>Site Language: <p>Your Websites Main Lanuage</p></h2><input id="SITE_LANGUAGE" placeholder="tr">
-   <h2>Theme Name: <p>Selected Theme Name (You can find more on our website)</p></h2><input id="THEME_NAME" placeholder="Space">
+   <h2>Theme Name: <p>Selected Theme Name (You can find more on our website or Themes folder)</p></h2><input id="THEME_NAME" placeholder="Space">
    <h2>Site Description: <p>Your Websites Description</p></h2><textarea id="SITE_DESCRIPTION" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
    <h2>Author Name: <p>Main Author Of The Website</p></h2><input id="AUTHOR_NAME" placeholder="Barbaros Köş (MTBBK)">
 
@@ -518,6 +519,7 @@ img {
           );
 
           const data = {
+              TEMPLATE_NAME: document.getElementById("TEMPLATE_NAME").value,
               baseURL: document.getElementById("baseURL").value,
               SITE_LANGUAGE: document.getElementById("SITE_LANGUAGE").value,
               THEME_NAME: document.getElementById("THEME_NAME").value,
@@ -529,7 +531,8 @@ img {
               INTRO_ABOUT_ME: document.getElementById("INTRO_ABOUT_ME").value
           };
 
-          let configText = `BASE:\n`;
+          let configText = `TEMPLATE_NAME: "${data.TEMPLATE_NAME}"\n`;
+          configText += `BASE:\n`;
           configText += `baseURL: "${data.baseURL}"\n`;
           configText += `SITE_LANGUAGE: "${data.SITE_LANGUAGE}"\n`;
           configText += `THEME_NAME: "${data.THEME_NAME}"\n`;

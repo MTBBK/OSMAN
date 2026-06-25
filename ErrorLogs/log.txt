@@ -54,8 +54,8 @@ Factory: End.
 
 makeFile: Successfully executed setStrategy("SOCIAL_ICONS") on the file.
 
-SocialIconsStrategy: Begin.
-SocialIconsStrategy: End.
+DoubleArrayStrategy: Begin.
+DoubleArrayStrategy:: End.
 
 makeFile: Successfully executed performStrategy("SOCIAL_ICONS") on the file.
 makeFile: Successfully finished changing "SOCIAL_ICONS" in the file.
@@ -107,7 +107,7 @@ makeFile: Successfully executed setStrategy("THEME_NAME") on the file.
 
 ThemeNameStrategy: Begin.
 ThemeNameStrategy: Starting copying "FreshPistachio.css" to the Output folder.
-ThemeNameStrategy: Starting copying "FreshPistachio.css" to the Output folder.
+ThemeNameStrategy: Finished copying "FreshPistachio.css" to the Output folder.
 ThemeNameStrategy: End.
 
 makeFile: Successfully executed performStrategy("THEME_NAME") on the file.
@@ -172,8 +172,8 @@ Factory: End.
 
 makeFile: Successfully executed setStrategy("NAV_BAR_LINKS") on the file.
 
-NavbarStrategy: Begin.
-NavbarStrategy: End.
+DoubleArrayStrategy: Begin.
+DoubleArrayStrategy:: End.
 
 makeFile: Successfully executed performStrategy("NAV_BAR_LINKS") on the file.
 makeFile: Successfully finished changing "NAV_BAR_LINKS" in the file.
@@ -201,8 +201,8 @@ Factory: End.
 
 makeFile: Successfully executed setStrategy("SOCIAL_LINKS") on the file.
 
-SocialLinksStrategy: Begin.
-SocialLinksStrategy: End.
+DoubleArrayStrategy: Begin.
+DoubleArrayStrategy:: End.
 
 makeFile: Successfully executed performStrategy("SOCIAL_LINKS") on the file.
 makeFile: Successfully finished changing "SOCIAL_LINKS" in the file.
@@ -273,8 +273,8 @@ Factory: End.
 
 makeFile: Successfully executed setStrategy("SOCIAL_ICONS") on the file.
 
-SocialIconsStrategy: Begin.
-SocialIconsStrategy: Could not find "SOCIAL_ICONS" in the file, it will be skipped.
+DoubleArrayStrategy: Begin.
+DoubleArrayStrategy: Could not find "SOCIAL_ICONS" in the file, it will be skipped.
 makeFile: Successfully executed performStrategy("SOCIAL_ICONS") on the file.
 makeFile: Successfully finished changing "SOCIAL_ICONS" in the file.
 makeFile: Successfully skipped to the next line.
@@ -287,8 +287,8 @@ buildSite: Successfully run makeFile on "base.html".
 buildSite: Starting to make site pages.
 
 makeFile: Begin.
-makeFile: Successfully found the start of "ElHamraSarayiGezisi.md" file's part.
-makeFile: Failed to find the start of "ElHamraSarayiGezisi.md" file's part. Will begin from the top of the file
+makeFile: Successfully found the start of "ExamplePost2.md" file's part.
+makeFile: Failed to find the start of "ExamplePost2.md" file's part. Will begin from the top of the file
 makeFile: Successfully found the option: "FEATURED_IMAGE".
 
 Factory: Begin.
@@ -349,8 +349,8 @@ Factory: End.
 
 makeFile: Successfully executed setStrategy("POST_TAGS") on the file.
 
-PostTagsStrategy: Begin.
-PostTagsStrategy: End.
+SingleArrayStrategy: Begin.
+SingleArrayStrategy: End.
 
 makeFile: Successfully executed performStrategy("POST_TAGS") on the file.
 makeFile: Successfully finished changing "POST_TAGS" in the file.
@@ -378,11 +378,11 @@ makeFile: Successfully skipped to the next line.
 makeFile: Successfully finished making the file.
 makeFile: End.
 
-buildSite: Successfully made "ElHamraSarayiGezisi.md" page.
+buildSite: Successfully made "ExamplePost2.md" page.
 
 makeFile: Begin.
-makeFile: Successfully found the start of "Naber.md" file's part.
-makeFile: Failed to find the start of "Naber.md" file's part. Will begin from the top of the file
+makeFile: Successfully found the start of "ExamplePost.md" file's part.
+makeFile: Failed to find the start of "ExamplePost.md" file's part. Will begin from the top of the file
 makeFile: Successfully found the option: "FEATURED_IMAGE".
 
 Factory: Begin.
@@ -443,12 +443,11 @@ Factory: End.
 
 makeFile: Successfully executed setStrategy("POST_TAGS") on the file.
 
-PostTagsStrategy: Begin.
-PostTagsStrategy: End.
+SingleArrayStrategy: Begin.
+SingleArrayStrategy: End.
 
 makeFile: Successfully executed performStrategy("POST_TAGS") on the file.
 makeFile: Successfully finished changing "POST_TAGS" in the file.
-makeFile: Successfully skipped to the next line.
 makeFile: Successfully skipped to the next line.
 makeFile: Successfully skipped to the next line.
 makeFile: Successfully skipped to the next line.
@@ -473,13 +472,13 @@ makeFile: Successfully skipped to the next line.
 makeFile: Successfully finished making the file.
 makeFile: End.
 
-buildSite: Successfully made "Naber.md" page.
+buildSite: Successfully made "ExamplePost.md" page.
 buildSite: Successfully made all of the site pages.
 buildSite: Successfully merged base and index.
 buildSite: Successfully made "index.html".
-buildSite: Successfully made "ElHamraSarayiGezisi".
-buildSite: Successfully made "Naber".
+buildSite: Successfully made "ExamplePost2".
+buildSite: Successfully made "ExamplePost".
 buildFile: End.
 
-main: Finished the process in 33 milliseconds.
+main: Finished the process in 76 milliseconds.
 main: End.

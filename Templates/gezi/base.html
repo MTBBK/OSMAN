@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="{{ SITE_LANGUAGE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_DESCRIPTION }}">
+    <title>{{ SITE_TITLE }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ FAVICON_URL }}">
+    <link rel="stylesheet" href="{{ THEME_NAME }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <header class="header container">
+        <div class="site-branding">
+            <a href="/" class="site-title">{{ SITE_TITLE }}</a>
+        </div>
+        <nav class="nav-bar">
+            {{ NAV_BAR_LINKS }}
+        </nav>
+    </header>
+
+    <main class="content container">
+        {{ CONTENT }}  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    </main>
+
+    <footer class="footer container">
+        <hr>
+        <div class="footer-links">
+            {{ SOCIAL_LINKS }}
+        </div>
+        <div class="footer-copy">
+            <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}</p>
+            <p>&copy; OSMAN</p>
+        </div>
+    </footer>
+</body>
+
+</html>

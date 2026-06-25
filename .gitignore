@@ -1,8 +1,9 @@
-Project/Output/*
-!Project/Output/readme.txt
+Output/*
+!Output/readme.txt
 Old_Files/
-Project/Content/Texts/*
-!Project/Content/Texts/ElHamraSarayiGezisi.md
-Project/*.class
-Project/ErrorLogs/*
-Project/makeJarFile.bat
+Content/Texts/*
+!Content/Texts/ElHamraSarayiGezisi.md
+*.class
+ErrorLogs/*
+makeJarFile.bat
+ErrorLogs/*
