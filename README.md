@@ -27,6 +27,9 @@ You can add images if you want to the `Content/Images` folder. (optional)
 
 You can add any additional files (such as a custom-created page, robots.txt file, etc.) to the `Content` folder. (optional)
 
-For Windows: double-click the `Builder.jar` file directly. For Linux: run the command `java -jar Builder.jar` while in the `OSMAN` folder.
+- For Windows: double-click the `Builder.jar` file directly. 
+- For Linux: run the command 
+    ```java -jar Builder.jar``` 
+    while in the `OSMAN` folder.
 
 You static website will generate in `Output` folder. You can copy the files in the resulting `Output` folder to your desired location and use them directly for your website, or you can link a domain name and redirect directly to this folder.
