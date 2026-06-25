@@ -628,9 +628,14 @@ class PostContentStrategy extends Strategy {
             System.out.println("PostContentStrategy: Starting to calculate \"POST_READ_TIME\".");
             int wordNum = 0;
             int index = value.indexOf(' ');
+            int positionOfSpace = index;
             while (-1 != index) {
-                wordNum++;
-                index = value.indexOf(' ', index + 1);
+				if (positionOfSpace = index - 1){
+					positionOfSpace = index;
+				}else {
+					wordNum++;
+				}
+				index = value.indexOf(' ', index + 1);
             }
             wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
 
