@@ -67,24 +67,17 @@ public class Builder {
 
         String config = readFile("config.osman");
         System.out.println("buildSite: Successfully read the config.");
+        
+        String baseURL = getConfigOption("baseURL", config).replaceAll("\"", "").trim();
+        String siteTitle = getConfigOption("SITE_TITLE", config).replaceAll("\"", "").trim();
+        String siteDescription =  getConfigOption("SITE_DESCRIPTION", config).replaceAll("\"", "").trim();
 
         // Choose Template according to Config
-        String templatePath = "";
-        int TEMPLATE_NAMEindex = config.indexOf("TEMPLATE_NAME");
-        if (-1 == TEMPLATE_NAMEindex) {
-            System.out.println("buildSite: Cannot find config option for TEMPLATE_NAME");
-            return;
-        } else {
-            // index of the first " after TEMPLATE_NAME
-            int kesme1Index = config.indexOf('"', TEMPLATE_NAMEindex);
-            // selected templates's name
-            // "Templates/" + templateName"
-            String templateName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
-            templatePath = "Templates/" + templateName + "/";
-            if (!(new File(templatePath + "base.html")).exists()) {
-                throw new Exception("Selected template could not be found in Templates folder.");
-            }
-        }
+		String templateName = getConfigOption("TEMPLATE_NAME", config);
+        String templatePath = "Templates/" + templateName + "/";
+		if (!(new File(templatePath + "base.html")).exists()) {
+			throw new Exception("Selected template could not be found in Templates folder.");
+		}
 
         // [i][0] - file name, [i][1] file content
         // String[][] contents = parseContentFiles("/Content/Texts/");
@@ -182,7 +175,7 @@ public class Builder {
                 System.out.println(
                         "buildSite: Could not find \"" + option + "\" in the text content, it will be skipped.");
                 pageTags[j] = new String[0];
-                return;
+                continue;
             }
 
             boolean nextExists = true;
@@ -359,11 +352,55 @@ public class Builder {
             writeFile("Output/" + fileName + ".html", pages[i].toString());
             System.out.println("buildSite: Successfully made \"" + fileName + "\".");
         }
+        
+        // generate sitemap.xml
+        StringBuilder sitemap = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+        sitemap.append("<url><loc>").append(baseURL).append("/</loc></url>\n");
+        for (int i = 0; i < textContent.length; i++) {
+            String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            sitemap.append("<url><loc>").append(baseURL).append("/").append(fName).append(".html</loc></url>\n");
+        }
+        sitemap.append("</urlset>");
+        writeFile("Output/sitemap.xml", sitemap.toString());
+        System.out.println("buildSite: Successfully made \"sitemap.xml\".");
+
+        // generate rss.xml
+        StringBuilder rss = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
+        rss.append("<title>").append(siteTitle).append("</title>\n");
+        rss.append("<link>").append(baseURL).append("</link>\n");
+        rss.append("<description>").append(siteDescription).append("</description>\n");
+        for (int i = 0; i < Math.min(textContent.length, 20); i++) {
+            String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            rss.append("<item>\n<title>").append(pageTitles[i]).append("</title>\n");
+            rss.append("<link>").append(baseURL).append("/").append(fName).append(".html</link>\n");
+            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;")).append("</description>\n");
+            rss.append("</item>\n");
+        }
+        rss.append("</channel>\n</rss>");
+        writeFile("Output/rss.xml", rss.toString());
+        System.out.println("buildSite: Successfully made \"rss.xml\".");
 
         System.out.println("buildFile: End.\n");
     }
-
-    static String[][] parseContentFiles(String folderPath) throws IOException {
+	
+	static String getConfigOption (String configOption, String config) throws IOException {
+        String optionValue = "";
+        int valueIndex = config.indexOf(configOption);
+        if (-1 == valueIndex) {
+            System.out.println("getConfigOption: Cannot find config option for " + configOption);
+            // Default Value
+            return "OSMAN";
+        } else {
+            // index of the first quote symbol after configOption
+            int firstQuoteSymbolIndex = config.indexOf('"', valueIndex);
+            // selected options name
+            optionValue = config.substring(firstQuoteSymbolIndex + 1, config.indexOf('"', firstQuoteSymbolIndex + 1));
+            System.out.println("getConfigOption: Returned value of the option " + configOption + "as " + optionValue);
+            return optionValue;
+        }
+	}
+	
+	static String[][] parseContentFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
 
         // throw an IOException if folderPath is not an existing folder's path
@@ -409,7 +446,6 @@ public class Builder {
         // Creates required folders if they don't already exist.
 
         Path path = Paths.get(filePath);
-        System.out.println(path.getParent());
         Files.createDirectories(path.getParent());
         try {
             Files.createFile(path);
@@ -612,6 +648,7 @@ class PostContentStrategy extends Strategy {
         System.out.println("\nPostContentStrategy: Begin.");
         int contentStart = config.indexOf('\n', config.indexOf(option)) + 1;
         String value = config.substring(contentStart);
+        String freshValue = value.trim();
         option = "{{ " + option + " }}";
 
         if (-1 == file.indexOf(option)) {
@@ -623,11 +660,10 @@ class PostContentStrategy extends Strategy {
             return;
         } else {
 
-            // {{ POST_READ_TIME }} handling part. (Yes, it just counts spaces.
-            // Yes, I trust people to not leave ten thousand spaces.)
+            // {{ POST_READ_TIME }} handling part.
             System.out.println("PostContentStrategy: Starting to calculate \"POST_READ_TIME\".");
             int wordNum = 0;
-            int index = value.indexOf(' ');
+            int index = freshValue.indexOf(' ');
             int positionOfSpace = index;
             while (-1 != index) {
 				if (positionOfSpace == index - 1){
@@ -635,7 +671,7 @@ class PostContentStrategy extends Strategy {
 				}else {
 					wordNum++;
 				}
-				index = value.indexOf(' ', index + 1);
+				index = freshValue.indexOf(' ', index + 1);
             }
             wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
 
@@ -647,6 +683,8 @@ class PostContentStrategy extends Strategy {
             System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
 
             Builder.stringEditor(option, value, file);
+            // In Development
+            // Builder.stringEditor(option, MarkdownConverter.convert(value), file);
             System.out.println("PostContentStrategy: End.\n");
         }
         System.out.println("PostContentStrategy: End.\n");
@@ -854,3 +892,89 @@ class Factory {
         return strategy;
     }
 }
+
+// In Development
+/*
+class MarkdownConverter {
+    public static String convert(String md) {
+        if (md == null || md.trim().isEmpty()) return "";
+        StringBuilder html = new StringBuilder();
+        String[] lines = md.split("\n");
+        boolean inCodeBlock = false;
+        boolean inList = false;
+        for (int i = 0; i < lines.length; i++) {
+            String line = lines[i];
+            
+            if (line.trim().startsWith("```")) {
+                if (inCodeBlock) {
+                    html.append("</code></pre></div>\n");
+                    inCodeBlock = false;
+                } else {
+                    html.append("<div class=\"code-block\" style=\"position:relative; margin:1em 0;\"><button class=\"copy-btn\" style=\"position:absolute; top:8px; right:8px; background:#333; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; z-index:10; font-family:sans-serif;\" onclick=\"navigator.clipboard.writeText(this.parentElement.querySelector('code').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000);\">Copy</button><pre style=\"background:#1e1e1e; color:#d4d4d4; padding:15px; border-radius:8px; overflow-x:auto;\"><code>");
+                    inCodeBlock = true;
+                }
+                continue;
+            }
+            if (inCodeBlock) {
+                html.append(line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")).append("\n");
+                continue;
+            }
+            
+            if (line.trim().matches("---+") || line.trim().matches("\\*\\*\\*+")) {
+                if (inList) { html.append("</ul>\n"); inList = false; }
+                html.append("<hr>\n");
+                continue;
+            }
+            
+            if (line.trim().startsWith("> ")) {
+                if (inList) { html.append("</ul>\n"); inList = false; }
+                html.append("<blockquote style=\"border-left:4px solid var(--accent); padding-left:15px; color:var(--muted); margin-left:0;\">").append(parseInline(line.trim().substring(2))).append("</blockquote>\n");
+                continue;
+            }
+
+            if (line.startsWith("# ")) {
+                if (inList) { html.append("</ul>\n"); inList = false; }
+                html.append("<h1>").append(parseInline(line.substring(2))).append("</h1>\n");
+                continue;
+            } else if (line.startsWith("## ")) {
+                if (inList) { html.append("</ul>\n"); inList = false; }
+                html.append("<h2>").append(parseInline(line.substring(3))).append("</h2>\n");
+                continue;
+            } else if (line.startsWith("### ")) {
+                if (inList) { html.append("</ul>\n"); inList = false; }
+                html.append("<h3>").append(parseInline(line.substring(4))).append("</h3>\n");
+                continue;
+            }
+            
+            if (line.trim().startsWith("- ")) {
+                if (!inList) { html.append("<ul>\n"); inList = true; }
+                html.append("<li>").append(parseInline(line.trim().substring(2))).append("</li>\n");
+                continue;
+            } else {
+                if (inList) { html.append("</ul>\n"); inList = false; }
+            }
+            
+            if (line.trim().isEmpty()) {
+                // ignore
+            } else {
+                if (line.trim().startsWith("<")) {
+                    html.append(line).append("\n");
+                } else {
+                    html.append("<p>").append(parseInline(line)).append("</p>\n");
+                }
+            }
+        }
+        if (inList) html.append("</ul>\n");
+        return html.toString();
+    }
+    
+    private static String parseInline(String text) {
+        text = text.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+        text = text.replaceAll("\\*(.*?)\\*", "<em>$1</em>");
+        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\">");
+        text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
+        text = text.replaceAll("`(.*?)`", "<code style=\"background:rgba(120,120,120,0.2); padding:2px 4px; border-radius:4px;\">$1</code>");
+        return text;
+    }
+}
+*/

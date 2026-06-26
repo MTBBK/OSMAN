@@ -1,52 +1,263 @@
-/* 1. GENEL AYARLAR */
-body {
-    background-color: #fdf6e3; /* Solarized light / Cream */
-    color: #2c3e50;
-    font-family: 'Georgia', serif; /* Serif for readability */
+/* ═══════════════════════════════════════════════════════════════
+   OldSchool Theme for OSMAN
+   Style: Warm solarized light, serif, retro-cream feel
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@400;600&display=swap');
+
+:root {
+    --bg:          #fdf6e3;
+    --bg-dark:     #eee8d5;
+    --ink:         #2c3e50;
+    --muted:       #93a1a1;
+    --border:      #d5ccb2;
+    --accent:      #b58900;
+    --accent-hover:#dc3545;
+    --card-bg:     #f5efe0;
+    --post-bg:     #ffffff;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: 'Lora', Georgia, serif;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* ── LAYOUT ── */
+.container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+.content { min-height: 60vh; }
 
 a {
-    color: #b58900; /* Gold/Bronze accent */
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
 }
+a:hover { color: var(--accent-hover); }
 
-/* Gri renk kısımlar */
-.footer-copy, .footer-links a, .post-count, .post-card-meta,
-.post-card-categories, .post-read-time, .post-updated {
-    color: #93a1a1;
-}
+img { max-width: 100%; margin: 10px 0; }
 
-/* 2. HEADER */
+/* ── HEADER ── */
 .header {
-    background-color: #eee8d5;
-    border-bottom: 1px solid #d5ccb2;
+    padding: 18px 24px;
+    background-color: var(--bg-dark);
+    border-bottom: 1px solid var(--border);
+}
+.site-branding { margin-bottom: 8px; }
+.site-title {
+    font-family: 'Lora', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink);
+    text-decoration: none;
+}
+.site-title:hover { color: var(--accent); }
+
+.nav-bar { margin-top: 8px; }
+.nav-bar a {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+.nav-bar a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
 }
 
-.site-title {
-    color: #2c3e50;
+/* ── FOOTER ── */
+.footer {
+    margin-top: 80px;
+    padding: 32px 24px;
+    background-color: var(--bg-dark);
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+.footer hr { display: none; }
+.footer-links { margin-bottom: 12px; }
+.footer-links a {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: 0 10px;
+}
+.footer-links a:hover { color: var(--accent); }
+.footer-copy {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+.footer-copy p { margin: 3px 0; }
+
+/* ── INDEX PAGE ── */
+.index-page { padding: 50px 0; }
+
+.index-welcome {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+}
+.welcome-header { margin-bottom: 16px; }
+.profile-avatar {
+    max-width: 110px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+}
+.welcome-title {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink);
+    margin: 10px 0 0;
+}
+.welcome-intro {
+    max-width: 520px;
+    margin: 12px auto 20px;
+    color: var(--muted);
+    font-size: 0.95rem;
     font-style: italic;
 }
+.welcome-socials { margin-bottom: 20px; }
+.welcome-socials a { color: var(--muted); margin: 0 8px; }
+.welcome-socials a:hover { color: var(--accent); }
 
-/* 4. INDEX */
+.tag-cloud { margin-bottom: 12px; }
 .tag-cloud a {
-    background-color: #eee8d5;
-    border: 1px solid #d5ccb2;
-    color: #586e75;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.72rem;
+    padding: 3px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background-color: var(--bg-dark);
+    display: inline-block;
+    margin: 3px;
+}
+.tag-cloud a:hover { color: var(--accent); border-color: var(--accent); }
+
+.index-stats {
+    font-family: 'Source Sans 3', sans-serif;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+}
+.post-count { font-size: 0.78rem; color: var(--muted); }
+.post-feed { margin-top: 8px; }
+
+/* ── POST CARDS ── */
+.post-card {
+    padding: 18px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s;
+}
+.post-card:hover { background-color: var(--card-bg); }
+.post-card:hover .post-card-title { color: var(--accent); }
+
+.post-card-title { font-size: 1rem; color: var(--ink); }
+.post-card-excerpt {
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 5px 0;
+}
+.post-card-meta, .post-card-categories {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.76rem;
+    color: var(--muted);
 }
 
-/* 5. POST SAYFASI */
+/* ── POST PAGE ── */
 .post {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    background-color: var(--post-bg);
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 48px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
-
+.post > img {
+    width: 100%;
+    margin: 0 0 36px;
+    border-radius: 4px 4px 0 0;
+    display: block;
+}
 .post-title {
-    color: #1a1a1a;
-    font-family: 'Inter', sans-serif;
-    font-weight: 800;
+    font-family: 'Lora', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 14px;
+    line-height: 1.25;
 }
+.post-meta {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+.post-date   { color: var(--muted); }
+.post-author { color: var(--accent); }
+.post-read-time, .post-updated { color: var(--muted); font-size: 0.78rem; }
 
-.post-content {
-    color: #333333;
-    line-height: 1.9;
+.post-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 22px;
+    margin-bottom: 28px;
 }
+.post-content {
+    font-size: 17px;
+    line-height: 1.9;
+    color: #333;
+}
+.post-footer {
+    margin-top: 40px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+}
+.post-tags { margin-bottom: 22px; }
+.post-tags a {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.72rem;
+    padding: 3px 12px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background-color: var(--bg-dark);
+    margin-right: 4px;
+}
+.post-tags a:hover { color: var(--accent); border-color: var(--accent); }
+
+.post-pagination {
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    overflow: hidden;
+}
+.prev-post, .next-post {
+    font-family: 'Source Sans 3', sans-serif;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--bg);
+    transition: border-color 0.2s;
+}
+.prev-post:hover, .next-post:hover { border-color: var(--accent); }
+.prev-post { float: left; }
+.next-post { float: right; text-align: right; }
+.post-pagination div { font-weight: 600; cursor: pointer; }
+

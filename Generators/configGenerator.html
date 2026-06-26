@@ -1,181 +1,499 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="OSMAN config generator">
-    <title>Osman Config Generator</title>
+    <meta name="description" content="OSMAN Config Generator — configure your static site">
+    <title>OSMAN — Config Generator</title>
     <link rel="icon" type="image/x-icon" href="osman.png">
-<style>
-	body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-	.section { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
-	.row { margin-bottom: 5px; display: flex; gap: 10px; align-items: center; }
-	textarea, input { display: block; margin-bottom: 5px; width: 300px; }
-	.array-container { background: #f9f9f9; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-	button { cursor: pointer; padding: 5px 10px; }
-	.remove-btn { background: #ff4444; color: white; border: none; border-radius: 3px; }
-	.type-switch { font-size: 0.8em; display: flex; align-items: center; gap: 5px; background: #eee; padding: 2px 8px; border-radius: 10px; }
-	.type-switch input { width: auto; margin: 0; }
-	h2 { font-size: 1em; margin-bottom: 2px; }
-	h2 p{ font-size: 0.8em; color: #707070; }
-	h2 p b{ color: #FF0000; }
-	h3 { font-size: 1.5em; margin-bottom: 0px; }
-</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:       #0f1117;
+            --surface:  #1a1d27;
+            --surface2: #222535;
+            --border:   #2e3248;
+            --accent:   #6c8aff;
+            --accent2:  #4ecca3;
+            --danger:   #ff5f6d;
+            --text:     #e8eaf0;
+            --muted:    #8891aa;
+            --label:    #adb5d0;
+            --radius:   10px;
+            --mono:     'JetBrains Mono', monospace;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            min-height: 100vh;
+        }
+
+        /* ── Page Layout ── */
+        .page {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        /* ── Form Panel ── */
+        .form-panel {
+            padding: 36px 40px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo-area img { width: 44px; height: 44px; border-radius: 10px; }
+        .logo-area h1 { font-size: 1.1rem; font-weight: 700; }
+        .logo-area span { font-size: 0.78rem; color: var(--muted); display: block; margin-top: 2px; }
+
+        /* ── Section heading ── */
+        .section-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+            margin-top: 32px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .section-title:first-of-type { margin-top: 0; }
+
+        /* ── Fields ── */
+        .field-group { margin-bottom: 18px; }
+        .field-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--label);
+            margin-bottom: 7px;
+        }
+        .field-hint { font-size: 0.68rem; color: var(--muted); margin-bottom: 7px; font-weight: 400; letter-spacing: 0; text-transform: none; }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108,138,255,0.15);
+        }
+        textarea { resize: vertical; min-height: 72px; }
+
+        .inline-row { display: flex; gap: 10px; align-items: flex-end; }
+        .inline-row input { flex: 1; }
+        .toggle-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            color: var(--muted);
+            white-space: nowrap;
+            user-select: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .toggle-pill:has(input:checked) { border-color: var(--accent); color: var(--accent); }
+        .toggle-pill input { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; }
+
+        /* ── Array fields (links) ── */
+        .array-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        .array-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 8px 12px;
+        }
+        .array-row input { background: transparent; border: none; color: var(--text); padding: 4px 0; flex: 1; font-size: 0.85rem; }
+        .array-row input:focus { outline: none; border-bottom: 1px solid var(--accent); }
+        .array-row input::placeholder { color: var(--muted); }
+        .array-row .sep { color: var(--border); font-size: 1rem; }
+        .array-row .remove-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.1rem;
+            line-height: 1;
+            padding: 0 4px;
+            opacity: 0.5;
+            transition: opacity 0.15s;
+        }
+        .array-row .remove-btn:hover { opacity: 1; }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 10px 18px;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-sm { background: var(--surface); border: 1px solid var(--border); color: var(--label); padding: 7px 14px; font-size: 0.78rem; }
+        .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { opacity: 0.88; }
+
+        .save-section { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border); }
+
+        /* ── Preview Panel ── */
+        .preview-panel {
+            background: var(--surface);
+            padding: 36px 40px;
+            overflow-y: auto;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .preview-header h2 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+        .tab-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.15s;
+        }
+        .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(108,138,255,0.08); }
+        .preview-tabs { display: flex; gap: 4px; }
+
+        /* Raw output */
+        .raw-preview {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            line-height: 1.7;
+            color: var(--text);
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 400px;
+        }
+        /* Config-specific keyword highlighting will be done via JS */
+        .ck-key   { color: #6c8aff; }
+        .ck-val   { color: #4ecca3; }
+        .ck-str   { color: #f9c74f; }
+        .ck-section { color: #ff9f43; font-weight: 700; }
+        .ck-comment { color: var(--muted); }
+
+        @media (max-width: 800px) {
+            .page { grid-template-columns: 1fr; }
+            .preview-panel { display: none; }
+        }
+    </style>
 </head>
 <body>
-   <h1>OSMAN Config Generator</h1>
+<div class="page">
 
-   <div class="section">
-   <h3>Base Settings</h3>
-   <h2>Template Name: <p>Selected Template Name (You can find more on our website or Templates folder)</p></h2><input id="TEMPLATE_NAME" placeholder="Space">
-   <h2>Base URL: <p>Your Websites URL</p></h2><input id="baseURL" placeholder="https://osman.guru">
-   <h2>Site Language: <p>Your Websites Main Lanuage</p></h2><input id="SITE_LANGUAGE" placeholder="tr">
-   <h2>Theme Name: <p>Selected Theme Name (You can find more on our website or Themes folder)</p></h2><input id="THEME_NAME" placeholder="Space">
-   <h2>Site Title: <p>Your Websites Title</p></h2><input id="SITE_TITLE" placeholder="Osman Site">
-   <h2>Site Description: <p>Your Websites Description</p></h2><textarea id="SITE_DESCRIPTION" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
-   <h2>Author Name: <p>Main Author Of The Website</p></h2><input id="AUTHOR_NAME" placeholder="Barbaros Köş (MTBBK)">
+    <!-- ═══════ FORM PANEL ═══════ -->
+    <div class="form-panel">
 
-   <h2>Favicon URL: <p>URL or path to your favicon which is in Content/Images/</p></h2>
-   <div class="row">
-   <input id="FAVICON_URL" placeholder="kostebekgiller.png">
-   <label class="type-switch"><input type="checkbox" id="FAVICON_IS_URL"> Is URL?</label>
-   </div>
+        <div class="logo-area">
+            <img src="osman.png" alt="OSMAN">
+            <div>
+                <h1>Config Generator</h1>
+                <span>Generate your config.osman file</span>
+            </div>
+        </div>
 
-   <h2>Copyright Year: <p>Year For The Copyright Section</p></h2><input id="COPYRIGHT_YEAR" placeholder="2026">
-   </div>
+        <!-- BASE SETTINGS -->
+        <div class="section-title">Base Settings</div>
 
-   <div class="section">
-   <h2>Navigation Links <p>Links or subsite names for navigation panel section</p></h2>
-   <div id="NAV_BAR_LINKS" class="array-container"></div>
-   <button onclick="addRow('NAV_BAR_LINKS', false, '', '', 'Name', 'Target URL')">+ Add New Link</button>
-   </div>
+        <div class="field-group">
+            <label class="field-label" for="TEMPLATE_NAME">Template Name</label>
+            <span class="field-hint">Folder name inside Templates/ (e.g. blog, gezi)</span>
+            <input type="text" id="TEMPLATE_NAME" placeholder="blog" oninput="update()">
+        </div>
 
-   <div class="section">
-   <h2>Social Links <p>Links of social medias (Please add "<b>mailto:</b>" before mail addresses)</p></h2>
-   <div id="SOCIAL_LINKS" class="array-container"></div>
-   <button onclick="addRow('SOCIAL_LINKS', false, '', '', 'Name', 'Target URL')">+ Add New Link</button>
-   </div>
+        <div class="field-group">
+            <label class="field-label" for="baseURL">Base URL</label>
+            <input type="text" id="baseURL" placeholder="https://osman.guru" oninput="update()">
+        </div>
 
-   <div class="section">
-   <h3>Index Settings</h3>
-   <h2>Welcome Title: <p>Main Greeting Title</p></h2><input id="WELCOME_TITLE" placeholder="Osman'ın Sitesi">
-   <h2>About Me: <p>Short Intro Text</p></h2><textarea id="INTRO_ABOUT_ME" placeholder="Sondan Eklemeli Günlük Sayfası."></textarea>
+        <div class="field-group">
+            <label class="field-label" for="SITE_LANGUAGE">Site Language</label>
+            <input type="text" id="SITE_LANGUAGE" placeholder="tr" oninput="update()">
+        </div>
 
-   <h2>Author Avatar URL: <p>URL or path to your avatar which is in Content/Images/</p></h2>
-   <div class="row">
-	   <input id="AUTHOR_AVATAR_URL" placeholder="osman.png">
-	   <label class="type-switch"><input type="checkbox" id="AVATAR_IS_URL"> Is URL?</label>
-   </div>
-   </div>
+        <div class="field-group">
+            <label class="field-label" for="THEME_NAME">Theme Name</label>
+            <span class="field-hint">Folder name inside Themes/ (e.g. FreshPistachio, Space, Neon)</span>
+            <input type="text" id="THEME_NAME" placeholder="FreshPistachio" oninput="update()">
+        </div>
 
-   <div class="section">
-       <h2>Social Icons <p>Links of social media icons and social media links (Please add "<b>mailto:</b>" before mail addresses)</p></h2>
-       <div id="SOCIAL_ICONS" class="array-container"></div>
-       <button onclick="addRow('SOCIAL_ICONS', true, '', '', 'URL/Path', 'Target URL')">+ Add New Icon</button>
-   </div>
+        <div class="field-group">
+            <label class="field-label" for="SITE_TITLE">Site Title</label>
+            <input type="text" id="SITE_TITLE" placeholder="Osman Site" oninput="update()">
+        </div>
 
-   <br/>
-   <button onclick="downloadFile()" style="font-size: 1.2em; background: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 20px;">Save config.osman</button>
+        <div class="field-group">
+            <label class="field-label" for="SITE_DESCRIPTION">Site Description</label>
+            <textarea id="SITE_DESCRIPTION" placeholder="A short description of your site" oninput="update()"></textarea>
+        </div>
 
-   <script>
-      const addRow = (containerId, hasToggle = false, val1 = "", val2 = "", p1 = "Name", p2 = "URL") => {
-          const container = document.getElementById(containerId);
-          const div = document.createElement("div");
-          div.className = "row";
+        <div class="field-group">
+            <label class="field-label" for="AUTHOR_NAME">Author Name</label>
+            <input type="text" id="AUTHOR_NAME" placeholder="Your Name" oninput="update()">
+        </div>
 
-          let toggleHtml = hasToggle ? `<label class="type-switch"><input type="checkbox" class="is-url"> Is URL?</label>` : '';
+        <div class="field-group">
+            <label class="field-label">Favicon</label>
+            <div class="inline-row">
+                <input type="text" id="FAVICON_URL" placeholder="favicon.png" oninput="update()">
+                <label class="toggle-pill">
+                    <input type="checkbox" id="FAVICON_IS_URL" onchange="update()"> URL?
+                </label>
+            </div>
+        </div>
 
-          div.innerHTML = `
-              <input type="text" class="key" placeholder="${p1}" value="${val1}">
-              ${toggleHtml}
-              <input type="text" class="val" placeholder="${p2}" value="${val2}">
-              <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
-          `;
-          container.appendChild(div);
-      };
+        <div class="field-group">
+            <label class="field-label" for="COPYRIGHT_YEAR">Copyright Year</label>
+            <input type="text" id="COPYRIGHT_YEAR" placeholder="2026" oninput="update()">
+        </div>
 
-      const processPath = (text, isUrl) => {
-          if (!text) return "";
-          if (isUrl) return text;
-          return text.startsWith("./Images/") ? text : `./Images/${text}`;
-      };
+        <!-- NAV LINKS -->
+        <div class="section-title">Navigation Links</div>
+        <div class="array-list" id="NAV_BAR_LINKS_list"></div>
+        <button class="btn btn-sm" onclick="addArrayRow('NAV_BAR_LINKS', 'Link Name', 'https://')">+ Add Navigation Link</button>
 
-      const getArrayData = (containerId) => {
-          const container = document.getElementById(containerId);
-          const rows = container.querySelectorAll(".row");
-          let output = "";
-          rows.forEach(row => {
-              let k = row.querySelector(".key").value;
-              const v = row.querySelector(".val").value;
-              const toggle = row.querySelector(".is-url");
+        <!-- SOCIAL LINKS -->
+        <div class="section-title">Social Links</div>
+        <div class="array-list" id="SOCIAL_LINKS_list"></div>
+        <button class="btn btn-sm" onclick="addArrayRow('SOCIAL_LINKS', 'Platform Name', 'https://')">+ Add Social Link</button>
 
-              if (toggle) {
-                  k = processPath(k, toggle.checked);
-              }
+        <!-- INDEX SETTINGS -->
+        <div class="section-title">Index Page Settings</div>
 
-              if(k && v) {
-                  output += `\t- "${k}", "${v}"\n`;
-              }
-          });
-          return output;
-      };
+        <div class="field-group">
+            <label class="field-label" for="WELCOME_TITLE">Welcome Title</label>
+            <input type="text" id="WELCOME_TITLE" placeholder="Welcome to My Site!" oninput="update()">
+        </div>
 
-      const downloadFile = () => {
-          const link = document.createElement("a");
+        <div class="field-group">
+            <label class="field-label" for="INTRO_ABOUT_ME">About Me</label>
+            <textarea id="INTRO_ABOUT_ME" placeholder="Short intro shown on the homepage" oninput="update()"></textarea>
+        </div>
 
-          const faviconVal = processPath(
-              document.getElementById("FAVICON_URL").value,
-              document.getElementById("FAVICON_IS_URL").checked
-          );
+        <div class="field-group">
+            <label class="field-label">Author Avatar</label>
+            <div class="inline-row">
+                <input type="text" id="AUTHOR_AVATAR_URL" placeholder="avatar.png" oninput="update()">
+                <label class="toggle-pill">
+                    <input type="checkbox" id="AVATAR_IS_URL" onchange="update()"> URL?
+                </label>
+            </div>
+        </div>
 
-          const avatarVal = processPath(
-              document.getElementById("AUTHOR_AVATAR_URL").value,
-              document.getElementById("AVATAR_IS_URL").checked
-          );
+        <!-- SOCIAL ICONS -->
+        <div class="section-title">Social Icons</div>
+        <div class="array-list" id="SOCIAL_ICONS_list"></div>
+        <button class="btn btn-sm" onclick="addArrayRow('SOCIAL_ICONS', 'Icon URL/Path', 'https://', true)">+ Add Social Icon</button>
 
-          const data = {
-              TEMPLATE_NAME: document.getElementById("TEMPLATE_NAME").value,
-              baseURL: document.getElementById("baseURL").value,
-              SITE_LANGUAGE: document.getElementById("SITE_LANGUAGE").value,
-              THEME_NAME: document.getElementById("THEME_NAME").value,
-              SITE_TITLE: document.getElementById("SITE_TITLE").value,
-              SITE_DESCRIPTION: document.getElementById("SITE_DESCRIPTION").value,
-              AUTHOR_NAME: document.getElementById("AUTHOR_NAME").value,
-              COPYRIGHT_YEAR: document.getElementById("COPYRIGHT_YEAR").value,
-              WELCOME_TITLE: document.getElementById("WELCOME_TITLE").value,
-              INTRO_ABOUT_ME: document.getElementById("INTRO_ABOUT_ME").value
-          };
+        <!-- SAVE -->
+        <div class="save-section">
+            <button class="btn btn-primary" onclick="downloadFile()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Save config.osman
+            </button>
+        </div>
+    </div>
 
-          let configText = `TEMPLATE_NAME: "${data.TEMPLATE_NAME}"\n`;
-          configText += `BASE:\n`;
-          configText += `baseURL: "${data.baseURL}"\n`;
-          configText += `SITE_LANGUAGE: "${data.SITE_LANGUAGE}"\n`;
-          configText += `THEME_NAME: "${data.THEME_NAME}"\n`;
-          configText += `SITE_TITLE: "${data.SITE_TITLE}"\n`;
-          configText += `SITE_DESCRIPTION: "${data.SITE_DESCRIPTION}"\n`;
-          configText += `AUTHOR_NAME: "${data.AUTHOR_NAME}"\n`;
-          configText += `FAVICON_URL: "${faviconVal}"\n`;
-          configText += `NAV_BAR_LINKS:\n${getArrayData('NAV_BAR_LINKS')}`;
-          configText += `COPYRIGHT_YEAR: "${data.COPYRIGHT_YEAR}"\n`;
-          configText += `SOCIAL_LINKS:\n${getArrayData('SOCIAL_LINKS')}\n`;
+    <!-- ═══════ PREVIEW PANEL ═══════ -->
+    <div class="preview-panel">
+        <div class="preview-header">
+            <h2>Live Preview</h2>
+            <div class="preview-tabs">
+                <button class="tab-btn active" id="tab-raw" onclick="switchTab('raw')">config.osman</button>
+            </div>
+        </div>
+        <pre id="view-raw" class="raw-preview"></pre>
+    </div>
 
-          configText += `INDEX:\n`;
-          configText += `WELCOME_TITLE: "${data.WELCOME_TITLE}"\n`;
-          configText += `INTRO_ABOUT_ME: "${data.INTRO_ABOUT_ME}"\n`;
-          configText += `AUTHOR_AVATAR_URL: "${avatarVal}"\n`;
-          configText += `SOCIAL_ICONS:\n${getArrayData('SOCIAL_ICONS')}`;
+</div>
 
-         const file = new Blob([configText], { type: 'text/plain' });
-         link.href = URL.createObjectURL(file);
-         link.download = "config.osman";
-         link.click();
-         URL.revokeObjectURL(link.href);
-      };
+<script>
+    /* ══════ Array rows ══════ */
+    const arrayData = {
+        NAV_BAR_LINKS: [],
+        SOCIAL_LINKS: [],
+        SOCIAL_ICONS: []
+    };
 
-      window.onload = () => {
-          addRow('NAV_BAR_LINKS', false, '', '', 'Name', 'Target URL');
-          addRow('SOCIAL_LINKS', false, '', '', 'Name', 'Target URL');
-          addRow('SOCIAL_ICONS', true, '', '', 'URL/Path', 'Target URL');
-      };
-   </script>
+    function addArrayRow(id, p1 = 'Name', p2 = 'URL', hasToggle = false) {
+        const entry = { key: '', val: '', isUrl: false, hasToggle };
+        arrayData[id].push(entry);
+        renderArrayList(id);
+        update();
+    }
+
+    function removeArrayRow(id, i) {
+        arrayData[id].splice(i, 1);
+        renderArrayList(id);
+        update();
+    }
+
+    function renderArrayList(id) {
+        const container = document.getElementById(id + '_list');
+        container.innerHTML = arrayData[id].map((entry, i) => `
+            <div class="array-row">
+                <input type="text" value="${entry.key}" placeholder="${id === 'SOCIAL_ICONS' ? 'Icon image URL or path' : 'Name'}"
+                    oninput="arrayData['${id}'][${i}].key = this.value; update()">
+                <span class="sep">→</span>
+                <input type="text" value="${entry.val}" placeholder="URL / Link"
+                    oninput="arrayData['${id}'][${i}].val = this.value; update()">
+                ${entry.hasToggle ? `<label class="toggle-pill" style="font-size:0.65rem;padding:6px 10px">
+                    <input type="checkbox" ${entry.isUrl ? 'checked' : ''} onchange="arrayData['${id}'][${i}].isUrl=this.checked;update()"> URL?
+                </label>` : ''}
+                <button class="remove-btn" onclick="removeArrayRow('${id}', ${i})" title="Remove">×</button>
+            </div>
+        `).join('');
+    }
+
+    /* ══════ Path helper ══════ */
+    function processPath(text, isUrl) {
+        if (!text) return '';
+        if (isUrl) return text;
+        return text.startsWith('./Images/') ? text : `./Images/${text}`;
+    }
+
+    function getArrayText(id) {
+        return arrayData[id].map(entry => {
+            const k = id === 'SOCIAL_ICONS' ? processPath(entry.key, entry.isUrl) : entry.key;
+            if (!k || !entry.val) return '';
+            return `\t- "${k}", "${entry.val}"`;
+        }).filter(Boolean).join('\n');
+    }
+
+    /* ══════ Build config text ══════ */
+    function buildConfig() {
+        const faviconVal = processPath(document.getElementById('FAVICON_URL').value, document.getElementById('FAVICON_IS_URL').checked);
+        const avatarVal  = processPath(document.getElementById('AUTHOR_AVATAR_URL').value, document.getElementById('AVATAR_IS_URL').checked);
+
+        const navText    = getArrayText('NAV_BAR_LINKS');
+        const socialText = getArrayText('SOCIAL_LINKS');
+        const iconsText  = getArrayText('SOCIAL_ICONS');
+
+        let out = '';
+        out += `TEMPLATE_NAME: "${v('TEMPLATE_NAME')}"\n`;
+        out += `BASE:\n`;
+        out += `baseURL: "${v('baseURL')}"\n`;
+        out += `SITE_LANGUAGE: "${v('SITE_LANGUAGE')}"\n`;
+        out += `THEME_NAME: "${v('THEME_NAME')}"\n`;
+        out += `SITE_TITLE: "${v('SITE_TITLE')}"\n`;
+        out += `SITE_DESCRIPTION: "${v('SITE_DESCRIPTION')}"\n`;
+        out += `AUTHOR_NAME: "${v('AUTHOR_NAME')}"\n`;
+        out += `FAVICON_URL: "${faviconVal}"\n`;
+        out += `NAV_BAR_LINKS:\n${navText ? navText + '\n' : ''}`;
+        out += `COPYRIGHT_YEAR: "${v('COPYRIGHT_YEAR')}"\n`;
+        out += `SOCIAL_LINKS:\n${socialText ? socialText + '\n' : ''}\n`;
+        out += `INDEX:\n`;
+        out += `WELCOME_TITLE: "${v('WELCOME_TITLE')}"\n`;
+        out += `INTRO_ABOUT_ME: "${v('INTRO_ABOUT_ME')}"\n`;
+        out += `AUTHOR_AVATAR_URL: "${avatarVal}"\n`;
+        out += `SOCIAL_ICONS:\n${iconsText ? iconsText + '\n' : ''}`;
+        return out;
+    }
+
+    function v(id) { return (document.getElementById(id) || {}).value || ''; }
+
+    /* ══════ Syntax highlight ══════ */
+    function highlight(text) {
+        return text
+            .split('\n')
+            .map(line => {
+                if (/^[A-Z_]+:$/.test(line.trim())) return `<span class="ck-section">${line}</span>`;
+                if (/^\t?- "/.test(line)) {
+                    return line.replace(/"([^"]*)"/g, '<span class="ck-str">"$1"</span>');
+                }
+                const colonIdx = line.indexOf(':');
+                if (colonIdx > 0 && !/^\s/.test(line)) {
+                    const key = line.slice(0, colonIdx);
+                    const rest = line.slice(colonIdx + 1).replace(/"([^"]*)"/g, '<span class="ck-str">"$1"</span>');
+                    return `<span class="ck-key">${key}</span>:${rest}`;
+                }
+                return line;
+            })
+            .join('\n');
+    }
+
+    /* ══════ Update preview ══════ */
+    function update() {
+        const config = buildConfig();
+        document.getElementById('view-raw').innerHTML = highlight(config);
+    }
+
+    function switchTab(tab) {
+        document.getElementById('view-raw').style.display = '';
+        document.getElementById('tab-raw').classList.add('active');
+    }
+
+    /* ══════ Download ══════ */
+    function downloadFile() {
+        const config = buildConfig();
+        const blob = new Blob([config], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'config.osman';
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    /* ══════ Init ══════ */
+    addArrayRow('NAV_BAR_LINKS', 'Link Name', 'https://');
+    addArrayRow('SOCIAL_LINKS', 'Platform', 'https://');
+    addArrayRow('SOCIAL_ICONS', 'Icon URL/Path', 'https://', true);
+
+    // set default year
+    document.getElementById('COPYRIGHT_YEAR').value = new Date().getFullYear();
+    update();
+</script>
 </body>
 </html>
+
