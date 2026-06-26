@@ -630,7 +630,7 @@ class PostContentStrategy extends Strategy {
             int index = value.indexOf(' ');
             int positionOfSpace = index;
             while (-1 != index) {
-				if (positionOfSpace = index - 1){
+				if (positionOfSpace == index - 1){
 					positionOfSpace = index;
 				}else {
 					wordNum++;
