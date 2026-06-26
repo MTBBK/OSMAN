@@ -68,12 +68,12 @@ public class Builder {
         String config = readFile("config.osman");
         System.out.println("buildSite: Successfully read the config.");
         
-        String baseURL = getConfigOption("baseURL", config).replaceAll("\"", "").trim();
-        String siteTitle = getConfigOption("SITE_TITLE", config).replaceAll("\"", "").trim();
-        String siteDescription =  getConfigOption("SITE_DESCRIPTION", config).replaceAll("\"", "").trim();
+        String baseURL = getOption("baseURL", config).replaceAll("\"", "").trim();
+        String siteTitle = getOption("SITE_TITLE", config).replaceAll("\"", "").trim();
+        String siteDescription =  getOption("SITE_DESCRIPTION", config).replaceAll("\"", "").trim();
 
         // Choose Template according to Config
-		String templateName = getConfigOption("TEMPLATE_NAME", config);
+		String templateName = getOption("TEMPLATE_NAME", config);
         String templatePath = "Templates/" + templateName + "/";
 		if (!(new File(templatePath + "base.html")).exists()) {
 			throw new Exception("Selected template could not be found in Templates folder.");
@@ -136,31 +136,11 @@ public class Builder {
             }
         });
 
-        // --------------------------------------------------------------------------------------------
-        // get pages' dates begin
-        String[] pageDates = new String[textContent.length];
-        for (int i = 0; i < textContent.length; i++) {
-            if (textContent[i][1].indexOf("POST_DATE") == -1) {
-                pageDates[i] = "";
-            } else {
-                int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_DATE")) + 1;
-                pageDates[i] = textContent[i][1].substring(first1Quote, textContent[i][1].indexOf('"', first1Quote));
-            }
-        }
-        // get pages' dates end
+        // get pages' dates
+        String[] pageDates = getOptionArray("POST_DATE", textContent);
 
-        // --------------------------------------------------------------------------------------------
-        // get pages' titles begin
-        String[] pageTitles = new String[textContent.length];
-        for (int i = 0; i < textContent.length; i++) {
-            if (textContent[i][1].indexOf("POST_TITLE") == -1) {
-                pageTitles[i] = "";
-            } else {
-                int first1Quote = textContent[i][1].indexOf('"', textContent[i][1].indexOf("POST_TITLE")) + 1;
-                pageTitles[i] = textContent[i][1].substring(first1Quote, textContent[i][1].indexOf('"', first1Quote));
-            }
-        }
-        // get pages' titles end
+        // get pages' titles
+        String[] pageTitles = getOptionArray("POST_TITLE", textContent);
 
         // --------------------------------------------------------------------------------------------
         // get pages' tags begin
@@ -383,22 +363,31 @@ public class Builder {
         System.out.println("buildFile: End.\n");
     }
 	
-	static String getConfigOption (String configOption, String config) throws IOException {
+	static String getOption (String configOption, String config) throws IOException {
         String optionValue = "";
         int valueIndex = config.indexOf(configOption);
         if (-1 == valueIndex) {
-            System.out.println("getConfigOption: Cannot find config option for " + configOption);
+            System.out.println("getOption: Cannot find config option for " + configOption);
             // Default Value
-            return "OSMAN";
+            return "";
         } else {
             // index of the first quote symbol after configOption
             int firstQuoteSymbolIndex = config.indexOf('"', valueIndex);
             // selected options name
             optionValue = config.substring(firstQuoteSymbolIndex + 1, config.indexOf('"', firstQuoteSymbolIndex + 1));
-            System.out.println("getConfigOption: Returned value of the option " + configOption + "as " + optionValue);
+            System.out.println("getOption: Returned value of the option " + configOption + "as " + optionValue);
             return optionValue;
         }
 	}
+	
+	static String[] getOptionArray (String configOption, String[][] textContent) throws IOException {
+		String[] optionValues = new String[textContent.length];
+        for (int i = 0; i < textContent.length; i++) {
+			optionValues[i] = getOption(configOption, textContent[i][1]);
+        }
+        System.out.println("getOptionArray: Returned values of " + configOption);
+        return optionValues;
+	}	
 	
 	static String[][] parseContentFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
