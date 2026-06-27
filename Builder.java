@@ -671,9 +671,11 @@ class PostContentStrategy extends Strategy {
             }
             wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
 
-            if (wordNum > 0) {
+            if (wordNum > 1) {
                 Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: " + wordNum + " minutes", file);
-            } else {
+            } else if (wordNum == 1){
+                Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: " + wordNum + " minute", file);
+            }else {
                 Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: Under one minute.", file);
             }
             System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
@@ -1066,7 +1068,7 @@ class MarkdownConverter {
         // onlined text
         text = text.replaceAll("~~(.*?)~~", "<del>$1</del>");
 		// image
-        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\">");
+        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"Images/$2\" alt=\"$1\">");
         // link
         text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
         // oneline code

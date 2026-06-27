@@ -1,9 +1,11 @@
-FEATURED\_IMAGE: "[https://freepnglogo.com/images/all\_img/gmail-icon-2013-2020-2edc.png](https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2edc.png)" POST\_TITLE: "Features Showcase" POST\_DATE: "2026/06/27" POST\_SUMMARY: "A comprehensive showcase of all the new features in the OSMAN Static Site Builder, including advanced markdown, SEO, categories, and more." POST\_TAGS: - "Features" - "Showcase" - "OSMAN" - "Java" POST\_CATEGORIES: - "Updates" - "Documentation" POST\_CONTENT:
+FEATURED_IMAGE: "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2edc.png"
+POST_TITLE: "Example Post"
+POST_DATE: "2026/06/27"
+POST_AUTHOR: "Büyük Albert"
+POST_TAGS: - "Features" - "Showcase" - "OSMAN" - "Java"
 
-## Table of Contents
-
-The Table of Contents above is automatically generated from the `##` and `###` headers in this document using the `{{ POST_TOC }}` tag!
-
+POST_CONTENT:
+# Hello
 ## Introduction
 
 Welcome to the **OSMAN Feature Showcase**! This post is designed to demonstrate all of the powerful capabilities of the `MarkdownConverter` and the static site builder.
@@ -88,6 +90,6 @@ And another rule using asterisks.
 
 ## Media and Links
 
-You can embed images anywhere in your posts: ![Sample Image](osman.ong)
+You can embed images anywhere in your posts: ![Sample Image](osman.png)
 
 And you can easily add external links like [this link to GitHub](https://github.com).
