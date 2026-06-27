@@ -9,6 +9,19 @@
     <link rel="icon" type="image/x-icon" href="{{ FAVICON_URL }}">
     <link rel="stylesheet" href="{{ THEME_NAME }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+	.code-block {position:relative; margin:1em 0;}
+	.copy-btn {position:absolute; top:8px; right:8px; background:#333; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; z-index:10; font-family:sans-serif;}
+	pre {background:#1e1e1e; color:#d4d4d4; padding:15px; border-radius:8px; overflow-x:auto;}
+	blockquote {border-left:4px solid #b58900; padding-left:15px; color:#93a1a1; margin-left:0;}
+	.post-table {overflow-x:auto;}
+	table {width:100%; border-collapse:collapse; margin-bottom:1rem;}
+	th {border:1px solid #93a1a1; padding:8px; text-align:left;}
+	td {border:1px solid #93a1a1; padding:8px;}
+	.task-list {list-style-type:none; padding-left:0;}
+	li {display:flex; align-items:center; gap:0.5rem;}
+	onelinecode {background:rgba(120,120,120,0.2); padding:2px 4px; border-radius:4px;}
+    </style>
 </head>
 
 <body>
@@ -22,7 +35,7 @@
     </header>
 
     <main class="content container">
-        {{ CONTENT }}  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        {{ CONTENT }}
     </main>
 
     <footer class="footer container">
