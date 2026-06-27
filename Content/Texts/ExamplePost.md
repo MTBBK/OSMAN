@@ -45,10 +45,10 @@ You can create standard unordered lists:
 
 You can also use GitHub-flavored task lists to track your progress:
 
--   [x]  Task List
--   [x]  Task List (`POST_TITLE`)
--   [x]  Write documentation (`POST_TITLE`)
--   [ ]  Write documentation
+- [x]  Task List
+- [x]  Task List (`POST_TITLE`)
+- [x]  Write documentation (`POST_TITLE`)
+- [ ]  Write documentation
 
 ## Tables
 
