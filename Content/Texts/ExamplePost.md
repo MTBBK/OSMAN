@@ -35,14 +35,14 @@ You can create standard unordered lists:
 
 -   First item
 -   Second item
--   Third item with a [link to Google](https://google.com)
+-   Third item with a [link to Landfiller Blog](https://blog.landfiller.xyz/)
 
 ### Task Lists
 
 You can also use GitHub-flavored task lists to track your progress:
 
--   [x]  Write documentation (`POST_TITLE`)
--   [x]  Write documentation (`POST_TITLE`)
+-   [x]  Task List
+-   [x]  Task List (`POST_TITLE`)
 -   [x]  Write documentation (`POST_TITLE`)
 -   [ ]  Write documentation
 
@@ -52,7 +52,7 @@ Tables are incredibly useful for displaying structured data.
 
 | Feature | Supported | Description |
 | --- | --- | --- |
-| Task Lists | Yes | GitHub flavored task lists with disabled checkboxes. |
+| Task Lists | Yes | Task lists with disabled checkboxes. |
 | Tables | Yes | Basic Markdown tables support with borders. |
 | Onlinedtext | Yes | Using double tildes (`~~`). |
 | Code Highlighting | Yes | Language classes are added for PrismJS/HighlightJS. |
@@ -73,7 +73,7 @@ package com.osman;
 
 public class Builder {
     public static void main(String[] args) {
-        System.out.println("Building the best static site generator!");
+        System.out.println("Building Complete by OSMAN");
     }
 }
 ```
@@ -94,4 +94,4 @@ And another rule using asterisks.
 
 You can embed images anywhere in your posts: ![Sample Image](osman.png)
 
-And you can easily add external links like [this link to GitHub](https://github.com).
+And you can easily add external links like [this link to GitHub](https://github.com/MTBBK/OSMAN).
