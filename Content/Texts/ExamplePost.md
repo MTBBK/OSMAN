@@ -2,7 +2,11 @@ FEATURED_IMAGE: "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2ed
 POST_TITLE: "Example Post"
 POST_DATE: "2026/06/27"
 POST_AUTHOR: "Büyük Albert"
-POST_TAGS: - "Features" - "Showcase" - "OSMAN" - "Java"
+POST_TAGS:
+- "Features"
+- "Showcase"
+- "OSMAN"
+- "Java"
 
 POST_CONTENT:
 # Hello
