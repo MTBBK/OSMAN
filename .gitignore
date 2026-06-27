@@ -9,3 +9,4 @@ ErrorLogs/*
 ErrorLogs/
 makeJarFile.bat
 Potato.java
+compile.ps1
