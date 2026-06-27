@@ -94,4 +94,4 @@ And another rule using asterisks.
 
 You can embed images anywhere in your posts: ![Sample Image](osman.png)
 
-And you can easily add external links like [this link to GitHub](https://github.com/MTBBK/OSMAN).
+And you can easily add external links like this post's raw version[example.md](http://osman.guru/example/example.md).
