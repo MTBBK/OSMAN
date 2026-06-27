@@ -67,17 +67,17 @@ public class Builder {
 
         String config = readFile("config.osman");
         System.out.println("buildSite: Successfully read the config.");
-
+        
         String baseURL = getOption("baseURL", config).replaceAll("\"", "").trim();
         String siteTitle = getOption("SITE_TITLE", config).replaceAll("\"", "").trim();
         String siteDescription = getOption("SITE_DESCRIPTION", config).replaceAll("\"", "").trim();
 
         // Choose Template according to Config
-        String templateName = getOption("TEMPLATE_NAME", config);
+		String templateName = getOption("TEMPLATE_NAME", config);
         String templatePath = "Templates/" + templateName + "/";
-        if (!(new File(templatePath + "base.html")).exists()) {
-            throw new Exception("Selected template could not be found in Templates folder.");
-        }
+		if (!(new File(templatePath + "base.html")).exists()) {
+			throw new Exception("Selected template could not be found in Templates folder.");
+		}
 
         // [i][0] - file name, [i][1] file content
         // String[][] contents = parseContentFiles("/Content/Texts/");
@@ -143,10 +143,9 @@ public class Builder {
         String[] pageTitles = getOptionArray("POST_TITLE", textContent);
 
         // --------------------------------------------------------------------------------------------
-        // get pages' tags begin
+        // get pages' tags
         String[][] pageTags = new String[textContent.length][];
-        getPageTags(pageTags, textContent);
-        // get pages' tags end
+		getPageTags(pageTags, textContent);
 
         // --------------------------------------------------------------------------------------------
         // get pages' summaries begin
@@ -295,22 +294,12 @@ public class Builder {
             writeFile("Output/" + fileName + ".html", pages[i].toString());
             System.out.println("buildSite: Successfully made \"" + fileName + "\".");
         }
-
+        
         // generate sitemap.xml
-        StringBuilder sitemap = new StringBuilder(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
-        sitemap.append("<url><loc>").append(baseURL).append("/</loc></url>\n");
-        for (int i = 0; i < textContent.length; i++) {
-            String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
-            sitemap.append("<url><loc>").append(baseURL).append("/").append(fName).append(".html</loc></url>\n");
-        }
-        sitemap.append("</urlset>");
-        writeFile("Output/sitemap.xml", sitemap.toString());
-        System.out.println("buildSite: Successfully made \"sitemap.xml\".");
-
+		generateSitemap(baseURL, textContent);
+		
         // generate rss.xml
-        StringBuilder rss = new StringBuilder(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
+        StringBuilder rss = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
         rss.append("<title>").append(siteTitle).append("</title>\n");
         rss.append("<link>").append(baseURL).append("</link>\n");
         rss.append("<description>").append(siteDescription).append("</description>\n");
@@ -318,8 +307,7 @@ public class Builder {
             String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
             rss.append("<item>\n<title>").append(pageTitles[i]).append("</title>\n");
             rss.append("<link>").append(baseURL).append("/").append(fName).append(".html</link>\n");
-            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;"))
-                    .append("</description>\n");
+            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;")).append("</description>\n");
             rss.append("</item>\n");
         }
         rss.append("</channel>\n</rss>");
@@ -328,7 +316,19 @@ public class Builder {
 
         System.out.println("buildFile: End.\n");
     }
-
+	
+	static void generateSitemap(String baseURL, String[][] textContent)  throws IOException{
+	    StringBuilder sitemap = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+        sitemap.append("<url><loc>").append(baseURL).append("/</loc></url>\n");
+        for (int i = 0; i < textContent.length; i++) {
+            String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            sitemap.append("<url><loc>").append(baseURL).append("/").append(fName).append(".html</loc></url>\n");
+        }
+        sitemap.append("</urlset>");
+        writeFile("Output/sitemap.xml", sitemap.toString());
+        System.out.println("buildSite: Successfully made \"sitemap.xml\".");
+	}
+	
     static void getPageTags(String[][] pageTags, String[][] textContent) {
         for (int j = 0; j < textContent.length; j++) {
             String option = "POST_TAGS";
@@ -367,11 +367,10 @@ public class Builder {
             }
             pageTags[j] = new String[list.size()];
             pageTags[j] = (list.toArray(pageTags[j]));
-            System.err.println("gettags yolo");
         }
     }
-
-    static String getOption(String configOption, String config) throws IOException {
+    
+	static String getOption (String configOption, String config) throws IOException {
         String optionValue = "";
         int valueIndex = config.indexOf(configOption);
         if (-1 == valueIndex) {
@@ -386,18 +385,18 @@ public class Builder {
             System.out.println("getOption: Returned value of the option " + configOption + "as " + optionValue);
             return optionValue;
         }
-    }
-
-    static String[] getOptionArray(String configOption, String[][] textContent) throws IOException {
-        String[] optionValues = new String[textContent.length];
+	}
+	
+	static String[] getOptionArray (String configOption, String[][] textContent) throws IOException {
+		String[] optionValues = new String[textContent.length];
         for (int i = 0; i < textContent.length; i++) {
-            optionValues[i] = getOption(configOption, textContent[i][1]);
+			optionValues[i] = getOption(configOption, textContent[i][1]);
         }
         System.out.println("getOptionArray: Returned values of " + configOption);
         return optionValues;
-    }
-
-    static String[][] parseContentFiles(String folderPath) throws IOException {
+	}	
+	
+	static String[][] parseContentFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
 
         // throw an IOException if folderPath is not an existing folder's path
@@ -663,12 +662,12 @@ class PostContentStrategy extends Strategy {
             int index = freshValue.indexOf(' ');
             int positionOfSpace = index;
             while (-1 != index) {
-                if (positionOfSpace == index - 1) {
-                    positionOfSpace = index;
-                } else {
-                    wordNum++;
-                }
-                index = freshValue.indexOf(' ', index + 1);
+				if (positionOfSpace == index - 1){
+					positionOfSpace = index;
+				}else {
+					wordNum++;
+				}
+				index = freshValue.indexOf(' ', index + 1);
             }
             wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
 
@@ -679,9 +678,7 @@ class PostContentStrategy extends Strategy {
             }
             System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
 
-            Builder.stringEditor(option, value, file);
-            // In Development
-            // Builder.stringEditor(option, MarkdownConverter.convert(value), file);
+            Builder.stringEditor(option, MarkdownConverter.convert(value), file);
             System.out.println("PostContentStrategy: End.\n");
         }
         System.out.println("PostContentStrategy: End.\n");
@@ -890,97 +887,191 @@ class Factory {
     }
 }
 
-// In Development
-/*
- * class MarkdownConverter {
- * public static String convert(String md) {
- * if (md == null || md.trim().isEmpty()) return "";
- * StringBuilder html = new StringBuilder();
- * String[] lines = md.split("\n");
- * boolean inCodeBlock = false;
- * boolean inList = false;
- * for (int i = 0; i < lines.length; i++) {
- * String line = lines[i];
- * 
- * if (line.trim().startsWith("```")) {
- * if (inCodeBlock) {
- * html.append("</code></pre></div>\n");
- * inCodeBlock = false;
- * } else {
- * html.
- * append("<div class=\"code-block\" style=\"position:relative; margin:1em 0;\"><button class=\"copy-btn\" style=\"position:absolute; top:8px; right:8px; background:#333; color:#fff; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; z-index:10; font-family:sans-serif;\" onclick=\"navigator.clipboard.writeText(this.parentElement.querySelector('code').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000);\">Copy</button><pre style=\"background:#1e1e1e; color:#d4d4d4; padding:15px; border-radius:8px; overflow-x:auto;\"><code>"
- * );
- * inCodeBlock = true;
- * }
- * continue;
- * }
- * if (inCodeBlock) {
- * html.append(line.replace("&", "&amp;").replace("<", "&lt;").replace(">",
- * "&gt;")).append("\n");
- * continue;
- * }
- * 
- * if (line.trim().matches("---+") || line.trim().matches("\\*\\*\\*+")) {
- * if (inList) { html.append("</ul>\n"); inList = false; }
- * html.append("<hr>\n");
- * continue;
- * }
- * 
- * if (line.trim().startsWith("> ")) {
- * if (inList) { html.append("</ul>\n"); inList = false; }
- * html.
- * append("<blockquote style=\"border-left:4px solid var(--accent); padding-left:15px; color:var(--muted); margin-left:0;\">"
- * ).append(parseInline(line.trim().substring(2))).append("</blockquote>\n");
- * continue;
- * }
- * 
- * if (line.startsWith("# ")) {
- * if (inList) { html.append("</ul>\n"); inList = false; }
- * html.append("<h1>").append(parseInline(line.substring(2))).append("</h1>\n");
- * continue;
- * } else if (line.startsWith("## ")) {
- * if (inList) { html.append("</ul>\n"); inList = false; }
- * html.append("<h2>").append(parseInline(line.substring(3))).append("</h2>\n");
- * continue;
- * } else if (line.startsWith("### ")) {
- * if (inList) { html.append("</ul>\n"); inList = false; }
- * html.append("<h3>").append(parseInline(line.substring(4))).append("</h3>\n");
- * continue;
- * }
- * 
- * if (line.trim().startsWith("- ")) {
- * if (!inList) { html.append("<ul>\n"); inList = true; }
- * html.append("<li>").append(parseInline(line.trim().substring(2))).append(
- * "</li>\n");
- * continue;
- * } else {
- * if (inList) { html.append("</ul>\n"); inList = false; }
- * }
- * 
- * if (line.trim().isEmpty()) {
- * // ignore
- * } else {
- * if (line.trim().startsWith("<")) {
- * html.append(line).append("\n");
- * } else {
- * html.append("<p>").append(parseInline(line)).append("</p>\n");
- * }
- * }
- * }
- * if (inList) html.append("</ul>\n");
- * return html.toString();
- * }
- * 
- * private static String parseInline(String text) {
- * text = text.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
- * text = text.replaceAll("\\*(.*?)\\*", "<em>$1</em>");
- * text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)",
- * "<img src=\"$2\" alt=\"$1\">");
- * text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
- * text = text.replaceAll("`(.*?)`",
- * "<code style=\"background:rgba(120,120,120,0.2); padding:2px 4px; border-radius:4px;\">$1</code>"
- * );
- * return text;
- * }
- * }
- */
+class MarkdownConverter {
+	public static boolean isEndingList (boolean inList, StringBuilder html){
+		if(inList){
+			// Add list ending code
+			html.append("</ul>\n");
+			inList = false;
+		}
+		return inList;
+	}
+	
+	public static boolean isEndingTable (boolean inTable, StringBuilder html){		
+		if(inTable){
+			// Add table ending code
+			html.append("</tbody></table></div>\n");
+			inTable = false;
+		}
+		return inTable;
+	}
+	
+	public static String generateTitle (String titleStarter, String titleOptionCode, String line){
+		StringBuilder title = new StringBuilder();
+		int titleStarterLength = titleStarter.length();
+		String rawText = parseInline(line.substring(titleStarterLength));
+		String text = rawText;
+		String id = text.replaceAll("<[^>]*>", "").replaceAll("[^a-zA-Z0-9]+", "-").toLowerCase();
+		title.append("<").append(titleOptionCode).append(" id=\"").append(id).append("\">").append(text).append("</").append(titleOptionCode).append(">\n");
+		return title.toString();
+	}
+	
+    public static String convert(String md) {
+        if (md == null || md.trim().isEmpty()) {
+            return "";
+        }
+        
+        StringBuilder html = new StringBuilder();
+        String[] allLines = md.split("\n");
+        boolean inCodeBlock = false;
+        boolean inList = false;
+        boolean inTable = false;
+        for (int i = 0; i < allLines.length; i++) {
+            String line = allLines[i];
+			
+			// code block
+            if (line.trim().startsWith("```")) {
+                if (inCodeBlock) {
+                    html.append("</code></pre></div>\n");
+                    inCodeBlock = false;
+                } else {
+                    String lang = line.trim().substring(3).trim();
+                    String langClass = lang.isEmpty() ? "" : " class=\"language-" + lang + "\"";
+                    html.append(
+                            "<div class=\"code-block\"><button class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(this.parentElement.querySelector('code').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000);\">Copy</button><pre><code").append(langClass).append(">");
+                    inCodeBlock = true;
+                }
+                continue;
+            }
+            
+            // in code block modify some characters
+            if (inCodeBlock) {
+                html.append(line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")).append("\n");
+                continue;
+            }
+
+			// long horizontal line as seperator
+            if (line.trim().matches("---+") || line.trim().matches("\\*\\*\\*+")) {
+                inList = isEndingList(inList, html);
+                inTable = isEndingTable(inTable, html);
+                html.append("<hr>\n");
+                continue;
+            }
+
+			// caution message like vertical small line infront of the text
+            if (line.trim().startsWith("> ")) {
+                inList = isEndingList(inList, html);
+                inTable = isEndingTable(inTable, html);
+                html.append(
+                        "<blockquote>").append(parseInline(line.trim().substring(2))).append("</blockquote>\n");
+                continue;
+            }
+
+			// big title
+            if (line.startsWith("# ")) {
+                inList = isEndingList(inList, html);
+                inTable = isEndingTable(inTable, html);
+                html.append(generateTitle("# ", "h1", line));
+                continue;
+            }
+            // not big but not small title
+            else if (line.startsWith("## ")) {
+                inList = isEndingList(inList, html);
+                inTable = isEndingTable(inTable, html);
+				html.append(generateTitle("## ", "h2", line));
+                continue;
+            } 
+            // small title
+            else if (line.startsWith("### ")) {
+                inList = isEndingList(inList, html);
+                inTable = isEndingTable(inTable, html);
+				html.append(generateTitle("### ", "h3", line));
+                continue;
+            }
+
+            // tables
+            if (line.trim().startsWith("|") && line.trim().endsWith("|")) {
+                inList = isEndingList(inList, html);
+                if (line.trim().matches("\\|[-:\\s|]+\\|")) {
+                    continue; // Skip markdown table separator
+                }
+                String[] cols = line.trim().substring(1, line.trim().length() - 1).split("\\|");
+                if (!inTable) {
+                    html.append("<div class=\"post-table\"><table>\n<thead><tr>");
+                    for (String col : cols) {
+                        html.append("<th>").append(parseInline(col.trim())).append("</th>");
+                    }
+                    html.append("</tr></thead>\n<tbody>\n");
+                    inTable = true;
+                } else {
+                    html.append("<tr>");
+                    for (String col : cols) {
+                        html.append("<td>").append(parseInline(col.trim())).append("</td>");
+                    }
+                    html.append("</tr>\n");
+                }
+                continue;
+            } else {
+				inTable = isEndingTable(inTable, html);
+			}
+
+            // task lists
+            if (line.trim().startsWith("- [ ] ") || line.trim().startsWith("- [x] ") || line.trim().startsWith("- [X] ")) {
+                inTable = isEndingTable(inTable, html);
+                if (!inList) {
+                    html.append("<ul class=\"task-list\">\n");
+                    inList = true;
+                }
+                boolean checked = line.trim().startsWith("- [x] ") || line.trim().startsWith("- [X] ");
+                String text = line.trim().substring(6);
+                html.append("<li><input type=\"checkbox\" disabled ")
+                    .append(checked ? "checked" : "").append("><span>").append(parseInline(text)).append("</span></li>\n");
+                continue;
+            }
+
+			// unordered list
+            if (line.trim().startsWith("- ")) {
+                inTable = isEndingTable(inTable, html);
+                if (!inList) {
+                    html.append("<ul>\n");
+                    inList = true;
+                }
+                html.append("<li>").append("• ").append(parseInline(line.trim().substring(2))).append("</li>\n");
+                continue;
+            } else {
+				inList = isEndingList(inList, html);
+            }
+
+            if (line.trim().isEmpty()) {
+                // ignore
+            } else {
+                if (line.trim().startsWith("<")) {
+                    html.append(line).append("\n");
+                } else {
+                    html.append("<p>").append(parseInline(line)).append("</p>\n");
+                }
+            }
+        }
+        inList = isEndingList(inList, html);
+        inTable = isEndingTable(inTable, html);
+        
+        return html.toString();
+    }
+
+    private static String parseInline(String text) {
+		// bold text
+        text = text.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
+        // italic text
+        text = text.replaceAll("\\*(.*?)\\*", "<em>$1</em>");
+        // onlined text
+        text = text.replaceAll("~~(.*?)~~", "<del>$1</del>");
+		// image
+        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\">");
+        // link
+        text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
+        // oneline code
+        text = text.replaceAll("`(.*?)`",
+                "<onelinecode>$1</onelinecode>");
+        return text;
+    }
+}
