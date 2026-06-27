@@ -18,7 +18,7 @@ Markdown provides a variety of ways to format your text:
 
 -   You can make text **bold** using double asterisks.
 -   You can make text *italic* using single asterisks.
--   You can use ~~strikethrough~~ for text that is no longer accurate.
+-   You can use ~~onlinedtext~~ for text that is no longer accurate.
 -   You can add inline code like this: `System.out.println("Hello");`.
 
 ## Blockquotes
@@ -54,7 +54,7 @@ Tables are incredibly useful for displaying structured data.
 | --- | --- | --- |
 | Task Lists | Yes | GitHub flavored task lists with disabled checkboxes. |
 | Tables | Yes | Basic Markdown tables support with borders. |
-| Strikethrough | Yes | Using double tildes (`~~`). |
+| Onlinedtext | Yes | Using double tildes (`~~`). |
 | Code Highlighting | Yes | Language classes are added for PrismJS/HighlightJS. |
 
 ## Code Blocks
@@ -87,6 +87,8 @@ Here is some text below the rule.
 ---
 
 And another rule using asterisks.
+
+***
 
 ## Media and Links
 
