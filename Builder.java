@@ -234,10 +234,11 @@ public class Builder {
                         "{{ NEXT_POST }}", "<a href=\"./index.html\">Next Post</a>", pages[i]);
 
             }
-
+            
             System.out.println("buildSite: Successfully made \"" + textContent[i][0] + "\" page.");
-
         }
+        
+        
         System.out.println("buildSite: Successfully made all of the site pages.");
         // handling page.htmls end
 
@@ -395,7 +396,17 @@ public class Builder {
         }
         System.out.println("getOptionArray: Returned values of " + configOption);
         return optionValues;
-	}	
+	}
+	
+	static boolean isEnabled (String configOption, String config) throws IOException{	
+		String option = getOption(configOption, config).toLowerCase();
+		boolean isEnable = false;
+        if (option.equals("true") || option.equals("1") ||  option.equals("evet")){
+			isEnable = true;
+        }
+        System.out.println("isEnabled: Returned statue of" + configOption);
+		return isEnable;
+	}
 	
 	static String[][] parseContentFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
@@ -645,7 +656,6 @@ class PostContentStrategy extends Strategy {
         System.out.println("\nPostContentStrategy: Begin.");
         int contentStart = config.indexOf('\n', config.indexOf(option)) + 1;
         String value = config.substring(contentStart);
-        String freshValue = value.trim();
         option = "{{ " + option + " }}";
 
         if (-1 == file.indexOf(option)) {
@@ -659,16 +669,10 @@ class PostContentStrategy extends Strategy {
 
             // {{ POST_READ_TIME }} handling part.
             System.out.println("PostContentStrategy: Starting to calculate \"POST_READ_TIME\".");
+            String cleanText = MarkdownConverter.convert(value).replaceAll("<[^>]*>", "").trim();
             int wordNum = 0;
-            int index = freshValue.indexOf(' ');
-            int positionOfSpace = index;
-            while (-1 != index) {
-				if (positionOfSpace == index - 1){
-					positionOfSpace = index;
-				}else {
-					wordNum++;
-				}
-				index = freshValue.indexOf(' ', index + 1);
+            if (!cleanText.isEmpty()) {
+                wordNum = cleanText.split("\\s+").length;
             }
             wordNum /= 238; // https://scholarwithin.com/average-reading-speed#adult-average-reading-speed
 
@@ -682,6 +686,18 @@ class PostContentStrategy extends Strategy {
             System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
 
             Builder.stringEditor(option, MarkdownConverter.convert(value), file);
+            
+            boolean TOCEnable = Builder.isEnabled("TABLE_OF_CONTENT_ENABLE", config);
+            
+            if (TOCEnable) {
+                Builder.stringEditor("{{ POST_TOC }}", MarkdownConverter.currentTOC, file);
+                Builder.stringEditor("{{ TABLE_OF_CONTENT_TITLE }}", Builder.getOption("TABLE_OF_CONTENT_TITLE", config), file);
+                System.out.println("PostContentStrategy: Successfully added \"POST_TOC\".");
+            }else{
+				Builder.stringEditor("{{ POST_TOC }}", "", file);
+				System.out.println("PostContentStrategy: Table Of Content Is Disable skipping \"POST_TOC\".");
+			}
+            
             System.out.println("PostContentStrategy: End.\n");
         }
         System.out.println("PostContentStrategy: End.\n");
@@ -891,6 +907,8 @@ class Factory {
 }
 
 class MarkdownConverter {
+	public static String currentTOC = "";
+	
 	public static boolean isEndingList (boolean inList, StringBuilder html){
 		if(inList){
 			// Add list ending code
@@ -909,13 +927,14 @@ class MarkdownConverter {
 		return inTable;
 	}
 	
-	public static String generateTitle (String titleStarter, String titleOptionCode, String line){
+	public static String generateTitle (String titleStarter, String titleOptionCode, String line, StringBuilder toc){
 		StringBuilder title = new StringBuilder();
 		int titleStarterLength = titleStarter.length();
 		String rawText = parseInline(line.substring(titleStarterLength));
 		String text = rawText;
 		String id = text.replaceAll("<[^>]*>", "").replaceAll("[^a-zA-Z0-9]+", "-").toLowerCase();
 		title.append("<").append(titleOptionCode).append(" id=\"").append(id).append("\">").append(text).append("</").append(titleOptionCode).append(">\n");
+        toc.append("<li class=\"toc-level-").append(titleStarterLength).append("\"><a href=\"#").append(id).append("\">").append(text).append("</a></li>\n");
 		return title.toString();
 	}
 	
@@ -925,10 +944,12 @@ class MarkdownConverter {
         }
         
         StringBuilder html = new StringBuilder();
+		StringBuilder toc = new StringBuilder("<div class=\"post-toc\">\n  <h3 class=\"toc-title\">").append("{{ TABLE_OF_CONTENT_TITLE }}").append("</h3>\n  <ul class=\"toc-list\">\n");
         String[] allLines = md.split("\n");
         boolean inCodeBlock = false;
         boolean inList = false;
         boolean inTable = false;
+        boolean tocHasItems = false;
         for (int i = 0; i < allLines.length; i++) {
             String line = allLines[i];
 			
@@ -974,21 +995,24 @@ class MarkdownConverter {
             if (line.startsWith("# ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
-                html.append(generateTitle("# ", "h1", line));
+                html.append(generateTitle("# ", "h1", line, toc));
+                tocHasItems = true;
                 continue;
             }
             // not big but not small title
             else if (line.startsWith("## ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
-				html.append(generateTitle("## ", "h2", line));
+				html.append(generateTitle("## ", "h2", line, toc));
+				tocHasItems = true;
                 continue;
             } 
             // small title
             else if (line.startsWith("### ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
-				html.append(generateTitle("### ", "h3", line));
+				html.append(generateTitle("### ", "h3", line, toc));
+				tocHasItems = true;
                 continue;
             }
 
@@ -1057,6 +1081,11 @@ class MarkdownConverter {
         }
         inList = isEndingList(inList, html);
         inTable = isEndingTable(inTable, html);
+        
+        toc.append("</ul></div>\n");
+        if (tocHasItems) {
+            currentTOC = toc.toString();
+        }
         
         return html.toString();
     }
