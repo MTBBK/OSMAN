@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileAlreadyExistsException;
@@ -76,7 +77,7 @@ public class Builder {
 		String templateName = getOption("TEMPLATE_NAME", config);
         String templatePath = "Templates/" + templateName + "/";
 		if (!(new File(templatePath + "base.html")).exists()) {
-			throw new Exception("Selected template could not be found in Templates folder.");
+			throw new FileNotFoundException("Selected template could not be found in Templates folder.");
 		}
 
         // [i][0] - file name, [i][1] file content
