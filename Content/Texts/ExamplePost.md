@@ -8,6 +8,9 @@ POST_TAGS:
 - "OSMAN"
 - "Java"
 
+TABLE_OF_CONTENT_ENABLE: "True"
+TABLE_OF_CONTENT_TITLE: "İçindekiler"
+
 POST_CONTENT:
 # Hello
 ## Introduction

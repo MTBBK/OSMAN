@@ -2,7 +2,7 @@ TEMPLATE_NAME: "blog"
 BASE:
 baseURL: "https://osman.guru"
 SITE_LANGUAGE: "tr"
-THEME_NAME: "OldSchool"
+THEME_NAME: "Space"
 SITE_TITLE: "Osman Sit\e"
 SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası."
 AUTHOR_NAME: "Barbaros Köş (MTBBK)"
