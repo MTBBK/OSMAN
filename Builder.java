@@ -63,7 +63,7 @@ public class Builder {
         System.out.println("main: End.");
     }
 
-    static void buildSite() throws FileNotFoundException {
+    static void buildSite() throws Exception {
         System.out.println("\nbuildFile: Begin.");
 
         String config = readFile("config.osman");
