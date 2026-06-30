@@ -388,7 +388,7 @@ public class Builder {
             int firstQuoteSymbolIndex = config.indexOf('"', valueIndex);
             // selected options name
             optionValue = config.substring(firstQuoteSymbolIndex + 1, config.indexOf('"', firstQuoteSymbolIndex + 1));
-            System.out.println("getOption: Returned value of the option " + configOption + "as " + optionValue);
+            System.out.println("getOption: Returned value of the option " + configOption + " as " + optionValue);
             return optionValue;
         }
 	}
@@ -559,6 +559,9 @@ public class Builder {
                 System.out.println("makeFile: Successfully executed performStrategy(\"" + option + "\") on the file.");
                 index = nextLine;
                 System.out.println("makeFile: Successfully finished changing \"" + option + "\" in the file.");
+                
+                // Maybe we can stop searching for strategy options after POST_CONTENT reached.
+                // if(option.equals("POST_CONTENT")){break;}
             }
         } while (-1 != index && -1 != nextColon);
         System.out.println("makeFile: Successfully finished making the file.");
