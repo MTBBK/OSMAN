@@ -8,6 +8,9 @@ POST_TAGS:
 - "OSMAN"
 - "Java"
 
+PAGE_SUMMARY: "MerhabaKedi Temalı Bir Sayfa"
+OTOMATIC_SUMMARY_ENABLE: "f"
+
 TABLE_OF_CONTENT_ENABLE: "True"
 TABLE_OF_CONTENT_TITLE: "İçindekiler"
 

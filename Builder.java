@@ -152,25 +152,29 @@ public class Builder {
         // get pages' summaries begin
         String[] pageSummary = new String[textContent.length];
         for (int i = 0; i < textContent.length; i++) {
-            if (-1 == textContent[i][1].indexOf("POST_CONTENT")) {
-                pageSummary[i] = "";
-            } else {
-                int firstNextLine = textContent[i][1].indexOf('\n', textContent[i][1].indexOf("POST_CONTENT")) + 1;
-                String content = textContent[i][1].substring(firstNextLine);
-                int spaces = 0;
-                int spaceIndex = 0;
-                // Writes first 20 word as summary
-                while (-1 != spaceIndex && 20 > spaces) {
-                    spaces++;
-                    spaceIndex = content.indexOf(' ', spaceIndex + 1);
-                }
-                if (-1 == spaceIndex) {
-                    pageSummary[i] = content;
-                } else {
-                    pageSummary[i] = content.substring(0, spaceIndex);
-                }
-            }
-
+			if (isEnabled("OTOMATIC_SUMMARY_ENABLE", textContent[i][1])){
+				if (-1 == textContent[i][1].indexOf("POST_CONTENT")) {
+					pageSummary[i] = "";
+				} else {
+					int firstNextLine = textContent[i][1].indexOf('\n', textContent[i][1].indexOf("POST_CONTENT")) + 1;
+					String content = textContent[i][1].substring(firstNextLine);
+					String cleanText = MarkdownConverter.convert(content).replaceAll("<[^>]*>", "").trim();
+					int spaces = 0;
+					int spaceIndex = 0;
+					// Writes first 20 word as summary
+					while (-1 != spaceIndex && 20 > spaces) {
+						spaces++;
+						spaceIndex = cleanText.indexOf(' ', spaceIndex + 1);
+					}
+					if (-1 == spaceIndex) {
+						pageSummary[i] = cleanText;
+					} else {
+						pageSummary[i] = cleanText.substring(0, spaceIndex);
+					}
+				}
+			}else{
+				pageSummary[i] = getOption("PAGE_SUMMARY", textContent[i][1]);
+			}
         }
         // get pages' summaries end
 
@@ -378,7 +382,7 @@ public class Builder {
         if (-1 == valueIndex) {
             System.out.println("getOption: Cannot find config option for " + configOption);
             // Default Value
-            return "";
+            return "-1";
         } else {
             // index of the first quote symbol after configOption
             int firstQuoteSymbolIndex = config.indexOf('"', valueIndex);
@@ -566,7 +570,11 @@ public class Builder {
     // that will be placed instead of it. Then replaces the part.
     public static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
         int index = file.indexOf(contentName);
-        file.replace(index, index + contentName.length(), newContent);
+        if (index != -1) {
+			file.replace(index, index + contentName.length(), newContent);
+		} else {
+			System.out.println("stringEditor: Placeholder \"" + contentName + "\" not found in file.");
+		}
     }
 
     // sets a Strategy using Factory class
