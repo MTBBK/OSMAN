@@ -1,0 +1,61 @@
+<style>
+    .project-hero { text-align: left; margin-bottom: 60px; }
+    .project-title { font-size: 3em; font-weight: 800; color: #fff; margin: 0 0 15px; letter-spacing: -1px; line-height: 1.1; }
+
+    .project-meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; padding: 30px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; margin-bottom: 50px; }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; color: #777; margin-bottom: 5px; }
+    .meta-value { font-size: 1em; color: #e0e0e0; font-weight: 500; }
+    .meta-value span { color: #bb86fc; }
+
+    .project-featured-image { width: 100%; border-radius: 12px; margin-bottom: 50px; }
+
+    .project-content { font-size: 1.15em; font-weight: 300; line-height: 1.8; color: #c0c0c0; }
+    .project-content h2, .project-content h3 { color: #fff; font-weight: 600; margin-top: 2em; }
+
+    .project-footer { margin-top: 80px; padding-top: 40px; border-top: 1px solid #333; }
+    .project-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+    .project-tags a { background: #1e1e1e; padding: 6px 15px; border-radius: 4px; font-size: 0.85em; color: #a0a0a0; }
+    .project-tags a:hover { color: #bb86fc; }
+
+    .post-pagination { display: flex; justify-content: space-between; align-items: center; }
+    .prev-post, .next-post { font-weight: 600; font-size: 1.1em; }
+</style>
+
+<article class="project-post">
+    <header class="project-hero">
+        <h1 class="project-title">{{ POST_TITLE }}</h1>
+        <div class="project-meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Date</span>
+                <span class="meta-value">{{ POST_DATE }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Role / Author</span>
+                <span class="meta-value">{{ POST_AUTHOR }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Read Time</span>
+                <span class="meta-value">{{ POST_READ_TIME }}</span>
+            </div>
+        </div>
+    </header>
+
+    <img src="{{ FEATURED_IMAGE }}" alt="Project Featured Image" class="project-featured-image">
+
+    <div class="project-content">
+        {{ POST_TOC }}
+        {{ POST_CONTENT }}
+    </div>
+
+    <footer class="project-footer">
+        <div class="project-tags">
+            {{ POST_TAGS }}
+        </div>
+
+        <nav class="post-pagination">
+            <div class="prev-post">{{ PREVIOUS_POST }}</div>
+            <div class="next-post">{{ NEXT_POST }}</div>
+        </nav>
+    </footer>
+</article>

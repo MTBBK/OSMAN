@@ -1,0 +1,22 @@
+<style>
+    .tag-header { margin-bottom: 60px; border-bottom: 1px solid #333; padding-bottom: 40px; }
+    .tag-header h1 { font-size: 3em; font-weight: 800; color: #fff; margin: 0; letter-spacing: -1px; }
+    .tag-header h1 span { color: #bb86fc; }
+    
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; }
+    .project-card { display: flex; flex-direction: column; transition: transform 0.3s; }
+    .project-card:hover { transform: translateY(-5px); }
+    .project-card-title { font-size: 1.3em; font-weight: 700; color: #fff; margin: 0 0 10px; }
+    .project-card-title:hover { color: #bb86fc; }
+    .project-card-excerpt { font-size: 0.95em; color: #a0a0a0; margin: 0 0 15px; flex-grow: 1; }
+    .project-meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; color: #777; text-transform: uppercase; letter-spacing: 1px; }
+    .project-categories span { display: inline-block; background: #1e1e1e; padding: 4px 10px; border-radius: 4px; margin-right: 5px; color: #bb86fc; }
+</style>
+
+<div class="tag-header">
+    <h1>Projects in <span>{{ TAG_TITLE }}</span></h1>
+</div>
+
+<div class="portfolio-grid">
+    {{ POST_LIST }}
+</div>

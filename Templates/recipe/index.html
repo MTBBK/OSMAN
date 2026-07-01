@@ -1,0 +1,40 @@
+<style>
+    .welcome-section { text-align: center; margin-bottom: 50px; }
+    .author-avatar { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .welcome-title { font-size: 2.5em; font-family: 'Playfair Display', serif; color: #2c3e50; margin: 0 0 10px; }
+    .intro-text { color: #7f8c8d; font-size: 1.1em; max-width: 600px; margin: 0 auto 20px; }
+    .social-icons { margin-bottom: 30px; }
+    .social-icons a { font-size: 1.5em; color: #7f8c8d; margin: 0 10px; transition: color 0.2s; }
+    .social-icons a:hover { color: #d35400; }
+    
+    .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+    .recipe-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s; }
+    .recipe-card:hover { transform: translateY(-5px); }
+    .recipe-image { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+    .recipe-content { padding: 20px; text-align: center; }
+    .recipe-title { font-size: 1.4em; margin: 0 0 10px; font-family: 'Playfair Display', serif; }
+    .recipe-title a { color: #2c3e50; }
+    .recipe-title a:hover { color: #d35400; }
+    .recipe-meta { font-size: 0.85em; color: #95a5a6; font-family: sans-serif; text-transform: uppercase; margin-bottom: 10px; display: block; }
+    .recipe-excerpt { font-size: 0.95em; color: #7f8c8d; margin-bottom: 15px; }
+    .tag-cloud { margin-bottom: 30px; text-align: center; }
+    .tag-cloud a { display: inline-block; padding: 5px 15px; background: #fff; border: 1px solid #eee; border-radius: 20px; margin: 5px; font-size: 0.85em; font-family: sans-serif; text-transform: uppercase; color: #7f8c8d; }
+    .tag-cloud a:hover { background: #fdf6e3; border-color: #d35400; color: #d35400; }
+</style>
+
+<div class="welcome-section">
+    <img src="{{ AUTHOR_AVATAR_URL }}" alt="Author Avatar" class="author-avatar">
+    <h1 class="welcome-title">{{ WELCOME_TITLE }}</h1>
+    <p class="intro-text">{{ INTRO_ABOUT_ME }}</p>
+    <div class="social-icons">
+        {{ SOCIAL_ICONS }}
+    </div>
+</div>
+
+<div class="tag-cloud">
+    {{ TAG_CLOUD }}
+</div>
+
+<div class="recipe-grid">
+    {{ POST_LIST }}
+</div>

@@ -1,0 +1,22 @@
+<style>
+    .tag-header { text-align: center; margin-bottom: 40px; padding: 40px 0; border-bottom: 1px solid #eee; }
+    .tag-header h1 { font-family: 'Playfair Display', serif; color: #2c3e50; font-size: 2.5em; margin: 0; }
+    .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+    .recipe-card { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.2s; }
+    .recipe-card:hover { transform: translateY(-5px); }
+    .recipe-image { width: 100%; height: 200px; object-fit: cover; background: #eee; }
+    .recipe-content { padding: 20px; text-align: center; }
+    .recipe-title { font-size: 1.4em; margin: 0 0 10px; font-family: 'Playfair Display', serif; }
+    .recipe-title a { color: #2c3e50; }
+    .recipe-title a:hover { color: #d35400; }
+    .recipe-meta { font-size: 0.85em; color: #95a5a6; font-family: sans-serif; text-transform: uppercase; margin-bottom: 10px; display: block; }
+    .recipe-excerpt { font-size: 0.95em; color: #7f8c8d; margin-bottom: 15px; }
+</style>
+
+<div class="tag-header">
+    <h1>Recipes tagged: {{ TAG_TITLE }}</h1>
+</div>
+
+<div class="recipe-grid">
+    {{ POST_LIST }}
+</div>

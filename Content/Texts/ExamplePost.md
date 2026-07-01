@@ -102,7 +102,7 @@ And another rule using asterisks.
 
 ## Media and Links
 
-You can embed images anywhere in your posts: ![Sample Image](osman.png)
+You can embed images anywhere in your posts: ![Sample Image](Images/osman.png)
 
 And you can easily add external links like this post's raw version [example.md](http://osman.guru/example/example.md).
 

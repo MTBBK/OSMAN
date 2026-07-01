@@ -15,11 +15,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.net.InetSocketAddress;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
+import java.io.OutputStream;
+
 public class Builder {
     private static Strategy strategy;
 
     public static void main(String args[]) {
         long startTime = System.currentTimeMillis();
+        PrintStream console = System.out;
         try {
             // sets error's print location to log.txt in ErrorLogs
             writeFile("ErrorLogs/errorLog.txt", null);
@@ -54,6 +61,12 @@ public class Builder {
 
             // begin site building process
             buildSite();
+            
+                        
+            if (args.length > 0 && args[0].equals("--serve")) {
+                console.println("Starting server on http://localhost:8080");
+                startServer(console);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,6 +75,36 @@ public class Builder {
                 "main: Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
         System.out.println("main: End.");
     }
+    
+    static void startServer(PrintStream console) throws Exception {
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+        server.createContext("/", new HttpHandler() {
+            @Override
+            public void handle(HttpExchange exchange) throws IOException {
+                String path = exchange.getRequestURI().getPath();
+                if (path.equals("/")) {
+                    path = "/index.html";
+                }
+                File file = new File("Output" + path);
+                if (file.exists() && !file.isDirectory()) {
+                    exchange.sendResponseHeaders(200, file.length());
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        Files.copy(file.toPath(), os);
+                    }
+                } else {
+                    String response = "404 (Not Found)\n";
+                    exchange.sendResponseHeaders(404, response.length());
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(response.getBytes());
+                    }
+                }
+            }
+        });
+        server.setExecutor(null);
+        server.start();
+        console.println("Server is running. Press Ctrl+C to stop.");
+    }
+    
 
     static void buildSite() throws Exception {
         System.out.println("\nbuildFile: Begin.");
@@ -100,11 +143,7 @@ public class Builder {
         for (int i = 0; templates.length > i; i++) {
             if (templates[i][0].equals("base.html")) {
                 base = makeFile(templates[i], config);
-                if(isEnabled("ANALYTIC_ENABLE", config)){
-					String analyticScript = ("<head>" + getOption("ANALYTIC_SCRIPT", config));
-					stringEditor("<head>", analyticScript, base);
-					System.out.println("buildSite: Successfully added \"ANALYTIC_SCRIPT\" to site");
-				}
+                baseSEOMetaModification("ANALYTIC_SCRIPT", "ANALYTIC_ENABLE", config, base);
                 System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("index.html")) {
@@ -177,7 +216,7 @@ public class Builder {
 					if (-1 == spaceIndex) {
 						pageSummary[i] = cleanText;
 					} else {
-						pageSummary[i] = cleanText.substring(0, spaceIndex);
+						pageSummary[i] = (cleanText.substring(0, spaceIndex) + "...");
 					}
 				}
 			}else{
@@ -224,13 +263,13 @@ public class Builder {
             pages[i] = new StringBuilder(base);
                         
             String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
-			String seoTags = "<head>\n\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
+			String seoTags = "\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
                              "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n" +
                              "\t<meta property=\"og:type\" content=\"article\">\n";
             if (!"-1".equals(imgUrl)) {
                 seoTags += "\t<meta property=\"og:image\" content=\"" + imgUrl + "\">\n";
             }
-            stringEditor("<head>", seoTags, pages[i]);
+            stringEditor("{{ SEO_META }}", seoTags, pages[i]);
           
             stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
 
@@ -268,10 +307,10 @@ public class Builder {
 
         // handle index.html begin
         StringBuilder indexPage = new StringBuilder(base);
-		String indexSeo = "<head>\n\t<meta property=\"og:title\" content=\"" + siteTitle + "\">\n" +
+		String indexSeo = "\t<meta property=\"og:title\" content=\"" + siteTitle + "\">\n" +
 				  "\t<meta property=\"og:description\" content=\"" + siteDescription.replace("\"", "&quot;") + "\">\n" +
 				  "\t<meta property=\"og:type\" content=\"website\">";
-        stringEditor("<head>", indexSeo, indexPage);
+        stringEditor("{{ SEO_META }}", indexSeo, indexPage);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         System.out.println("buildSite: Successfully merged base and index.");
 
@@ -320,9 +359,9 @@ public class Builder {
                 String tag = existingTags.get(i);
                 StringBuilder tagPage = new StringBuilder(base);
                 
-                String tagSeo = "<head>\n\t<meta property=\"og:title\" content=\"Posts tagged: " + tag + "\">\n" +
+                String tagSeo = "\t<meta property=\"og:title\" content=\"Posts tagged: " + tag + "\">\n" +
                                 "\t<meta property=\"og:type\" content=\"website\">\n";
-                stringEditor("<head>", tagSeo, tagPage);
+                stringEditor("{{ SEO_META }}", tagSeo, tagPage);
                 stringEditor("{{ CONTENT }}", tagsPage.toString(), tagPage);
                 
                 StringBuilder tagPostList = new StringBuilder();
@@ -337,7 +376,7 @@ public class Builder {
                     }
                 }
                 stringEditor("{{ POST_LIST }}", tagPostList.toString(), tagPage);
-                stringEditor("{{ TOTAL_POSTS_COUNT }}", "Tag: " + tag + " (" + tagPostCount + ")", tagPage);
+                stringEditor("{{ TAG_TITLE }}", "Tag: " + tag + " (" + tagPostCount + ")", tagPage);
                 stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), tagPage);
                 
                 String safeTag = tag.replaceAll("[^a-zA-Z0-9]", "_");
@@ -484,6 +523,14 @@ public class Builder {
 		return isEnable;
 	}
 	
+	static void baseSEOMetaModification (String configOption, String enableSignal, String config, StringBuilder base) throws Exception{
+		if(isEnabled(enableSignal, config)){
+			String newModule = ("{{ SEO_META }}\n\t" + getOption(configOption, config));
+			stringEditor("{{ SEO_META }}", newModule, base);
+			System.out.println("baseSEOMetaModification: Successfully added \"" + configOption + "\" to base.html");
+		}
+	}
+	
 	static String[][] parseContentFiles(String folderPath) throws IOException {
         File folder = new File(folderPath);
 
@@ -600,9 +647,7 @@ public class Builder {
             index = config.indexOf(file[0].substring(0, file[0].indexOf('.')).toUpperCase());
             System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
             if (-1 == index) {
-                System.out.println(
-                        "makeFile: Failed to find the start of \"" + file[0]
-                                + "\" file's part. Will begin from the top of the file");
+                System.out.println("makeFile: Failed to find the start of \"" + file[0]+ "\" file's part. Will begin from the top of the file");
             }
         }
 
@@ -856,7 +901,7 @@ class PostTagsStrategy extends SingleArrayStrategy {
     public void makeChanges(StringBuilder file, String config) throws Exception {
 		System.out.println("\nPostTagsStrategy: Begin.");
 		
-		codePiece = "<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
+		codePiece = "\t\t\t<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
 		// \n's and \t's to allign it better. It is just visual.
         String sl = "{{ " + option + " }}";
         String slLink = "{{ " + option + "_LINK }}";
@@ -1069,6 +1114,15 @@ class MarkdownConverter {
 		return inTable;
 	}
 	
+	public static boolean isEndingBlockquote (boolean inBlockquote, StringBuilder html){		
+		if(inBlockquote){
+			// Add blockquote ending code
+			html.append("</blockquote>\n");
+			inBlockquote = false;
+		}
+		return inBlockquote;
+	}
+	
 	public static String generateTitle (String titleStarter, String titleOptionCode, String line, StringBuilder toc){
 		StringBuilder title = new StringBuilder();
 		int titleStarterLength = titleStarter.length();
@@ -1091,6 +1145,7 @@ class MarkdownConverter {
         boolean inCodeBlock = false;
         boolean inList = false;
         boolean inTable = false;
+        boolean inBlockquote = false;
         boolean tocHasItems = false;
         for (int i = 0; i < allLines.length; i++) {
             String line = allLines[i];
@@ -1128,9 +1183,14 @@ class MarkdownConverter {
             if (line.trim().startsWith("> ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
-                html.append(
-                        "<blockquote>").append(parseInline(line.trim().substring(2))).append("</blockquote>\n");
+                if (!inBlockquote) {
+                    html.append("<blockquote>\n");
+                    inBlockquote = true;
+                }
+                html.append("<p>").append(parseInline(line.trim().substring(2))).append("</p>\n");
                 continue;
+            } else {
+                inBlockquote = isEndingBlockquote(inBlockquote, html);
             }
 
 			// big title
@@ -1221,8 +1281,10 @@ class MarkdownConverter {
                 }
             }
         }
+        
         inList = isEndingList(inList, html);
         inTable = isEndingTable(inTable, html);
+        inBlockquote = isEndingBlockquote(inBlockquote, html);
         
         toc.append("</ul></div>\n");
         if (tocHasItems) {
@@ -1240,7 +1302,7 @@ class MarkdownConverter {
         // onlined text
         text = text.replaceAll("~~(.*?)~~", "<del>$1</del>");
 		// image
-        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"Images/$2\" alt=\"$1\">");
+        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\">");
         // link
         text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
         // oneline code

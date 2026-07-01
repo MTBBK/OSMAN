@@ -1,0 +1,53 @@
+<style>
+    .docs-article { max-width: 800px; }
+    .docs-header { margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .docs-title { font-size: 2.5em; font-weight: 600; margin: 0 0 16px 0; letter-spacing: -0.5px; }
+
+    .docs-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.9em; color: #586069; }
+    .docs-meta div { display: flex; align-items: center; }
+
+    .docs-content { font-size: 16px; line-height: 1.5; color: #24292e; word-wrap: break-word; }
+    .docs-content h1, .docs-content h2, .docs-content h3, .docs-content h4 { font-weight: 600; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; border-bottom: 1px solid #eaecef; padding-bottom: 0.3em; }
+    .docs-content h3, .docs-content h4 { border-bottom: none; padding-bottom: 0; }
+
+    .post-toc { background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 16px; margin-bottom: 32px; }
+    .post-toc .toc-title { font-size: 14px; font-weight: 600; margin: 0 0 8px 0; color: #0366d6; }
+    .post-toc ul { list-style-type: none; padding-left: 0; margin: 0; }
+    .post-toc li { margin-bottom: 4px; font-size: 14px; }
+    .post-toc a { color: #586069; }
+    .post-toc a:hover { color: #0366d6; text-decoration: none; }
+
+    .docs-footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .docs-tags { margin-bottom: 24px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .docs-tags a, .docs-tags span { display: inline-block; padding: 4px 10px; background-color: #f1f8ff; color: var(--primary); border-radius: 2em; font-size: 12px; font-weight: 500; }
+    .docs-tags span { background-color: #e1e4e8; color: #24292e; }
+
+    .post-pagination { display: flex; justify-content: space-between; font-weight: 500; font-size: 14px; }
+</style>
+
+<article class="docs-article">
+    <header class="docs-header">
+        <h1 class="docs-title">{{ POST_TITLE }}</h1>
+        <div class="docs-meta">
+            <div><i class="fa fa-calendar" style="margin-right:6px;"></i> {{ POST_DATE }}</div>
+            <div><i class="fa fa-user" style="margin-right:6px;"></i> {{ POST_AUTHOR }}</div>
+            <div><i class="fa fa-clock-o" style="margin-right:6px;"></i> {{ POST_READ_TIME }}</div>
+        </div>
+    </header>
+
+    <div class="docs-content">
+        {{ POST_TOC }}
+        {{ POST_CONTENT }}
+    </div>
+
+    <footer class="docs-footer">
+        <div class="docs-tags">
+            {{ POST_TAGS }}
+        </div>
+
+        <nav class="post-pagination">
+            <div class="prev-post">{{ PREVIOUS_POST }}</div>
+            <div class="next-post">{{ NEXT_POST }}</div>
+        </nav>
+    </footer>
+</article>

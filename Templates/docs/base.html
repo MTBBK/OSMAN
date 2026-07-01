@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="{{ SITE_LANGUAGE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_DESCRIPTION }}">
+{{ SEO_META }}
+    <title>{{ SITE_TITLE }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ FAVICON_URL }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        :root { --primary: #0366d6; --bg: #ffffff; --text: #24292e; --border: #e1e4e8; --sidebar: #f6f8fa; --code-bg: #f6f8fa; }
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .header { background-color: var(--text); color: #fff; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .site-title { font-size: 1.25em; font-weight: 600; color: #fff; }
+        .site-title:hover { text-decoration: none; }
+        .nav-bar { display: flex; gap: 20px; font-size: 0.9em; font-weight: 500; }
+        .nav-bar a { color: rgba(255,255,255,0.7); }
+        .nav-bar a:hover { color: #fff; text-decoration: none; }
+
+        .layout-wrapper { display: flex; flex: 1; width: 100%; max-width: 1400px; margin: 0 auto; }
+
+        .sidebar { width: 250px; background-color: var(--sidebar); border-right: 1px solid var(--border); padding: 32px 24px; display: none; }
+        @media (min-width: 768px) { .sidebar { display: block; } }
+
+        .main-content { flex: 1; padding: 40px 32px; min-width: 0; max-width: 900px; margin: 0 auto; }
+
+        .footer { padding: 40px 32px; border-top: 1px solid var(--border); font-size: 0.8em; color: #586069; text-align: center; }
+        .footer-links { margin-bottom: 10px; }
+        .footer-links a { color: var(--primary); margin: 0 10px; }
+
+        pre { background: var(--code-bg); padding: 16px; border-radius: 6px; overflow: auto; border: 1px solid var(--border); font-size: 0.85em; }
+        code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; background: var(--code-bg); padding: 0.2em 0.4em; border-radius: 3px; font-size: 85%; }
+        blockquote { padding: 0 1em; color: #6a737d; border-left: 0.25em solid #dfe2e5; margin: 0 0 16px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 0; margin-bottom: 16px; }
+        table th, table td { padding: 6px 13px; border: 1px solid #dfe2e5; }
+        table tr:nth-child(2n) { background-color: #f6f8fa; }
+        img { max-width: 100%; box-sizing: content-box; background-color: #fff; }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="site-branding">
+            <a href="./index.html" class="site-title">{{ SITE_TITLE }}</a>
+        </div>
+        <nav class="nav-bar">
+            {{ NAV_BAR_LINKS }}
+        </nav>
+    </header>
+
+    <div class="layout-wrapper">
+        <aside class="sidebar">
+            <div style="font-weight: 600; margin-bottom: 15px; color: #24292e;">Documentation</div>
+            <a href="./index.html" style="display:block; margin-bottom:10px; color:#586069;">Home</a>
+            <!-- Normally a dynamic sidebar would go here, but we'll use SOCIAL_LINKS as a placeholder for sidebar links if they want -->
+            {{ SOCIAL_LINKS }}
+        </aside>
+
+        <main class="main-content">
+            {{ CONTENT }}
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-copy">
+            <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}. Manufactured by <a href="https://osman.guru">OSMAN</a>.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
