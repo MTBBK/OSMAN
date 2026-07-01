@@ -94,18 +94,26 @@ public class Builder {
 
         StringBuilder base = new StringBuilder();
         StringBuilder index = new StringBuilder();
+        String tagsPage = "";
         String page = "";
 
         for (int i = 0; templates.length > i; i++) {
             if (templates[i][0].equals("base.html")) {
                 base = makeFile(templates[i], config);
-                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
-                        + "\".");
+                if(isEnabled("ANALYTIC_ENABLE", config)){
+					String analyticScript = ("<head>" + getOption("ANALYTIC_SCRIPT", config));
+					stringEditor("<head>", analyticScript, base);
+					System.out.println("buildSite: Successfully added \"ANALYTIC_SCRIPT\" to site");
+				}
+                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("index.html")) {
                 index = makeFile(templates[i], config);
-                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0]
-                        + "\".");
+                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0] + "\".");
+            }
+            if (templates[i][0].equals("tags.html")) {
+                tagsPage = templates[i][1];
+                System.out.println("buildSite: Successfully grabbed \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("page.html")) {
                 page = templates[i][1];
@@ -197,11 +205,13 @@ public class Builder {
             stringEditor("{{ POST_SUMMARY }}", pageSummary[i], postLists[i]);
             StringBuilder pTags = new StringBuilder();
             for (int j = 0; j < pageTags[i].length; j++) {
-                pTags.append(pageTags[i][j]);
+				String safeTag = pageTags[i][j].replaceAll("[^a-zA-Z0-9]", "_");
+                pTags.append("<a href=\"tag_").append(safeTag).append(".html\">").append(pageTags[i][j]).append("</a>");
                 if (j != pageTags[i].length - 1) {
                     pTags.append(", ");
                 }
             }
+
             stringEditor("{{ POST_TAGS }}", pTags.toString(), postLists[i]);
         }
         // POST_LIST maker end
@@ -212,6 +222,16 @@ public class Builder {
         for (int i = 0; i < textContent.length; i++) {
             String[] arr = { textContent[i][0], page };
             pages[i] = new StringBuilder(base);
+                        
+            String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
+			String seoTags = "<head>\n\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
+                             "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n" +
+                             "\t<meta property=\"og:type\" content=\"article\">\n";
+            if (!"-1".equals(imgUrl)) {
+                seoTags += "\t<meta property=\"og:image\" content=\"" + imgUrl + "\">\n";
+            }
+            stringEditor("<head>", seoTags, pages[i]);
+          
             stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
 
             if (0 != i) {
@@ -248,6 +268,10 @@ public class Builder {
 
         // handle index.html begin
         StringBuilder indexPage = new StringBuilder(base);
+		String indexSeo = "<head>\n\t<meta property=\"og:title\" content=\"" + siteTitle + "\">\n" +
+				  "\t<meta property=\"og:description\" content=\"" + siteDescription.replace("\"", "&quot;") + "\">\n" +
+				  "\t<meta property=\"og:type\" content=\"website\">";
+        stringEditor("<head>", indexSeo, indexPage);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         System.out.println("buildSite: Successfully merged base and index.");
 
@@ -280,13 +304,47 @@ public class Builder {
                 }
 
             }
-            String tagCloudTemplate = "<a href=\"#\">{{ POST_TAGS }}</a>\t\t\t\n";
+
+            String tagCloudTemplate = "<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
             for (int i = 0; i < existingTags.size(); i++) {
                 StringBuilder toBeAdded = new StringBuilder(tagCloudTemplate);
+                String safeTag = existingTags.get(i).replaceAll("[^a-zA-Z0-9]", "_");
+                stringEditor("{{ POST_TAGS_LINK }}", safeTag, toBeAdded);
                 stringEditor("{{ POST_TAGS }}", existingTags.get(i), toBeAdded);
                 tagCloud.append(toBeAdded);
             }
             stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), indexPage);
+            
+            // generate dedicated tag pages begin
+            for (int i = 0; i < existingTags.size(); i++) {
+                String tag = existingTags.get(i);
+                StringBuilder tagPage = new StringBuilder(base);
+                
+                String tagSeo = "<head>\n\t<meta property=\"og:title\" content=\"Posts tagged: " + tag + "\">\n" +
+                                "\t<meta property=\"og:type\" content=\"website\">\n";
+                stringEditor("<head>", tagSeo, tagPage);
+                stringEditor("{{ CONTENT }}", tagsPage.toString(), tagPage);
+                
+                StringBuilder tagPostList = new StringBuilder();
+                int tagPostCount = 0;
+                for (int p = postLists.length - 1; p > -1; p--) {
+                    for (String t : pageTags[p]) {
+                        if (t.equals(tag)) {
+                            tagPostList.append(postLists[p]);
+                            tagPostCount++;
+                            break;
+                        }
+                    }
+                }
+                stringEditor("{{ POST_LIST }}", tagPostList.toString(), tagPage);
+                stringEditor("{{ TOTAL_POSTS_COUNT }}", "Tag: " + tag + " (" + tagPostCount + ")", tagPage);
+                stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), tagPage);
+                
+                String safeTag = tag.replaceAll("[^a-zA-Z0-9]", "_");
+                writeFile("Output/tag_" + safeTag + ".html", tagPage.toString());
+            }
+            // generate dedicated tag pages end.
+            
         }
         // make TAG_CLOUD for index.html end.
 
@@ -295,6 +353,7 @@ public class Builder {
 
         System.out.println("buildSite: Successfully made \"index.html\".");
 
+		// generate post pages
         for (int i = 0; i < textContent.length; i++) {
             String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
             writeFile("Output/" + fileName + ".html", pages[i].toString());
@@ -319,7 +378,12 @@ public class Builder {
         rss.append("</channel>\n</rss>");
         writeFile("Output/rss.xml", rss.toString());
         System.out.println("buildSite: Successfully made \"rss.xml\".");
-
+		
+		// generate robots.txt
+		String robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + baseURL + "/sitemap.xml\n";
+        writeFile("Output/robots.txt", robotsTxt);
+        System.out.println("buildSite: Successfully made \"robots.txt\".");
+        
         System.out.println("buildFile: End.\n");
     }
 	
@@ -385,9 +449,17 @@ public class Builder {
             return "-1";
         } else {
             // index of the first quote symbol after configOption
-            int firstQuoteSymbolIndex = config.indexOf('"', valueIndex);
+            int firstQuote = config.indexOf('"', valueIndex) + 1;
+            int nextLine = config.indexOf('\n', firstQuote);
+			if (nextLine == -1) {
+				nextLine = config.length();
+			}
+			int lastQuote = config.lastIndexOf('"', nextLine - 1);
+			if (lastQuote <= firstQuote) {
+				lastQuote = config.indexOf('"', firstQuote);
+			}
             // selected options name
-            optionValue = config.substring(firstQuoteSymbolIndex + 1, config.indexOf('"', firstQuoteSymbolIndex + 1));
+            optionValue = config.substring(firstQuote, lastQuote);
             System.out.println("getOption: Returned value of the option " + configOption + " as " + optionValue);
             return optionValue;
         }
@@ -644,7 +716,15 @@ class NonArrayStrategy extends Strategy {
     public void makeChanges(StringBuilder file, String config) throws Exception {
         System.out.println("\nNonArrayStrategy: Begin.");
         int firstQuote = config.indexOf('"', config.indexOf(option)) + 1;
-        String value = config.substring(firstQuote, config.indexOf('"', firstQuote));
+        int nextLine = config.indexOf('\n', firstQuote);
+        if (nextLine == -1) {
+            nextLine = config.length();
+        }
+        int lastQuote = config.lastIndexOf('"', nextLine - 1);
+        if (lastQuote <= firstQuote) {
+            lastQuote = config.indexOf('"', firstQuote);
+        }
+        String value = config.substring(firstQuote, lastQuote);
         option = "{{ " + option + " }}";
         if (-1 == file.indexOf(option)) {
             System.out.println(
@@ -774,9 +854,60 @@ abstract class SingleArrayStrategy extends Strategy {
 class PostTagsStrategy extends SingleArrayStrategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        codePiece = "<a href=\"#\">{{ POST_TAGS }}</a>\n\t\t\t";
-        // \n's and \t's to allign it better. It is just visual.
-        super.makeChanges(file, config);
+		System.out.println("\nPostTagsStrategy: Begin.");
+		
+		codePiece = "<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
+		// \n's and \t's to allign it better. It is just visual.
+        String sl = "{{ " + option + " }}";
+        String slLink = "{{ " + option + "_LINK }}";
+
+        if (-1 == file.indexOf(sl)) {
+            System.out.println(
+                    "PostTagsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            return;
+        }
+
+        int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
+
+        if (-1 == lIndex) {
+            System.out.println(
+                    "PostTagsStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.stringEditor("{{ " + option + " }}", "", file);
+            return;
+        }
+
+        boolean nextExists = true;
+
+        StringBuilder result = new StringBuilder();
+
+        while (nextExists) {
+            int nextLQuote = config.indexOf('"', lIndex) + 1;
+            int nextLDash = config.indexOf('-', lIndex);
+            int nextLLine = config.indexOf('\n', lIndex);
+
+            // check if there is a variable to read and skip to the next iteration if there
+            // isnt
+            if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
+                nextExists = false;
+                continue;
+            }
+
+            StringBuilder ref = new StringBuilder(codePiece);
+
+            String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
+			String safelValue = lValue.replaceAll("[^a-zA-Z0-9]", "_");
+
+            lIndex = config.indexOf('\n', lIndex) + 1;
+            lIndex = nextLLine + 1;
+
+            Builder.stringEditor(sl, lValue, ref);
+			Builder.stringEditor(slLink, safelValue, ref);
+
+            result.append(ref);
+        }
+
+        Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
+        System.out.println("PostTagsStrategy: End.\n");
     }
 }
 

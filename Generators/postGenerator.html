@@ -1,510 +1,317 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="OSMAN Post Generator — create blog posts easily">
-    <title>OSMAN — Post Generator</title>
+    <title>Osman Post Generator</title>
     <link rel="icon" type="image/x-icon" href="osman.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* ── Reset & Base ── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg:       #0f1117;
-            --surface:  #1a1d27;
-            --surface2: #222535;
-            --border:   #2e3248;
-            --accent:   #6c8aff;
-            --accent2:  #4ecca3;
-            --danger:   #ff5f6d;
-            --text:     #e8eaf0;
-            --muted:    #8891aa;
-            --label:    #adb5d0;
-            --radius:   10px;
-            --mono:     'JetBrains Mono', monospace;
-        }
-
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            min-height: 100vh;
-        }
-
-        /* ── Layout ── */
-        .page {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 100vh;
-        }
-
-        /* ── Left: Form Panel ── */
-        .form-panel {
-            padding: 36px 40px;
-            overflow-y: auto;
-            border-right: 1px solid var(--border);
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid var(--border);
-        }
-        .logo-area img { width: 44px; height: 44px; border-radius: 10px; }
-        .logo-area h1 { font-size: 1.1rem; font-weight: 700; color: var(--text); }
-        .logo-area span { font-size: 0.78rem; color: var(--muted); display: block; margin-top: 2px; }
-
-        /* ── Field Groups ── */
-        .field-group { margin-bottom: 22px; }
-        .field-label {
-            display: block;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--label);
-            margin-bottom: 7px;
-        }
-        .field-hint { font-size: 0.68rem; color: var(--muted); margin-bottom: 7px; font-weight: 400; letter-spacing: 0; text-transform: none; }
-
-        input[type="text"], input[type="date"], textarea, select {
-            width: 100%;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.88rem;
-            padding: 10px 14px;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        input[type="text"]:focus, input[type="date"]:focus,
-        textarea:focus, select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(108,138,255,0.15);
-        }
-        textarea { resize: vertical; min-height: 160px; font-size: 0.85rem; }
-
-        /* ── Row helper (for inline combos) ── */
-        .inline-row { display: flex; gap: 10px; align-items: flex-end; }
-        .inline-row input[type="text"] { flex: 1; }
-        .toggle-pill {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 8px 14px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            color: var(--muted);
-            white-space: nowrap;
-            user-select: none;
-            transition: border-color 0.2s, color 0.2s;
-        }
-        .toggle-pill:has(input:checked) { border-color: var(--accent); color: var(--accent); }
-        .toggle-pill input { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; }
-
-        /* ── Tag array ── */
-        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-        .tag-chip {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            padding: 4px 12px;
-            font-size: 0.78rem;
-            color: var(--text);
-        }
-        .tag-chip button {
-            background: none;
-            border: none;
-            color: var(--danger);
-            cursor: pointer;
-            font-size: 1rem;
-            line-height: 1;
-            padding: 0;
-            display: flex;
-            align-items: center;
-        }
-        .tag-add-row { display: flex; gap: 8px; }
-        .tag-add-row input { flex: 1; }
-
-        /* ── Date helper ── */
-        .date-row { display: flex; gap: 8px; align-items: flex-end; }
-        .date-row input { flex: 1; }
-
-        /* ── Buttons ── */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 10px 18px;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-        .btn:active { transform: scale(0.97); }
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-primary:hover { opacity: 0.88; }
-        .btn-sm { background: var(--surface); border: 1px solid var(--border); color: var(--label); padding: 7px 12px; font-size: 0.78rem; }
-        .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
-        .btn-danger-sm { background: transparent; border: 1px solid var(--border); color: var(--danger); padding: 7px 12px; font-size: 0.78rem; }
-        .btn-today { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 10px 14px; font-size: 0.8rem; border-radius: var(--radius); cursor: pointer; font-family: 'Inter', sans-serif; transition: border-color 0.2s, color 0.2s; }
-        .btn-today:hover { border-color: var(--accent2); color: var(--accent2); }
-
-        .save-section { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
-        .filename-row { display: flex; gap: 8px; align-items: center; }
-        .filename-row input { flex: 1; font-family: var(--mono); font-size: 0.82rem; }
-        .filename-row span { color: var(--muted); font-size: 0.82rem; font-family: var(--mono); }
-
-        .section-title {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        /* ── Right: Live Preview ── */
-        .preview-panel {
-            background: var(--surface);
-            padding: 36px 40px;
-            overflow-y: auto;
-        }
-        .preview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-        .preview-header h2 { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-        .preview-tabs { display: flex; gap: 4px; }
-        .tab-btn {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--muted);
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.15s;
-        }
-        .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(108,138,255,0.08); }
-
-        /* Raw output box */
-        .raw-preview {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+            font-family: sans-serif;
             padding: 20px;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            line-height: 1.7;
-            color: var(--text);
-            white-space: pre-wrap;
-            word-break: break-word;
-            min-height: 400px;
+            line-height: 1.6;
+            background-color: #f9f6f0;
+            color: #1a1a1a;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        /* Rendered preview */
-        .rendered-preview {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 28px;
-            min-height: 400px;
+        .section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
         }
-        .rp-image { width: 100%; border-radius: 6px; margin-bottom: 20px; display: block; background: var(--surface2); }
-        .rp-title { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.2; }
-        .rp-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; }
-        .rp-meta span { margin-right: 10px; }
-        .rp-tags { margin-bottom: 16px; }
-        .rp-tag { display: inline-block; font-size: 0.7rem; padding: 2px 10px; border: 1px solid var(--border); border-radius: 100px; color: var(--muted); margin-right: 5px; }
-        .rp-content { font-size: 0.9rem; line-height: 1.8; color: var(--label); white-space: pre-wrap; }
-        .rp-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 
-        /* ── Responsive ── */
-        @media (max-width: 800px) {
-            .page { grid-template-columns: 1fr; }
-            .preview-panel { display: none; }
+        .row {
+            margin-bottom: 5px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        textarea,
+        input {
+            margin-bottom: 5px;
+            font-size: 0.8em;
+            height: 40px;
+            width: 150px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        #POST_TITLE,
+        #POST_AUTHOR,
+        #POST_DATE,
+        #TABLE_OF_CONTENT_TITLE,
+        #FEATURED_IMAGE,
+        #FILENAME {
+            width: 300px;
+        }
+
+        #PAGE_SUMMARY {
+            width: 100%;
+            height: 80px;
+            resize: vertical;
+        }
+
+        #POST_CONTENT {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        .val,
+        .is-url {
+            height: 20px;
+            width: 150px;
+        }
+
+        .remove-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            margin-right: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .type-switch {
+            color: #000000;
+            font-size: 0.8em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .type-switch input {
+            width: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .array-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        h2 {
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+
+        h2 p {
+            font-size: 0.8em;
+            color: #707070;
+            margin: 0;
+            font-weight: normal;
+        }
+
+        h2 p b {
+            color: #FF0000;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        button {
+            font-size: 1em;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            font-size: 1.2em;
+            padding: 10px 20px;
+            margin-top: 10px;
         }
     </style>
 </head>
+
 <body>
-<div class="page">
+    <h1>OSMAN Post Generator</h1>
 
-    <!-- ═══════════ FORM PANEL ═══════════ -->
-    <div class="form-panel">
+    <div class="section">
+        <h3>Post Metadata</h3>
 
-        <div class="logo-area">
-            <img src="osman.png" alt="OSMAN">
-            <div>
-                <h1>Post Generator</h1>
-                <span>Create a new blog post for OSMAN</span>
-            </div>
+        <h2>Featured Image <p>URL or path to your featured image (Content/Images/)</p>
+        </h2>
+        <div class="row">
+            <input id="FEATURED_IMAGE" placeholder="cover.png">
+            <label class="type-switch"><input type="checkbox" id="IMAGE_IS_URL"> Is URL?</label>
         </div>
 
-        <!-- Featured Image -->
-        <div class="section-title">Post Settings</div>
+        <h2>Post Title <p>The main title of your post</p>
+        </h2>
+        <input id="POST_TITLE" placeholder="Example Post">
 
-        <div class="field-group">
-            <label class="field-label" for="FEATURED_IMAGE">Featured Image</label>
-            <span class="field-hint">File name from Content/Images/ — or paste a full URL</span>
-            <div class="inline-row">
-                <input type="text" id="FEATURED_IMAGE" placeholder="cover.jpg" oninput="update()">
-                <label class="toggle-pill">
-                    <input type="checkbox" id="IMAGE_IS_URL" onchange="update()"> URL?
-                </label>
-            </div>
+        <h2>Post Date <p>Date of the post (e.g. 27/06/2026)</p>
+        </h2>
+        <div class="row">
+            <input id="POST_DATE" placeholder="27/06/2026">
+            <button onclick="setToday()" style="background:#007bff;">Today</button>
         </div>
 
-        <!-- Post Title -->
-        <div class="field-group">
-            <label class="field-label" for="POST_TITLE">Post Title</label>
-            <input type="text" id="POST_TITLE" placeholder="My Awesome Post" oninput="update()">
-        </div>
-
-        <!-- Post Date -->
-        <div class="field-group">
-            <label class="field-label">Post Date</label>
-            <span class="field-hint">Format: day/month/year</span>
-            <div class="date-row">
-                <input type="text" id="POST_DATE" placeholder="26/06/2026" oninput="update()">
-                <button class="btn-today" onclick="setToday()" title="Use today's date">Today</button>
-            </div>
-        </div>
-
-        <!-- Author -->
-        <div class="field-group">
-            <label class="field-label" for="POST_AUTHOR">Author</label>
-            <input type="text" id="POST_AUTHOR" placeholder="Your Name" oninput="update()">
-        </div>
-
-        <!-- Tags -->
-        <div class="field-group">
-            <label class="field-label">Tags</label>
-            <div class="tag-list" id="tag-list"></div>
-            <div class="tag-add-row">
-                <input type="text" id="tag-input" placeholder="Add a tag…" onkeydown="tagKeydown(event)">
-                <button class="btn btn-sm" onclick="addTag()">+ Add</button>
-            </div>
-        </div>
-
-        <!-- Content -->
-        <div class="section-title" style="margin-top:28px;">Content</div>
-
-        <div class="field-group">
-            <label class="field-label" for="POST_CONTENT">Post Content</label>
-            <textarea id="POST_CONTENT" placeholder="Write your post content here…" oninput="update()"></textarea>
-        </div>
-
-        <!-- Save -->
-        <div class="save-section">
-            <div class="field-label">Output Filename</div>
-            <div class="filename-row">
-                <input type="text" id="filename-input" placeholder="MyPost" oninput="update()">
-                <span>.md</span>
-            </div>
-            <button class="btn btn-primary" onclick="downloadFile()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Save .md Post
-            </button>
-        </div>
+        <h2>Post Author <p>Author of the post</p>
+        </h2>
+        <input id="POST_AUTHOR" placeholder="Your Name">
     </div>
 
-    <!-- ═══════════ PREVIEW PANEL ═══════════ -->
-    <div class="preview-panel">
-        <div class="preview-header">
-            <h2>Live Preview</h2>
-            <div class="preview-tabs">
-                <button class="tab-btn active" id="tab-rendered" onclick="switchTab('rendered')">Preview</button>
-                <button class="tab-btn" id="tab-raw" onclick="switchTab('raw')">Raw .md</button>
-            </div>
-        </div>
-        <div id="view-rendered" class="rendered-preview">
-            <div id="rp-image-wrap" style="display:none"><img id="rp-image" class="rp-image" src="" alt="Cover"></div>
-            <div id="rp-title" class="rp-title" style="color:var(--muted);font-style:italic">Your post title will appear here…</div>
-            <div id="rp-meta" class="rp-meta"></div>
-            <div id="rp-tags" class="rp-tags"></div>
-            <hr class="rp-divider">
-            <div id="rp-content" class="rp-content" style="color:var(--muted);font-style:italic">Your post content will appear here…</div>
-        </div>
-        <pre id="view-raw" class="raw-preview" style="display:none"></pre>
+    <div class="section">
+        <h3>Summary & TOC</h3>
+
+        <h2>Automatic Summary <p>Enable automatic summary generation based on post content</p>
+        </h2>
+        <label class="type-switch" style="width:fit-content; margin-bottom: 10px;"><input type="checkbox"
+                id="OTOMATIC_SUMMARY_ENABLE"> Enable (True/False)</label>
+
+        <h2>Page Summary <p>Manual summary (used if automatic is false)</p>
+        </h2>
+        <textarea id="PAGE_SUMMARY" placeholder="A short description of this post..."></textarea>
+
+        <h2>Table of Contents <p>Enable table of contents for this post</p>
+        </h2>
+        <label class="type-switch" style="width:fit-content; margin-bottom: 10px;"><input type="checkbox"
+                id="TABLE_OF_CONTENT_ENABLE" checked> Enable (True/False)</label>
+
+        <h2>Table of Contents Title <p>Title for the Table Of Content section</p>
+        </h2>
+        <input id="TABLE_OF_CONTENT_TITLE" placeholder="İçindekiler">
     </div>
 
-</div>
+    <div class="section">
+        <h3>Tags</h3>
+        <h2>Post Tags <p>Categories and tags for this post</p>
+        </h2>
+        <div id="POST_TAGS" class="array-container"></div>
+        <button onclick="addArrayRow('POST_TAGS', '', 'Tag')" style="background:#007bff; margin-top: 5px;">+ Add
+            Tag</button>
+    </div>
 
-<script>
-    /* ── Tags ── */
-    const tags = [];
+    <div class="section">
+        <h3>Post Content</h3>
+        <h2>Content <p>Markdown formatted text for your post</p>
+        </h2>
+        <textarea id="POST_CONTENT" placeholder="# Merhaba Blog..."></textarea>
+    </div>
 
-    function addTag() {
-        const inp = document.getElementById('tag-input');
-        const val = inp.value.trim();
-        if (val && !tags.includes(val)) {
-            tags.push(val);
-            renderTagChips();
-            update();
-        }
-        inp.value = '';
-        inp.focus();
-    }
+    <div class="section">
+        <h2>Output Filename <p>Name of the generated .md file (leave blank to auto-generate from title)</p>
+        </h2>
+        <input id="FILENAME" placeholder="ExamplePost">
+    </div>
 
-    function removeTag(i) {
-        tags.splice(i, 1);
-        renderTagChips();
-        update();
-    }
+    <button class="btn-primary" onclick="downloadFile()">Save Post (.md)</button>
 
-    function tagKeydown(e) {
-        if (e.key === 'Enter') { e.preventDefault(); addTag(); }
-    }
+    <script>
+        const addArrayRow = (containerId, val = "", placeholder = "") => {
+            const container = document.getElementById(containerId);
+            const div = document.createElement("div");
+            div.className = "row";
+            div.innerHTML = `
+              <input type="text" class="val" placeholder="${placeholder}" value="${val}">
+              <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
+          `;
+            container.appendChild(div);
+        };
 
-    function renderTagChips() {
-        const list = document.getElementById('tag-list');
-        list.innerHTML = tags.map((t, i) => `
-            <div class="tag-chip">
-                ${t}
-                <button onclick="removeTag(${i})" title="Remove">×</button>
-            </div>
-        `).join('');
-    }
+        const processPath = (text, isUrl) => {
+            if (!text) return "";
+            if (isUrl) return text;
+            return text.startsWith("./Images/") ? text : `./Images/${text}`;
+        };
 
-    /* ── Date helper ── */
-    function setToday() {
-        const d = new Date();
-        const day   = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year  = d.getFullYear();
-        document.getElementById('POST_DATE').value = `${day}/${month}/${year}`;
-        update();
-    }
+        const getArrayData = (containerId) => {
+            const container = document.getElementById(containerId);
+            const rows = container.querySelectorAll(".row");
+            let output = "";
+            rows.forEach(row => {
+                const v = row.querySelector(".val").value;
+                if (v) {
+                    output += `\t- "${v}"\n`;
+                }
+            });
+            return output;
+        };
 
-    /* ── Path helper ── */
-    function processPath(text, isUrl) {
-        if (!text) return '';
-        if (isUrl) return text;
-        return text.startsWith('./Images/') ? text : `./Images/${text}`;
-    }
+        const setToday = () => {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            document.getElementById('POST_DATE').value = `${day}/${month}/${year}`;
+        };
 
-    /* ── Build raw .md text ── */
-    function buildRaw() {
-        const isUrl  = document.getElementById('IMAGE_IS_URL').checked;
-        const img    = processPath(document.getElementById('FEATURED_IMAGE').value, isUrl);
-        const title  = document.getElementById('POST_TITLE').value;
-        const date   = document.getElementById('POST_DATE').value;
-        const author = document.getElementById('POST_AUTHOR').value;
-        const content = document.getElementById('POST_CONTENT').value;
+        const downloadFile = () => {
+            const isImgUrl = document.getElementById("IMAGE_IS_URL").checked;
+            const imgVal = processPath(document.getElementById("FEATURED_IMAGE").value, isImgUrl);
 
-        let out = '';
-        out += `FEATURED_IMAGE: "${img}"\n`;
-        out += `POST_TITLE: "${title}"\n`;
-        out += `POST_DATE: "${date}"\n`;
-        out += `POST_AUTHOR: "${author}"\n`;
-        out += `POST_TAGS:\n`;
-        tags.forEach(t => { out += `\t- "${t}"\n`; });
-        out += `\nPOST_CONTENT:\n${content}`;
-        return out;
-    }
+            const title = document.getElementById("POST_TITLE").value;
+            const date = document.getElementById("POST_DATE").value;
+            const author = document.getElementById("POST_AUTHOR").value;
+            const tags = getArrayData("POST_TAGS");
 
-    /* ── Update live preview ── */
-    function update() {
-        const raw = buildRaw();
-        document.getElementById('view-raw').textContent = raw;
+            const autoSummary = document.getElementById("OTOMATIC_SUMMARY_ENABLE").checked ? "True" : "False";
+            const pageSummary = document.getElementById("PAGE_SUMMARY").value;
 
-        // update rendered
-        const title = document.getElementById('POST_TITLE').value;
-        const date  = document.getElementById('POST_DATE').value;
-        const author = document.getElementById('POST_AUTHOR').value;
-        const content = document.getElementById('POST_CONTENT').value;
-        const isUrl = document.getElementById('IMAGE_IS_URL').checked;
-        const imgSrc = processPath(document.getElementById('FEATURED_IMAGE').value, isUrl);
+            const tocEnable = document.getElementById("TABLE_OF_CONTENT_ENABLE").checked ? "True" : "False";
+            const tocTitle = document.getElementById("TABLE_OF_CONTENT_TITLE").value;
 
-        const rpTitle = document.getElementById('rp-title');
-        rpTitle.textContent = title || 'Your post title will appear here…';
-        rpTitle.style.color  = title ? 'var(--text)' : 'var(--muted)';
-        rpTitle.style.fontStyle = title ? 'normal' : 'italic';
+            const content = document.getElementById("POST_CONTENT").value;
 
-        const rpMeta = document.getElementById('rp-meta');
-        const parts = [];
-        if (date) parts.push(`<span>${date}</span>`);
-        if (author) parts.push(`<span>@ ${author}</span>`);
-        rpMeta.innerHTML = parts.join('');
+            let mdText = `FEATURED_IMAGE: "${imgVal}"\n`;
+            mdText += `POST_TITLE: "${title}"\n`;
+            mdText += `POST_DATE: "${date}"\n`;
+            mdText += `POST_AUTHOR: "${author}"\n`;
 
-        const rpTags = document.getElementById('rp-tags');
-        rpTags.innerHTML = tags.map(t => `<span class="rp-tag">${t}</span>`).join('');
+            if (tags) {
+                mdText += `POST_TAGS:\n${tags}`;
+            }
 
-        const rpContent = document.getElementById('rp-content');
-        rpContent.textContent = content || 'Your post content will appear here…';
-        rpContent.style.color = content ? 'var(--label)' : 'var(--muted)';
-        rpContent.style.fontStyle = content ? 'normal' : 'italic';
+            mdText += `PAGE_SUMMARY: "${pageSummary}"\n`;
+            mdText += `OTOMATIC_SUMMARY_ENABLE: "${autoSummary}"\n\n`;
 
-        const rpImgWrap = document.getElementById('rp-image-wrap');
-        const rpImg = document.getElementById('rp-image');
-        if (imgSrc) {
-            rpImg.src = imgSrc;
-            rpImgWrap.style.display = '';
-        } else {
-            rpImgWrap.style.display = 'none';
-        }
+            mdText += `TABLE_OF_CONTENT_ENABLE: "${tocEnable}"\n`;
+            mdText += `TABLE_OF_CONTENT_TITLE: "${tocTitle}"\n\n`;
 
-        // auto filename from title
-        const filenameInp = document.getElementById('filename-input');
-        if (!filenameInp.dataset.manual) {
-            filenameInp.value = title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ\s]/g,'').trim().replace(/\s+/g,'_');
-        }
-    }
+            mdText += `POST_CONTENT:\n${content}`;
 
-    document.getElementById('filename-input').addEventListener('input', function() {
-        this.dataset.manual = '1';
-    });
+            const file = new Blob([mdText], { type: 'text/plain' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(file);
 
-    /* ── Tab switching ── */
-    function switchTab(tab) {
-        document.getElementById('view-rendered').style.display = tab === 'rendered' ? '' : 'none';
-        document.getElementById('view-raw').style.display       = tab === 'raw'      ? '' : 'none';
-        document.getElementById('tab-rendered').classList.toggle('active', tab === 'rendered');
-        document.getElementById('tab-raw').classList.toggle('active', tab === 'raw');
-    }
+            let filename = document.getElementById("FILENAME").value.trim();
+            if (!filename) {
+                filename = title.replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ_\\-\\s]/g, '').trim().replace(/\\s+/g, '_') || "post";
+            }
+            if (!filename.endsWith(".md")) {
+                filename += ".md";
+            }
 
-    /* ── Download ── */
-    function downloadFile() {
-        const raw = buildRaw();
-        const name = (document.getElementById('filename-input').value.trim() ||
-                      document.getElementById('POST_TITLE').value.trim() ||
-                      'post').replace(/[^a-zA-Z0-9ğüşıöçĞÜŞİÖÇ_\-\s]/g,'').trim().replace(/\s+/g,'_');
-        const blob = new Blob([raw], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `${name}.md`;
-        link.click();
-        URL.revokeObjectURL(link.href);
-    }
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        };
 
-    /* ── Init ── */
-    setToday();
-    update();
-</script>
+        window.onload = () => {
+            addArrayRow('POST_TAGS', '', 'Tag');
+            setToday();
+            document.getElementById('TABLE_OF_CONTENT_TITLE').value = "İçindekiler";
+        };
+    </script>
 </body>
-</html>
 
+</html>

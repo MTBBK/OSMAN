@@ -7,7 +7,7 @@ POST_TAGS:
 - "Showcase"
 
 PAGE_SUMMARY: "MerhabaKedi Temalı Bir Sayfa"
-OTOMATIC_SUMMARY_ENABLE: "f"
+OTOMATIC_SUMMARY_ENABLE: "False"
 
 TABLE_OF_CONTENT_ENABLE: "True"
 TABLE_OF_CONTENT_TITLE: "İçindekiler"

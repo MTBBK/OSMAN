@@ -2,7 +2,7 @@ TEMPLATE_NAME: "blog"
 BASE:
 baseURL: "https://osman.guru"
 SITE_LANGUAGE: "tr"
-THEME_NAME: "MerhabaKedi"
+THEME_NAME: "SilverLilac"
 SITE_TITLE: "Osman Sit\e"
 SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası."
 AUTHOR_NAME: "Barbaros Köş (MTBBK)"
@@ -22,3 +22,6 @@ AUTHOR_AVATAR_URL: "./Images/osman.png"
 SOCIAL_ICONS:
 	- "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2edc.png", "mailto:mtbbk46@gmail.com"
 	- "https://images.seeklogo.com/logo-png/31/1/youtube-2017-icon-logo-png_seeklogo-316067.png", "https://www.youtube.com/@cezerisoftware"
+
+ANALYTIC_ENABLE: "true"
+ANALYTIC_SCRIPT: "<script defer data-domain="osman.guru" src="http://superanalytics.osman/js/script.js"></script>"
