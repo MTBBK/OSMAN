@@ -4,6 +4,7 @@ Output/
 Old_Files/
 Content/Texts/*
 !Content/Texts/ExamplePost.md
+!Content/Texts/ShowcaseFeatures.md
 *.class
 ErrorLogs/*
 ErrorLogs/

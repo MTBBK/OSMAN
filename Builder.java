@@ -1333,7 +1333,7 @@ class MarkdownConverter {
         // footnote references
         text = text.replaceAll("\\[\\^(\\d+)\\]", "<sup id=\"fnref:$1\"><a href=\"#fn:$1\">$1</a></sup>");
         // youtube shortcode
-        text = text.replaceAll("\\[youtube:(.*?)\\]", "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/$1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+        text = text.replaceAll("\\[youtube:(.*?)\\]", "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube-nocookie.com/embed/$1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>");
         // oneline code
         text = text.replaceAll("`(.*?)`",
                 "<onelinecode>$1</onelinecode>");
