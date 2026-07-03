@@ -24,6 +24,7 @@ cd OSMAN
 ```
 
 Decide the theme you want to use from the `Themes` folder.
+And decide the template you want to use from the `Templates` folder.
 
 Create the configuration file either directly writting in the `config.osman` file or via `configGenerator.html`.
 
