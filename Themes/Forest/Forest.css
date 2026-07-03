@@ -1,5 +1,15 @@
 /* 1. GENEL AYARLAR */
 
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: #f2f7f0;
+    --theme-text: #2c3e2d;
+    --theme-accent: #3a7d44;
+    --theme-border: var(--stone-border, #333);
+    --theme-alt-bg: #ffffff;
+}
+
+
 body {
     background-color: #f2f7f0;
     color: #2c3e2d;

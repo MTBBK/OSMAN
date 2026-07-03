@@ -1,8 +1,8 @@
-TEMPLATE_NAME: "recipe"
+TEMPLATE_NAME: "blog"
 BASE:
 baseURL: "https://osman.guru"
 SITE_LANGUAGE: "tr"
-THEME_NAME: "Hacker"
+THEME_NAME: "Forest"
 SITE_TITLE: "Osman Sit\e"
 SITE_DESCRIPTION: "Sondan Eklemeli Günlük Sayfası."
 AUTHOR_NAME: "Barbaros Köş (MTBBK)"

@@ -1,0 +1,49 @@
+<style>
+    /* In Gallery, the container is normally 1400px wide. We will make the image full-width inside the container. */
+    .gallery-hero { margin-bottom: 60px; text-align: center; }
+    .gallery-hero-image { width: 100%; max-height: 80vh; object-fit: cover; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+    
+    .gallery-header { max-width: 800px; margin: 0 auto; }
+    .gallery-header h1 { font-size: 3em; font-weight: 300; margin: 0 0 20px 0; letter-spacing: -1px; line-height: 1.2; }
+    .gallery-meta { font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom: 40px; }
+    
+    .gallery-content { max-width: 800px; margin: 0 auto; font-size: 1.15em; font-weight: 300; line-height: 1.8; }
+    
+    .gallery-footer { max-width: 800px; margin: 60px auto 0; padding-top: 40px; border-top: 1px solid var(--theme-border); text-align: center; }
+    .gallery-tags { margin-bottom: 40px; }
+    .gallery-tags a { display: inline-block; padding: 6px 16px; border: 1px solid var(--theme-border); border-radius: 30px; margin: 0 5px; font-size: 0.85em; transition: all 0.2s; opacity: 0.8; }
+    .gallery-tags a:hover { border-color: var(--theme-accent); opacity: 1; }
+    
+    .post-pagination { display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; font-size: 0.85em; letter-spacing: 1px; font-weight: bold; }
+    .post-pagination .prev-post, .post-pagination .next-post { transition: color 0.2s; opacity: 0.7; }
+    .post-pagination .prev-post:hover, .post-pagination .next-post:hover { opacity: 1; color: var(--theme-accent); }
+</style>
+
+<article class="gallery-post">
+    <div class="gallery-hero">
+        <img class="gallery-hero-image" src="{{ FEATURED_IMAGE }}" alt="{{ POST_TITLE }}">
+        
+        <header class="gallery-header">
+            <h1>{{ POST_TITLE }}</h1>
+            <div class="gallery-meta">
+                {{ POST_DATE }} &nbsp;&bull;&nbsp; {{ POST_AUTHOR }} &nbsp;&bull;&nbsp; {{ POST_READ_TIME }}
+            </div>
+        </header>
+    </div>
+
+    <div class="gallery-content">
+        {{ POST_TOC }}
+        {{ POST_CONTENT }}
+    </div>
+
+    <footer class="gallery-footer">
+        <div class="gallery-tags">
+            {{ POST_TAGS }}
+        </div>
+        
+        <nav class="post-pagination">
+            <div class="prev-post">{{ PREVIOUS_POST }}</div>
+            <div class="next-post">{{ NEXT_POST }}</div>
+        </nav>
+    </footer>
+</article>

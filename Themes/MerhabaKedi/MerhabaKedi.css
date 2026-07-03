@@ -3,6 +3,16 @@
    Pastel pembe, beyaz ve yuvarlak hatlı sevimli estetik.
    ============================================= */
 
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: #fff5f7;
+    --theme-text: #4a4a4a;
+    --theme-accent: #ff69b4;
+    --theme-border: var(--stone-border, #333);
+    --theme-alt-bg: #ffffff;
+}
+
+
 /* ── 1. GENEL AYARLAR ── */
 
 body {

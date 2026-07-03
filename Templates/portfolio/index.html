@@ -1,25 +1,17 @@
 <style>
     .hero-section { margin-bottom: 80px; display: flex; flex-direction: column; align-items: flex-start; }
-    .hero-title { font-size: 3.5em; font-weight: 800; color: #fff; margin: 0 0 20px; line-height: 1.1; letter-spacing: -1px; }
-    .hero-intro { font-size: 1.25em; color: #a0a0a0; max-width: 600px; margin: 0 0 30px; font-weight: 300; }
+    .hero-title { font-size: 3.5em; font-weight: 800; margin: 0 0 20px; line-height: 1.1; letter-spacing: -1px; }
+    .hero-intro { font-size: 1.25em; max-width: 600px; margin: 0 0 30px; font-weight: 300; }
     
-    .social-icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #1e1e1e; color: #fff; margin-right: 15px; font-size: 1.2em; transition: all 0.3s ease; }
-    .social-icons a:hover { background: #bb86fc; transform: translateY(-3px); color: #121212; }
+    .social-icons a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; margin-right: 15px; font-size: 1.2em; transition: all 0.3s ease; background-color: var(--theme-alt-bg); border: 1px solid var(--theme-border); }
+    .social-icons a:hover { transform: translateY(-3px); }
     
-    .section-title { font-size: 1.5em; color: #fff; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px; font-weight: 600; }
+    .section-title { font-size: 1.5em; margin-bottom: 30px; border-bottom: 1px solid var(--theme-border); padding-bottom: 15px; font-weight: 600; }
     
     .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 40px; }
-    .project-card { display: flex; flex-direction: column; transition: transform 0.3s; }
-    .project-card:hover { transform: translateY(-5px); }
-    .project-card-title { font-size: 1.3em; font-weight: 700; color: #fff; margin: 0 0 10px; }
-    .project-card-title:hover { color: #bb86fc; }
-    .project-card-excerpt { font-size: 0.95em; color: #a0a0a0; margin: 0 0 15px; flex-grow: 1; }
-    .project-meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.8em; color: #777; text-transform: uppercase; letter-spacing: 1px; }
-    .project-categories span { display: inline-block; background: #1e1e1e; padding: 4px 10px; border-radius: 4px; margin-right: 5px; color: #bb86fc; }
     
-    .tag-cloud { margin-top: 60px; padding-top: 40px; border-top: 1px solid #333; }
-    .tag-cloud a { display: inline-block; padding: 6px 16px; background: transparent; border: 1px solid #333; border-radius: 30px; margin: 0 10px 10px 0; font-size: 0.85em; color: #a0a0a0; transition: all 0.3s; }
-    .tag-cloud a:hover { border-color: #bb86fc; color: #bb86fc; }
+    .tag-cloud { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--theme-border); }
+    .tag-cloud a { display: inline-block; padding: 6px 16px; background: transparent; border: 1px solid var(--theme-border); border-radius: 30px; margin: 0 10px 10px 0; font-size: 0.85em; transition: all 0.3s; }
 </style>
 
 <div class="hero-section">
@@ -36,6 +28,6 @@
 </div>
 
 <div class="tag-cloud">
-    <h3 style="font-size: 1em; color:#fff; margin-bottom:15px;">Filter by Technologies</h3>
+    <h3 style="font-size: 1em; margin-bottom:15px;">Filter by Technologies</h3>
     {{ TAG_CLOUD }}
 </div>

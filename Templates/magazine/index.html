@@ -1,0 +1,40 @@
+<style>
+    .welcome-section { display: flex; align-items: center; justify-content: center; margin-bottom: 60px; padding-bottom: 40px; border-bottom: 1px solid var(--theme-border); text-align: center; }
+    .welcome-text { max-width: 700px; }
+    .welcome-title { font-size: 2.2em; font-family: 'Playfair Display', serif; margin: 0 0 15px; }
+    .intro-text { font-size: 1.15em; margin: 0 0 25px; line-height: 1.8; opacity: 0.9; }
+    
+    .social-icons { margin-top: 15px; }
+    .social-icons a { font-size: 1.3em; margin: 0 10px; display: inline-block; transition: transform 0.2s; }
+    .social-icons a:hover { transform: scale(1.1); }
+    
+    .magazine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; margin-top: 40px; }
+    
+    .post-card { display: flex; flex-direction: column; padding-bottom: 20px; border-bottom: 1px solid var(--theme-border); }
+    .post-card-title { font-size: 1.5em; font-family: 'Playfair Display', serif; margin: 0 0 10px; font-weight: 700; line-height: 1.2; }
+    .post-card-excerpt { font-size: 1em; margin: 0 0 15px; line-height: 1.6; opacity: 0.8; flex-grow: 1; }
+    .post-card-meta { font-size: 0.8em; font-family: Arial, sans-serif; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px; opacity: 0.7; }
+    
+    .tag-cloud { margin-top: 60px; padding: 30px; border-top: 3px double var(--theme-border); text-align: center; background-color: var(--theme-alt-bg); }
+    .tag-cloud h3 { font-family: 'Playfair Display', serif; font-size: 1.5em; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+    .tag-cloud a { display: inline-block; padding: 8px 16px; border: 1px solid var(--theme-border); margin: 5px; font-size: 0.85em; font-family: Arial, sans-serif; text-transform: uppercase; font-weight: bold; background-color: transparent; transition: all 0.2s; }
+</style>
+
+<div class="welcome-section">
+    <div class="welcome-text">
+        <h1 class="welcome-title">{{ WELCOME_TITLE }}</h1>
+        <p class="intro-text">{{ INTRO_ABOUT_ME }}</p>
+        <div class="social-icons">
+            {{ SOCIAL_ICONS }}
+        </div>
+    </div>
+</div>
+
+<div class="magazine-grid">
+    {{ POST_LIST }}
+</div>
+
+<div class="tag-cloud">
+    <h3>Topics in this Issue</h3>
+    {{ TAG_CLOUD }}
+</div>

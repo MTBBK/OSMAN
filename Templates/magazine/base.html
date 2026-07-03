@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="{{ SITE_LANGUAGE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_DESCRIPTION }}">
+    {{ SEO_META }}
+    <title>{{ SITE_TITLE }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ FAVICON_URL }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        a {
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 3px double var(--theme-border);
+            margin-bottom: 40px;
+        }
+
+        .site-title {
+            font-size: 3.5em;
+            font-family: 'Playfair Display', Georgia, serif;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .nav-bar {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-top: 1px solid var(--theme-border);
+            border-bottom: 1px solid var(--theme-border);
+            padding: 10px 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 60px 0 40px;
+            border-top: 4px solid var(--theme-border);
+            font-family: Arial, sans-serif;
+            font-size: 0.9em;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .footer-copy {
+            font-size: 0.8em;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+
+        pre {
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid var(--theme-border);
+            font-family: monospace;
+        }
+
+        code {
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        blockquote {
+            border-left: 5px solid var(--theme-border);
+            margin: 0 0 20px 0;
+            padding-left: 20px;
+            font-style: italic;
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--theme-border);
+            text-align: left;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+        }
+        .post-card-image { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 15px; }
+    </style>
+    <link rel="stylesheet" href="{{ THEME_NAME }}">
+</head>
+
+<body>
+    <header class="header container">
+        <div class="site-branding">
+            <a href="./index.html" class="site-title">{{ SITE_TITLE }}</a>
+        </div>
+        <nav class="nav-bar">
+            {{ NAV_BAR_LINKS }}
+        </nav>
+    </header>
+
+    <main class="content container">
+        {{ CONTENT }}
+    </main>
+
+    <footer class="footer container">
+        <div class="footer-links">
+            {{ SOCIAL_LINKS }}
+        </div>
+        <div class="footer-copy">
+            <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}.</p>
+            <p>Manufactured by <a href="https://osman.guru">OSMAN</a></p>
+        </div>
+    </footer>
+</body>
+
+</html>

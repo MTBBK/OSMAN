@@ -3,6 +3,16 @@
    Style: Warm solarized light, serif, retro-cream feel
    ═══════════════════════════════════════════════════════════════ */
 
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: var(--bg);
+    --theme-text: var(--ink);
+    --theme-accent: var(--accent);
+    --theme-border: var(--border);
+    --theme-alt-bg: var(--bg-dark);
+}
+
+
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@400;600&display=swap');
 
 :root {

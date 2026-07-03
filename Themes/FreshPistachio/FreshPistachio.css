@@ -1,3 +1,12 @@
+
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: var(--bg-earth);
+    --theme-text: var(--paper-text);
+    --theme-accent: var(--dull-gold);
+    --theme-border: var(--stone-border, #333);
+    --theme-alt-bg: var(--clay-dark, #1e1e1e);
+}
 :root {
     --bg-earth: #3b0a1c;      /* Derin Mürdüm */
     --paper-text: #f0f4d2;    /* Kirli Beyaz/Yeşil */

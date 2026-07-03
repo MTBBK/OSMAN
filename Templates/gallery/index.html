@@ -1,0 +1,44 @@
+<style>
+    .gallery-intro { text-align: center; max-width: 800px; margin: 0 auto 60px; }
+    .gallery-intro h1 { font-size: 2.5em; font-weight: 300; margin-bottom: 20px; letter-spacing: -0.5px; }
+    .gallery-intro p { font-size: 1.1em; opacity: 0.8; font-weight: 300; }
+    
+    .social-icons { margin-top: 25px; }
+    .social-icons a { font-size: 1.2em; margin: 0 12px; transition: opacity 0.3s; opacity: 0.7; }
+    .social-icons a:hover { opacity: 1; }
+
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin-bottom: 80px; }
+    
+    .post-card { position: relative; overflow: hidden; border-radius: 4px; aspect-ratio: 4/3; }
+    
+    /* Trick: we assume Builder passes the thumbnail/featured image into post-card if we format it right.
+       Since Builder generates raw HTML for post list based on tags, we can style the post card to hide excerpts 
+       if the user didn't write one, or just overlay everything. */
+    .post-card { display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; background-color: var(--theme-alt-bg); border: 1px solid var(--theme-border); transition: transform 0.3s, box-shadow 0.3s; }
+    .post-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-color: var(--theme-accent); }
+    
+    .post-card-title { font-size: 1.2em; font-weight: 600; margin: 0 0 10px 0; z-index: 2; position: relative; }
+    .post-card-excerpt { font-size: 0.9em; opacity: 0.7; z-index: 2; position: relative; margin: 0 0 15px 0; }
+    .post-card-meta { font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; z-index: 2; position: relative; }
+    .post-card-categories { display: none; } /* Hide categories in grid to keep it clean */
+    
+    .tag-cloud { text-align: center; border-top: 1px solid var(--theme-border); padding-top: 40px; }
+    .tag-cloud a { display: inline-block; padding: 5px 15px; border: 1px solid var(--theme-border); border-radius: 20px; margin: 5px; font-size: 0.85em; transition: all 0.2s; opacity: 0.8; }
+    .tag-cloud a:hover { border-color: var(--theme-accent); opacity: 1; }
+</style>
+
+<div class="gallery-intro">
+    <h1>{{ WELCOME_TITLE }}</h1>
+    <p>{{ INTRO_ABOUT_ME }}</p>
+    <div class="social-icons">
+        {{ SOCIAL_ICONS }}
+    </div>
+</div>
+
+<div class="tag-cloud" style="margin-bottom: 40px; border-top: none; padding-top: 0;">
+    {{ TAG_CLOUD }}
+</div>
+
+<div class="gallery-grid">
+    {{ POST_LIST }}
+</div>

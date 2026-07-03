@@ -3,6 +3,16 @@
    Asfalt karanlığı, yarış kırmızısı, paslı kahverengi ve hız hissiyatı.
    ============================================= */
 
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: var(--asphalt-bg);
+    --theme-text: var(--text-main);
+    --theme-accent: var(--mcqueen-yellow);
+    --theme-border: var(--mcqueen-red);
+    --theme-alt-bg: var(--asphalt-card);
+}
+
+
 /* ── 0. CSS VARIABLES (THEME TOKENS) ── */
 :root {
     --mcqueen-red: #e53935;

@@ -1,0 +1,19 @@
+<style>
+    .tag-header { text-align: center; margin-bottom: 50px; padding: 40px 0; border-bottom: 3px double var(--theme-border); background-color: var(--theme-alt-bg); }
+    .tag-header h1 { font-family: 'Playfair Display', serif; font-size: 3em; margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+    
+    .magazine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; margin-top: 40px; }
+    
+    .post-card { display: flex; flex-direction: column; padding-bottom: 20px; border-bottom: 1px solid var(--theme-border); }
+    .post-card-title { font-size: 1.5em; font-family: 'Playfair Display', serif; margin: 0 0 10px; font-weight: 700; line-height: 1.2; }
+    .post-card-excerpt { font-size: 1em; margin: 0 0 15px; line-height: 1.6; opacity: 0.8; flex-grow: 1; }
+    .post-card-meta { font-size: 0.8em; font-family: Arial, sans-serif; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px; opacity: 0.7; }
+</style>
+
+<div class="tag-header">
+    <h1>Topic: {{ TAG_TITLE }}</h1>
+</div>
+
+<div class="magazine-grid">
+    {{ POST_LIST }}
+</div>

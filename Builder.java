@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -9,24 +8,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.DirectoryStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import java.net.InetSocketAddress;
-import com.sun.net.httpserver.HttpServer;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpExchange;
-import java.io.OutputStream;
+import java.util.stream.Stream;
 
 public class Builder {
     private static Strategy strategy;
 
+	public static void log (String functionName, String message) {
+		System.out.println("\n" + functionName + ": " + message);
+	}
+	
+	public static void log (String message) {
+		System.out.println("\n" + message);
+	}
+	
     public static void main(String args[]) {
         long startTime = System.currentTimeMillis();
-        PrintStream console = System.out;
         try {
             // sets error's print location to log.txt in ErrorLogs
             writeFile("ErrorLogs/errorLog.txt", null);
@@ -35,16 +37,13 @@ public class Builder {
             writeFile("ErrorLogs/log.txt", null);
             PrintStream out = new PrintStream(new FileOutputStream("ErrorLogs/log.txt"));
             System.setOut(out);
-            System.out.println("main: Begin.");
+            Builder.log("main","Begin.");
 
-            // print to confirm that System.err.println functions properly
+            // print to confirm that log functions properly
             System.err.println("Error's Stack Trace Will Be Below:");
 
             // create an Output folder in the case that it doesn't exist.
-            File folder = new File("Output/");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
+            createFolder("Output/");
 
             Path rootPath = Paths.get("Output");
             final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder())
@@ -53,64 +52,25 @@ public class Builder {
                 Files.deleteIfExists(path);
             }
             // https://stackoverflow.com/questions/35988192/java-nio-most-concise-recursive-directory-delete
-
-            folder = new File("Output/");
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
+			
+			// recreate Output folder after cleaning
+			createFolder("Output/");
 
             // begin site building process
             buildSite();
-            
-                        
-            if (args.length > 0 && args[0].equals("--serve")) {
-                console.println("Starting server on http://localhost:8080");
-                startServer(console);
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(
-                "main: Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
-        System.out.println("main: End.");
-    }
-    
-    static void startServer(PrintStream console) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/", new HttpHandler() {
-            @Override
-            public void handle(HttpExchange exchange) throws IOException {
-                String path = exchange.getRequestURI().getPath();
-                if (path.equals("/")) {
-                    path = "/index.html";
-                }
-                File file = new File("Output" + path);
-                if (file.exists() && !file.isDirectory()) {
-                    exchange.sendResponseHeaders(200, file.length());
-                    try (OutputStream os = exchange.getResponseBody()) {
-                        Files.copy(file.toPath(), os);
-                    }
-                } else {
-                    String response = "404 (Not Found)\n";
-                    exchange.sendResponseHeaders(404, response.length());
-                    try (OutputStream os = exchange.getResponseBody()) {
-                        os.write(response.getBytes());
-                    }
-                }
-            }
-        });
-        server.setExecutor(null);
-        server.start();
-        console.println("Server is running. Press Ctrl+C to stop.");
-    }
-    
+        Builder.log("main", "Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
+		Builder.log("main", "End.");
+    }    
 
     static void buildSite() throws Exception {
-        System.out.println("\nbuildFile: Begin.");
+        Builder.log("buildFile", "Begin.");
 
         String config = readFile("config.osman");
-        System.out.println("buildSite: Successfully read the config.");
+        Builder.log("buildSite", "Successfully read the config.");
         
         String baseURL = getOption("baseURL", config).replaceAll("\"", "").trim();
         String siteTitle = getOption("SITE_TITLE", config).replaceAll("\"", "").trim();
@@ -119,17 +79,17 @@ public class Builder {
         // Choose Template according to Config
 		String templateName = getOption("TEMPLATE_NAME", config);
         String templatePath = "Templates/" + templateName + "/";
-		if (!(new File(templatePath + "base.html")).exists()) {
+		if (Files.notExists(Paths.get(templatePath + "base.html"))) {
 			throw new FileNotFoundException("Selected template could not be found in Templates folder.");
 		}
 
         // [i][0] - file name, [i][1] file content
         // String[][] contents = parseContentFiles("/Content/Texts/");
         String[][] templates = parseContentFiles(templatePath);
-        System.out.println("buildSite: Successfully run parseContentFiles(\"/Templates/\").");
+        Builder.log("buildSite", "Successfully run parseContentFiles(\"/Templates/\").");
 
         String[][] textContent = parseContentFiles("Content/Texts/");
-        System.out.println("buildSite: Successfully run parseContentFiles(\"/Content/Texts/\").");
+        Builder.log("buildSite", "Successfully run parseContentFiles(\"/Content/Texts/\").");
 
         // Copy all files and folders in Content folder into Output
         // except Content/Texts
@@ -144,19 +104,20 @@ public class Builder {
             if (templates[i][0].equals("base.html")) {
                 base = makeFile(templates[i], config);
                 baseSEOMetaModification("ANALYTIC_SCRIPT", "ANALYTIC_ENABLE", config, base);
-                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0] + "\".");
+				stringEditor("{{ SEO_META }}", "{{ SEO_META }}\n\t" + getAssets("Content/Assets"), base);
+                Builder.log("buildSite", "Successfully run makeFile on \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("index.html")) {
                 index = makeFile(templates[i], config);
-                System.out.println("buildSite: Successfully run makeFile on \"" + templates[i][0] + "\".");
+                Builder.log("buildSite", "Successfully run makeFile on \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("tags.html")) {
                 tagsPage = templates[i][1];
-                System.out.println("buildSite: Successfully grabbed \"" + templates[i][0] + "\".");
+                Builder.log("buildSite", "Successfully grabbed \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("page.html")) {
                 page = templates[i][1];
-                System.out.println("buildSite: Successfully grabbed \"" + templates[i][0] + "\".");
+                Builder.log("buildSite", "Successfully grabbed \"" + templates[i][0] + "\".");
             }
         }
 
@@ -187,6 +148,8 @@ public class Builder {
         // get pages' dates
         String[] pageDates = getOptionArray("POST_DATE", textContent);
 
+		String[] pageAuthors = getOptionArray("POST_AUTHOR", textContent);
+		
         // get pages' titles
         String[] pageTitles = getOptionArray("POST_TITLE", textContent);
 
@@ -227,9 +190,10 @@ public class Builder {
 
         // POST_LIST template
         String postListTemplate = "<div class=\"post-card\">\n" + //
+                "                    {{ POST_IMAGE_HTML }}\n" + //
                 "                    <a href=\"{{ POST_PATH }}\" class=\"post-card-title\">{{ POST_TITLE }}</a>\n" + //
                 "                    <p class=\"post-card-excerpt\">{{ POST_SUMMARY }}</p>\n" + //
-                "                    <div class=\"post-card-meta\">{{ POST_DATE }}</div>\n" + //
+                "                    <div class=\"post-card-meta\">{{ POST_DATE }}, {{ POST_AUTHOR }}</div>\n" + //
                 "                    <div class=\"post-card-categories\">{{ POST_TAGS }}</div>\n" + //
                 "                </div>";
 
@@ -242,6 +206,12 @@ public class Builder {
             stringEditor("{{ POST_TITLE }}", pageTitles[i], postLists[i]);
             stringEditor("{{ POST_DATE }}", pageDates[i], postLists[i]);
             stringEditor("{{ POST_SUMMARY }}", pageSummary[i], postLists[i]);
+            stringEditor("{{ POST_AUTHOR }}", pageAuthors[i], postLists[i]);
+                        
+            String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
+            String imgHtml = !"-1".equals(imgUrl) ? "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">" : "";
+            stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
+            
             StringBuilder pTags = new StringBuilder();
             for (int j = 0; j < pageTags[i].length; j++) {
 				String safeTag = pageTags[i][j].replaceAll("[^a-zA-Z0-9]", "_");
@@ -256,7 +226,7 @@ public class Builder {
         // POST_LIST maker end
 
         // handling page.htmls begin
-        System.out.println("buildSite: Starting to make site pages.");
+        Builder.log("buildSite", "Starting to make site pages.");
         StringBuilder[] pages = new StringBuilder[textContent.length];
         for (int i = 0; i < textContent.length; i++) {
             String[] arr = { textContent[i][0], page };
@@ -298,11 +268,11 @@ public class Builder {
 
             }
             
-            System.out.println("buildSite: Successfully made \"" + textContent[i][0] + "\" page.");
+            Builder.log("buildSite", "Successfully made \"" + textContent[i][0] + "\" page.");
         }
         
         
-        System.out.println("buildSite: Successfully made all of the site pages.");
+        Builder.log("buildSite", "Successfully made all of the site pages.");
         // handling page.htmls end
 
         // handle index.html begin
@@ -312,7 +282,7 @@ public class Builder {
 				  "\t<meta property=\"og:type\" content=\"website\">";
         stringEditor("{{ SEO_META }}", indexSeo, indexPage);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
-        System.out.println("buildSite: Successfully merged base and index.");
+        Builder.log("buildSite", "Successfully merged base and index.");
 
         stringEditor("{{ TOTAL_POSTS_COUNT }}", "Total Posts: " + pages.length, indexPage);
 
@@ -390,13 +360,13 @@ public class Builder {
         writeFile("Output/index.html", indexPage.toString());
         // handle index.html end
 
-        System.out.println("buildSite: Successfully made \"index.html\".");
+        Builder.log("buildSite", "Successfully made \"index.html\".");
 
 		// generate post pages
         for (int i = 0; i < textContent.length; i++) {
             String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
             writeFile("Output/" + fileName + ".html", pages[i].toString());
-            System.out.println("buildSite: Successfully made \"" + fileName + "\".");
+            Builder.log("buildSite", "Successfully made \"" + fileName + "\".");
         }
         
         // generate sitemap.xml
@@ -416,14 +386,14 @@ public class Builder {
         }
         rss.append("</channel>\n</rss>");
         writeFile("Output/rss.xml", rss.toString());
-        System.out.println("buildSite: Successfully made \"rss.xml\".");
+        Builder.log("buildSite", "Successfully made \"rss.xml\".");
 		
 		// generate robots.txt
 		String robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + baseURL + "/sitemap.xml\n";
         writeFile("Output/robots.txt", robotsTxt);
-        System.out.println("buildSite: Successfully made \"robots.txt\".");
+        Builder.log("buildSite", "Successfully made \"robots.txt\".");
         
-        System.out.println("buildFile: End.\n");
+        Builder.log("buildFile", "End.\n");
     }
 	
 	static void generateSitemap(String baseURL, String[][] textContent)  throws IOException{
@@ -435,7 +405,7 @@ public class Builder {
         }
         sitemap.append("</urlset>");
         writeFile("Output/sitemap.xml", sitemap.toString());
-        System.out.println("buildSite: Successfully made \"sitemap.xml\".");
+        Builder.log("buildSite", "Successfully made \"sitemap.xml\".");
 	}
 	
     static void getPageTags(String[][] pageTags, String[][] textContent) {
@@ -446,8 +416,7 @@ public class Builder {
             int lIndex = page.indexOf('\n', page.indexOf(option)) + 1;
 
             if (-1 == lIndex) {
-                System.out.println(
-                        "buildSite: Could not find \"" + option + "\" in the text content, it will be skipped.");
+                Builder.log("buildSite", "Could not find \"" + option + "\" in the text content, it will be skipped.");
                 pageTags[j] = new String[0];
                 continue;
             }
@@ -483,7 +452,7 @@ public class Builder {
         String optionValue = "";
         int valueIndex = config.indexOf(configOption);
         if (-1 == valueIndex) {
-            System.out.println("getOption: Cannot find config option for " + configOption);
+            Builder.log("getOption", "Cannot find config option for " + configOption);
             // Default Value
             return "-1";
         } else {
@@ -499,7 +468,7 @@ public class Builder {
 			}
             // selected options name
             optionValue = config.substring(firstQuote, lastQuote);
-            System.out.println("getOption: Returned value of the option " + configOption + " as " + optionValue);
+            Builder.log("getOption", "Returned value of the option " + configOption + " as " + optionValue);
             return optionValue;
         }
 	}
@@ -509,7 +478,7 @@ public class Builder {
         for (int i = 0; i < textContent.length; i++) {
 			optionValues[i] = getOption(configOption, textContent[i][1]);
         }
-        System.out.println("getOptionArray: Returned values of " + configOption);
+        Builder.log("getOptionArray", "Returned values of " + configOption);
         return optionValues;
 	}
 	
@@ -519,7 +488,7 @@ public class Builder {
         if (option.equals("true") || option.equals("1") ||  option.equals("evet")){
 			isEnable = true;
         }
-        System.out.println("isEnabled: Returned statue of" + configOption);
+        Builder.log("isEnabled", "Returned statue of" + configOption);
 		return isEnable;
 	}
 	
@@ -527,38 +496,78 @@ public class Builder {
 		if(isEnabled(enableSignal, config)){
 			String newModule = ("{{ SEO_META }}\n\t" + getOption(configOption, config));
 			stringEditor("{{ SEO_META }}", newModule, base);
-			System.out.println("baseSEOMetaModification: Successfully added \"" + configOption + "\" to base.html");
+			Builder.log("baseSEOMetaModification", "Successfully added \"" + configOption + "\" to base.html");
 		}
 	}
 	
-	static String[][] parseContentFiles(String folderPath) throws IOException {
-        File folder = new File(folderPath);
-
-        // throw an IOException if folderPath is not an existing folder's path
-        if (!folder.isDirectory()) {
-            throw new IOException("Folder \"" + folderPath + "\" Could Not Be Found\n");
+	static String getAssets (String assetsFolderPath) throws IOException{
+		Path assetsFolderPathObject = createFolder(assetsFolderPath);
+		StringBuilder customAssets = new StringBuilder();
+		try(Stream<Path> assetFiles = Files.list(assetsFolderPathObject)){
+			assetFiles.forEach(asset -> {
+				String fileName = asset.getFileName().toString();
+				if (fileName.endsWith(".css")) {
+					customAssets.append("<link rel=\"stylesheet\" href=\"./Assets/").append(fileName).append("\">\n");
+				} 
+				else if (fileName.endsWith(".js")) {
+					customAssets.append("<script defer src=\"./Assets/").append(fileName).append("\"></script>\n");
+				}
+			});
+		}
+		return customAssets.toString();
+	}
+	
+	static Path createFolder (String folderPath) throws IOException{
+		Path newPath = Paths.get(folderPath); 
+		if (Files.notExists(newPath)) { 
+			try {Files.createDirectory(newPath);}
+			catch (Exception e) {e.printStackTrace();}
+		}
+		return newPath;
+	}
+	
+	static int countFiles(Path folderPath) throws IOException {
+        int count = 0;
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
+            for (Path path : directoryStream) {
+                if (Files.isRegularFile(path)) {
+                    count++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return count;
+    }
+	
+static String[][] parseContentFiles(String folderPath) throws IOException {
+    Path newPath = Paths.get(folderPath);
 
-        File[] files = folder.listFiles();
+    if (!Files.isDirectory(newPath)) {
+        throw new IOException("Folder \"" + folderPath + "\" Could Not Be Found\n");
+    }
 
-        // return an empty array if the folder is empty and send a log about it.
-        if (null == files || 0 == files.length) {
-            System.out.println("parseContentFiles: Folder \"" + folderPath + "\" is empty.");
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(newPath)) {
+        List<Path> entries = new ArrayList<>();
+        for (Path p : stream) entries.add(p);
+
+        if (entries.isEmpty()) {
+            Builder.log("parseContentFiles", "Folder \"" + folderPath + "\" is empty.");
             return new String[0][0];
         }
 
-        String[][] fileContents = new String[files.length][2]; // [i][0] - dosyanın adı, [i][1] - dosyanın içeriği
+        String[][] fileContents = new String[entries.size()][2]; // [i][0] file's name, [i][1] file's content
 
-        // reads all files and puts them in a string array
-        for (int i = 0; i < files.length; i++) {
-
-            fileContents[i][0] = files[i].getName();
-            fileContents[i][1] = readFile(folderPath + fileContents[i][0]);
-
+        for (int i = 0; i < entries.size(); i++) {
+            Path p = entries.get(i);
+            fileContents[i][0] = p.getFileName().toString();
+            fileContents[i][1] = readFile(p.toString());
         }
 
         return fileContents;
     }
+}
+
 
     // takes text file's name and reads text file and return its contents as a
     // string
@@ -631,23 +640,23 @@ public class Builder {
     // replaces file[1]'s with the appropriate parts in config and returns the
     // result as a StringBuilder
     static StringBuilder makeFile(String[] file, String config) throws Exception {
-        System.out.println("\nmakeFile: Begin.");
+        Builder.log("makeFile", "Begin.");
         StringBuilder sbFile = new StringBuilder(file[1]);
         int index = 0;
 
         if (-1 != file[0].indexOf("base")) { // for base
             index = config.indexOf("BASE");
-            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
+            Builder.log("makeFile", "Successfully found the start of \"" + file[0] + "\" file's part.");
         } else if (-1 != file[0].indexOf("index")) { // for index
             index = config.indexOf("INDEX");
-            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
+            Builder.log("makeFile", "Successfully found the start of \"" + file[0] + "\" file's part.");
         } else { // for unknown templates
             // cut file[0] from 0 to first '.' to remove extension and make it all uppercase
             // then look for it in config
             index = config.indexOf(file[0].substring(0, file[0].indexOf('.')).toUpperCase());
-            System.out.println("makeFile: Successfully found the start of \"" + file[0] + "\" file's part.");
+            Builder.log("makeFile", "Successfully found the start of \"" + file[0] + "\" file's part.");
             if (-1 == index) {
-                System.out.println("makeFile: Failed to find the start of \"" + file[0]+ "\" file's part. Will begin from the top of the file");
+                Builder.log("makeFile", "Failed to find the start of \"" + file[0]+ "\" file's part. Will begin from the top of the file");
             }
         }
 
@@ -666,23 +675,23 @@ public class Builder {
             // check if there is a variable to read and skip to the next iteration if so
             if ((nextColon > nextDash && -1 != nextDash) || nextColon > nextLine || -1 == nextColon) {
                 index = nextLine;
-                System.out.println("makeFile: Successfully skipped to the next line.");
+                Builder.log("makeFile", "Successfully skipped to the next line.");
             } else {
                 String option = config.substring(index + 1, nextColon);
-                System.out.println("makeFile: Successfully found the option: \"" + option + "\".");
+                Builder.log("makeFile", "Successfully found the option: \"" + option + "\".");
                 setStrategy(option);
-                System.out.println("makeFile: Successfully executed setStrategy(\"" + option + "\") on the file.");
+                Builder.log("makeFile", "Successfully executed setStrategy(\"" + option + "\") on the file.");
                 performStrategy(sbFile, config);
-                System.out.println("makeFile: Successfully executed performStrategy(\"" + option + "\") on the file.");
+                Builder.log("makeFile", "Successfully executed performStrategy(\"" + option + "\") on the file.");
                 index = nextLine;
-                System.out.println("makeFile: Successfully finished changing \"" + option + "\" in the file.");
+                Builder.log("makeFile", "Successfully finished changing \"" + option + "\" in the file.");
                 
                 // Maybe we can stop searching for strategy options after POST_CONTENT reached.
                 // if(option.equals("POST_CONTENT")){break;}
             }
         } while (-1 != index && -1 != nextColon);
-        System.out.println("makeFile: Successfully finished making the file.");
-        System.out.println("makeFile: End.\n");
+        Builder.log("makeFile", "Successfully finished making the file.");
+        Builder.log("makeFile", "End.\n");
         return sbFile;
     }
 
@@ -693,7 +702,7 @@ public class Builder {
         if (index != -1) {
 			file.replace(index, index + contentName.length(), newContent);
 		} else {
-			System.out.println("stringEditor: Placeholder \"" + contentName + "\" not found in file.");
+			Builder.log("stringEditor", "Placeholder \"" + contentName + "\" not found in file.");
 		}
     }
 
@@ -721,12 +730,11 @@ abstract class Strategy {
 class ThemeNameStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nThemeNameStrategy: Begin.");
+        Builder.log("ThemeNameStrategy", "Begin.");
         int THEME_NAMEindex = config.indexOf(option);
 
         if (-1 == file.indexOf("{{ " + option + " }}")) {
-            System.out.println(
-                    "ThemeNameStrategy: Could not find both \"THEME_NAME\" AND \"SOCIAL_LINKS\" in the file, they will be skipped.");
+            Builder.log("ThemeNameStrategy", "Could not find both \"THEME_NAME\" AND \"SOCIAL_LINKS\" in the file, they will be skipped.");
             return;
         }
 
@@ -740,26 +748,28 @@ class ThemeNameStrategy extends Strategy {
         // "Project/Themes/" + themeName + "/" + themeName + ".css"
         String themeName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
         String themePath = "Themes/" + themeName + "/" + themeName + ".css";
-        if (!(new File(themePath)).exists()) {
-            throw new Exception("Selected theme could not be found in Themes folder.");
-        }
+
+		Path newPath = Paths.get(themePath); 
+		if (Files.notExists(newPath)) { 
+			throw new Exception("Selected theme could not be found in Themes folder.");
+		}
 
         // copy theme file to Output folder
-        System.out.println("ThemeNameStrategy: Starting copying \"" + themeName + ".css\" to the Output folder.");
+        Builder.log("ThemeNameStrategy", "Starting copying \"" + themeName + ".css\" to the Output folder.");
         String themeFile = Builder.readFile(themePath);
         Builder.writeFile("Output/" + themeName + ".css", themeFile);
-        System.out.println("ThemeNameStrategy: Finished copying \"" + themeName + ".css\" to the Output folder.");
+        Builder.log("ThemeNameStrategy", "Finished copying \"" + themeName + ".css\" to the Output folder.");
 
         option = "{{ " + option + " }}";
         Builder.stringEditor(option, themeName + ".css", file);
-        System.out.println("ThemeNameStrategy: End.\n");
+        Builder.log("ThemeNameStrategy", "End.\n");
     }
 }
 
 class NonArrayStrategy extends Strategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nNonArrayStrategy: Begin.");
+        Builder.log("NonArrayStrategy", "Begin.");
         int firstQuote = config.indexOf('"', config.indexOf(option)) + 1;
         int nextLine = config.indexOf('\n', firstQuote);
         if (nextLine == -1) {
@@ -772,15 +782,14 @@ class NonArrayStrategy extends Strategy {
         String value = config.substring(firstQuote, lastQuote);
         option = "{{ " + option + " }}";
         if (-1 == file.indexOf(option)) {
-            System.out.println(
-                    "NonArrayStrategy: Could not find the option \"" + option + "\" in the file, it will be skipped.");
-            System.out.println("NonArrayStrategy: End.\n");
+            Builder.log("NonArrayStrategy", "Could not find the option \"" + option + "\" in the file, it will be skipped.");
+            Builder.log("NonArrayStrategy", "End.\n");
             return;
         } else {
             do {
                 Builder.stringEditor(option, value, file);
             } while (-1 != file.indexOf(option));
-            System.out.println("NonArrayStrategy: End.\n");
+            Builder.log("NonArrayStrategy", "End.\n");
         }
 
     }
@@ -789,22 +798,21 @@ class NonArrayStrategy extends Strategy {
 class PostContentStrategy extends Strategy {
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nPostContentStrategy: Begin.");
+        Builder.log("PostContentStrategy", "Begin.");
         int contentStart = config.indexOf('\n', config.indexOf(option)) + 1;
         String value = config.substring(contentStart);
         option = "{{ " + option + " }}";
 
         if (-1 == file.indexOf(option)) {
             // if the option isnt available in the file
-            System.out.println(
-                    "PostContentStrategy: Could not find the option \"" + option
+            Builder.log("PostContentStrategy", "Could not find the option \"" + option
                             + "\" in the file, it will be skipped.");
-            System.out.println("PostContentStrategy: End.\n");
+            Builder.log("PostContentStrategy", "End.\n");
             return;
         } else {
 
             // {{ POST_READ_TIME }} handling part.
-            System.out.println("PostContentStrategy: Starting to calculate \"POST_READ_TIME\".");
+            Builder.log("PostContentStrategy", "Starting to calculate \"POST_READ_TIME\".");
             String cleanText = MarkdownConverter.convert(value).replaceAll("<[^>]*>", "").trim();
             int wordNum = 0;
             if (!cleanText.isEmpty()) {
@@ -819,7 +827,7 @@ class PostContentStrategy extends Strategy {
             }else {
                 Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: Under one minute.", file);
             }
-            System.out.println("PostContentStrategy: Successfully calculated \"POST_READ_TIME\".");
+            Builder.log("PostContentStrategy", "Successfully calculated \"POST_READ_TIME\".");
 
             Builder.stringEditor(option, MarkdownConverter.convert(value), file);
             
@@ -828,15 +836,15 @@ class PostContentStrategy extends Strategy {
             if (TOCEnable) {
                 Builder.stringEditor("{{ POST_TOC }}", MarkdownConverter.currentTOC, file);
                 Builder.stringEditor("{{ TABLE_OF_CONTENT_TITLE }}", Builder.getOption("TABLE_OF_CONTENT_TITLE", config), file);
-                System.out.println("PostContentStrategy: Successfully added \"POST_TOC\".");
+                Builder.log("PostContentStrategy", "Successfully added \"POST_TOC\".");
             }else{
 				Builder.stringEditor("{{ POST_TOC }}", "", file);
-				System.out.println("PostContentStrategy: Table Of Content Is Disable skipping \"POST_TOC\".");
+				Builder.log("PostContentStrategy", "Table Of Content Is Disable skipping \"POST_TOC\".");
 			}
             
-            System.out.println("PostContentStrategy: End.\n");
+            Builder.log("PostContentStrategy", "End.\n");
         }
-        System.out.println("PostContentStrategy: End.\n");
+        Builder.log("PostContentStrategy", "End.\n");
     }
 }
 
@@ -845,20 +853,18 @@ abstract class SingleArrayStrategy extends Strategy {
 
     @Override
     void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nSingleArrayStrategy: Begin.");
+        Builder.log("SingleArrayStrategy", "Begin.");
         String sl = "{{ " + option + " }}";
 
         if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "SingleArrayStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            Builder.log("SingleArrayStrategy", "Could not find \"" + option + "\" in the file, it will be skipped.");
             return;
         }
 
         int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
 
         if (-1 == lIndex) {
-            System.out.println(
-                    "SingleArrayStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.log("SingleArrayStrategy", "Could not find \"" + option + "\" in the config, it will be skipped.");
             Builder.stringEditor("{{ " + option + " }}", "", file);
             return;
         }
@@ -892,14 +898,14 @@ abstract class SingleArrayStrategy extends Strategy {
         }
 
         Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
-        System.out.println("SingleArrayStrategy: End.\n");
+        Builder.log("SingleArrayStrategy", "End.\n");
     }
 }
 
 class PostTagsStrategy extends SingleArrayStrategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-		System.out.println("\nPostTagsStrategy: Begin.");
+		Builder.log("PostTagsStrategy", "Begin.");
 		
 		codePiece = "\t\t\t<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
 		// \n's and \t's to allign it better. It is just visual.
@@ -907,16 +913,14 @@ class PostTagsStrategy extends SingleArrayStrategy {
         String slLink = "{{ " + option + "_LINK }}";
 
         if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "PostTagsStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            Builder.log("PostTagsStrategy", "Could not find \"" + option + "\" in the file, it will be skipped.");
             return;
         }
 
         int lIndex = config.indexOf('\n', config.indexOf(option)) + 1;
 
         if (-1 == lIndex) {
-            System.out.println(
-                    "PostTagsStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.log("PostTagsStrategy", "Could not find \"" + option + "\" in the config, it will be skipped.");
             Builder.stringEditor("{{ " + option + " }}", "", file);
             return;
         }
@@ -952,7 +956,7 @@ class PostTagsStrategy extends SingleArrayStrategy {
         }
 
         Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
-        System.out.println("PostTagsStrategy: End.\n");
+        Builder.log("PostTagsStrategy", "End.\n");
     }
 }
 
@@ -965,13 +969,12 @@ abstract class DoubleArrayStrategy extends Strategy {
 
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-        System.out.println("\nDoubleArrayStrategy: Begin.");
+        Builder.log("DoubleArrayStrategy", "Begin.");
 
         String sl = "{{ " + option + " }}";
 
         if (-1 == file.indexOf(sl)) {
-            System.out.println(
-                    "DoubleArrayStrategy: Could not find \"" + option + "\" in the file, it will be skipped.");
+            Builder.log("DoubleArrayStrategy", "Could not find \"" + option + "\" in the file, it will be skipped.");
             return;
         }
 
@@ -979,8 +982,7 @@ abstract class DoubleArrayStrategy extends Strategy {
         int iIndex = config.indexOf(',', lIndex);
 
         if (-1 == lIndex) {
-            System.out.println(
-                    "DoubleArrayStrategy: Could not find \"" + option + "\" in the config, it will be skipped.");
+            Builder.log("DoubleArrayStrategy", "Could not find \"" + option + "\" in the config, it will be skipped.");
             Builder.stringEditor("{{ " + option + " }}", "", file);
             return;
         }
@@ -1019,7 +1021,7 @@ abstract class DoubleArrayStrategy extends Strategy {
 
         Builder.stringEditor("{{ " + option + " }}", result.toString(), file);
 
-        System.out.println("DoubleArrayStrategy:: End.\n");
+        Builder.log("DoubleArrayStrategy", "End.\n");
     }
 }
 
@@ -1053,42 +1055,42 @@ class SocialIconsStrategy extends DoubleArrayStrategy {
 class Factory {
     // factory to decide which strategy is selected in which scenario
     static Strategy decideStrategy(String option) throws Exception {
-        System.out.println("\nFactory: Begin.");
+        Builder.log("Factory: Begin.");
 
         Strategy strategy;
         switch (option) {
             case "NAV_BAR_LINKS":
                 strategy = new NavbarStrategy();
-                System.out.println("Factory: Chose NavbarStrategy.");
+                Builder.log("Factory", "Chose NavbarStrategy.");
                 break;
             case "SOCIAL_ICONS":
                 strategy = new SocialIconsStrategy();
-                System.out.println("Factory: Chose SocialIconsStrategy.");
+                Builder.log("Factory", "Chose SocialIconsStrategy.");
                 break;
             case "SOCIAL_LINKS":
                 strategy = new SocialLinksStrategy();
-                System.out.println("Factory: Chose SocialLinksStrategy.");
+                Builder.log("Factory", "Chose SocialLinksStrategy.");
                 break;
             case "THEME_NAME":
                 strategy = new ThemeNameStrategy();
-                System.out.println("Factory: Chose ThemeNameStrategy.");
+                Builder.log("Factory", "Chose ThemeNameStrategy.");
                 break;
             case "POST_CONTENT":
                 strategy = new PostContentStrategy();
-                System.out.println("Factory: Chose PostContentStrategy.");
+                Builder.log("Factory", "Chose PostContentStrategy.");
                 break;
             case "POST_TAGS":
                 strategy = new PostTagsStrategy();
-                System.out.println("Factory: Chose PostTagsStrategy.");
+                Builder.log("Factory", "Chose PostTagsStrategy.");
                 break;
             case "":
                 throw new Exception("Could not detect the next config variable.");
             default:
                 strategy = new NonArrayStrategy();
-                System.out.println("Factory: Chose NonArrayStrategy.");
+                Builder.log("Factory", "Chose NonArrayStrategy.");
         }
         strategy.option = option;
-        System.out.println("Factory: End.\n");
+        Builder.log("Factory", "End.\n");
         return strategy;
     }
 }
@@ -1142,6 +1144,7 @@ class MarkdownConverter {
         StringBuilder html = new StringBuilder();
 		StringBuilder toc = new StringBuilder("<div class=\"post-toc\">\n  <h3 class=\"toc-title\">").append("{{ TABLE_OF_CONTENT_TITLE }}").append("</h3>\n  <ul class=\"toc-list\">\n");
         String[] allLines = md.split("\n");
+        List<String> footnotes = new ArrayList<>();
         boolean inCodeBlock = false;
         boolean inList = false;
         boolean inTable = false;
@@ -1170,7 +1173,16 @@ class MarkdownConverter {
                 html.append(line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")).append("\n");
                 continue;
             }
-
+                       
+            // footnote definition
+            if (line.trim().matches("\\[\\^\\d+\\]:.*")) {
+                inList = isEndingList(inList, html);
+                inTable = isEndingTable(inTable, html);
+                inBlockquote = isEndingBlockquote(inBlockquote, html);
+                footnotes.add(line.trim());
+                continue;
+            }
+            
 			// long horizontal line as seperator
             if (line.trim().matches("---+") || line.trim().matches("\\*\\*\\*+")) {
                 inList = isEndingList(inList, html);
@@ -1286,6 +1298,19 @@ class MarkdownConverter {
         inTable = isEndingTable(inTable, html);
         inBlockquote = isEndingBlockquote(inBlockquote, html);
         
+		if (!footnotes.isEmpty()) {
+			html.append("<div class=\"footnotes\">\n<hr>\n<ol>\n");
+			for (String fn : footnotes) {
+				int colonIdx = fn.indexOf("]:");
+				String num = fn.substring(2, colonIdx);
+				String fnText = fn.substring(colonIdx + 2).trim();
+				html.append("<li id=\"fn:").append(num).append("\">");
+				html.append(parseInline(fnText));
+				html.append(" <a href=\"#fnref:").append(num).append("\" class=\"footnote-backref\">&#8617;</a></li>\n");
+			}
+			html.append("</ol>\n</div>\n");
+        }
+		
         toc.append("</ul></div>\n");
         if (tocHasItems) {
             currentTOC = toc.toString();
@@ -1302,9 +1327,13 @@ class MarkdownConverter {
         // onlined text
         text = text.replaceAll("~~(.*?)~~", "<del>$1</del>");
 		// image
-        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\">");
+        text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\" loading=\"lazy\">");
         // link
         text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
+        // footnote references
+        text = text.replaceAll("\\[\\^(\\d+)\\]", "<sup id=\"fnref:$1\"><a href=\"#fn:$1\">$1</a></sup>");
+        // youtube shortcode
+        text = text.replaceAll("\\[youtube:(.*?)\\]", "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/$1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
         // oneline code
         text = text.replaceAll("`(.*?)`",
                 "<onelinecode>$1</onelinecode>");

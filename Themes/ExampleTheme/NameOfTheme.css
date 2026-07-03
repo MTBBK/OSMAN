@@ -1,1 +1,10 @@
+
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: var(--bg-earth, #121212);
+    --theme-text: var(--paper-text, #e0e0e0);
+    --theme-accent: var(--dull-gold, #bb86fc);
+    --theme-border: var(--stone-border, #333);
+    --theme-alt-bg: var(--clay-dark, #1e1e1e);
+}
 Temanın CSS Dosyası

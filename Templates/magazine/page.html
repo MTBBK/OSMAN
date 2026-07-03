@@ -1,0 +1,52 @@
+<style>
+    .magazine-article { max-width: 800px; margin: 0 auto; }
+    .article-header { text-align: center; margin-bottom: 50px; padding-bottom: 30px; border-bottom: 3px double var(--theme-border); }
+    .article-header h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 3.5em; margin: 0 0 20px; line-height: 1.1; font-weight: 900; }
+    
+    .article-meta-bar { display: flex; justify-content: center; gap: 20px; font-family: Arial, sans-serif; font-size: 0.85em; text-transform: uppercase; font-weight: 600; opacity: 0.7; }
+    
+    .article-hero-image { width: 100%; height: auto; max-height: 500px; object-fit: cover; margin-bottom: 40px; }
+
+    .article-body { font-size: 1.2em; line-height: 1.8; }
+    .article-body > p:first-of-type::first-letter { font-size: 4em; font-weight: 900; font-family: 'Playfair Display', serif; float: left; margin: 0.1em 0.1em 0 0; line-height: 0.8; color: var(--theme-accent); }
+    
+    .article-body h2 { font-family: 'Playfair Display', serif; font-size: 1.8em; margin-top: 1.5em; border-bottom: 1px solid var(--theme-border); padding-bottom: 10px; }
+
+    .article-footer { margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--theme-border); }
+    
+    .article-tags { text-align: center; margin-bottom: 40px; }
+    .article-tags span { display: inline-block; padding: 5px 12px; border: 1px solid var(--theme-border); font-family: Arial, sans-serif; font-size: 0.8em; text-transform: uppercase; margin: 0 5px; font-weight: bold; background-color: var(--theme-alt-bg); }
+
+    .post-pagination { display: flex; justify-content: space-between; font-family: 'Playfair Display', serif; font-size: 1.2em; font-style: italic; border-top: 3px double var(--theme-border); border-bottom: 1px solid var(--theme-border); padding: 20px 0; }
+</style>
+
+<article class="magazine-article">
+    <header class="article-header">
+        <h1>{{ POST_TITLE }}</h1>
+        <div class="article-meta-bar">
+            <span>By {{ POST_AUTHOR }}</span>
+            <span>&bull;</span>
+            <span>{{ POST_DATE }}</span>
+            <span>&bull;</span>
+            <span>{{ POST_READ_TIME }}</span>
+        </div>
+    </header>
+
+    <img class="article-hero-image" src="{{ FEATURED_IMAGE }}" alt="{{ POST_TITLE }}">
+
+    <div class="article-body">
+        {{ POST_TOC }}
+        {{ POST_CONTENT }}
+    </div>
+
+    <footer class="article-footer">
+        <div class="article-tags">
+            {{ POST_TAGS }}
+        </div>
+
+        <nav class="post-pagination">
+            <div class="prev-post">{{ PREVIOUS_POST }}</div>
+            <div class="next-post">{{ NEXT_POST }}</div>
+        </nav>
+    </footer>
+</article>

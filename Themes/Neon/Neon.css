@@ -3,15 +3,32 @@
    Karbon fiber, NOS neonları, asfalt karanlığı ve sokak yarışı estetiği.
    ============================================= */
 
+/* Injected Global Theme Variables for Templates */
+:root {
+    --theme-bg: var(--carbon-base);
+    --theme-text: var(--metallic-silver);
+    --theme-accent: var(--nos-cyan);
+    --theme-border: #333;
+    --theme-alt-bg: var(--carbon-weave);
+}
+
+
 /* ── 0. CSS VARIABLES (THEME TOKENS) ── */
 :root {
-    --street-black: #050505;       /* Gece asfaltı */
-    --carbon-base: #111111;        /* Karbon fiber zemin */
-    --carbon-weave: #1a1a1a;       /* Karbon fiber dokusu */
-    --nos-cyan: #00ffcc;           /* NOS neon mavisi/yeşili */
-    --brake-red: #ff003c;          /* Fren lambası / Redline kırmızısı */
-    --metallic-silver: #d1d5db;    /* Krom/Metalik metin */
-    --chrome-white: #ffffff;       /* Parlak beyaz başlıklar */
+    --street-black: #050505;
+    /* Gece asfaltı */
+    --carbon-base: #111111;
+    /* Karbon fiber zemin */
+    --carbon-weave: #1a1a1a;
+    /* Karbon fiber dokusu */
+    --nos-cyan: #00ffcc;
+    /* NOS neon mavisi/yeşili */
+    --brake-red: #ff003c;
+    /* Fren lambası / Redline kırmızısı */
+    --metallic-silver: #d1d5db;
+    /* Krom/Metalik metin */
+    --chrome-white: #ffffff;
+    /* Parlak beyaz başlıklar */
 }
 
 /* ── 1. GENEL AYARLAR ── */
@@ -23,8 +40,8 @@ body {
     margin: 0;
     padding: 0;
     /* Sentetik Karbon Fiber Dokusu */
-    background-image: 
-        linear-gradient(45deg, var(--carbon-weave) 25%, transparent 25%, transparent 75%, var(--carbon-weave) 75%, var(--carbon-weave)), 
+    background-image:
+        linear-gradient(45deg, var(--carbon-weave) 25%, transparent 25%, transparent 75%, var(--carbon-weave) 75%, var(--carbon-weave)),
         linear-gradient(45deg, var(--carbon-weave) 25%, transparent 25%, transparent 75%, var(--carbon-weave) 75%, var(--carbon-weave));
     background-size: 10px 10px;
     background-position: 0 0, 5px 5px;
@@ -43,7 +60,8 @@ body {
 a {
     color: var(--nos-cyan);
     text-decoration: none;
-    transition: all 0.15s cubic-bezier(0.4, 0, 1, 1); /* NOS gibi ani tepki */
+    transition: all 0.15s cubic-bezier(0.4, 0, 1, 1);
+    /* NOS gibi ani tepki */
 }
 
 a:hover {
@@ -95,13 +113,15 @@ img {
     font-size: 1.8rem;
     font-weight: 900;
     text-transform: uppercase;
-    font-style: italic; /* Hız hissi */
+    font-style: italic;
+    /* Hız hissi */
     letter-spacing: 2px;
-    text-shadow: 0px 4px 0px var(--brake-red); /* 3D Krom Hissi */
+    text-shadow: 0px 4px 0px var(--brake-red);
+    /* 3D Krom Hissi */
 }
 
 .site-title::before {
-    content: "10SEC // ";
+    content: "// ";
     color: var(--nos-cyan);
     font-size: 1rem;
     text-shadow: none;
@@ -166,7 +186,8 @@ img {
     border: 3px solid #333;
     border-radius: 10px;
     background-color: var(--street-black);
-    box-shadow: 0 0 15px rgba(255, 0, 60, 0.3); /* Fren lambası yansıması */
+    box-shadow: 0 0 15px rgba(255, 0, 60, 0.3);
+    /* Fren lambası yansıması */
 }
 
 .welcome-title {
@@ -186,8 +207,15 @@ img {
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 .welcome-intro {
@@ -244,7 +272,8 @@ img {
 
 /* Post Kartları (Garajdaki Araçlar) */
 .post-card {
-    background-color: rgba(10, 10, 10, 0.85); /* Cam filmi etkisi */
+    background-color: rgba(10, 10, 10, 0.85);
+    /* Cam filmi etkisi */
     padding: 24px;
     border: 1px solid #222;
     border-radius: 8px;
@@ -259,7 +288,9 @@ img {
 .post-card::after {
     content: '';
     position: absolute;
-    bottom: 0; left: 0; right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     height: 3px;
     background: var(--nos-cyan);
     box-shadow: 0 -5px 15px rgba(0, 255, 204, 0.0);
@@ -267,12 +298,14 @@ img {
 }
 
 .post-card:hover {
-    transform: translateX(10px) skewX(-2deg); /* Vites atıp ileri atılma hissi */
+    transform: translateX(10px) skewX(-2deg);
+    /* Vites atıp ileri atılma hissi */
     border-color: #444;
 }
 
 .post-card:hover::after {
-    box-shadow: 0 -10px 25px rgba(0, 255, 204, 0.6); /* Underglow'un yanması */
+    box-shadow: 0 -10px 25px rgba(0, 255, 204, 0.6);
+    /* Underglow'un yanması */
 }
 
 .post-card-title {
@@ -302,8 +335,9 @@ img {
     margin: 50px auto;
     padding: 48px;
     border: 1px solid #333;
-    border-top: 5px solid var(--nos-cyan); /* Kaput şeridi */
-    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    border-top: 5px solid var(--nos-cyan);
+    /* Kaput şeridi */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
 }
 
 .post-title {
@@ -323,8 +357,14 @@ img {
     margin-bottom: 10px;
 }
 
-.post-date   { color: var(--metallic-silver); }
-.post-author { color: var(--nos-cyan); font-weight: bold; }
+.post-date {
+    color: var(--metallic-silver);
+}
+
+.post-author {
+    color: var(--nos-cyan);
+    font-weight: bold;
+}
 
 .post-header {
     border-bottom: 1px solid #333;
@@ -339,7 +379,9 @@ img {
 }
 
 /* Makale içi başlıklar için metalik görünüm */
-.post-content h1, .post-content h2, .post-content h3 {
+.post-content h1,
+.post-content h2,
+.post-content h3 {
     color: var(--chrome-white);
     text-transform: uppercase;
     font-style: italic;
@@ -361,7 +403,8 @@ img {
     justify-content: space-between;
 }
 
-.prev-post, .next-post {
+.prev-post,
+.next-post {
     padding: 12px 24px;
     background-color: #111;
     border: 1px solid #333;
@@ -372,7 +415,8 @@ img {
     transition: all 0.2s ease;
 }
 
-.prev-post:hover, .next-post:hover {
+.prev-post:hover,
+.next-post:hover {
     background-color: var(--nos-cyan);
     color: #000;
     border-color: var(--nos-cyan);
@@ -389,16 +433,67 @@ img {
     margin-bottom: 30px;
     border: 1px solid rgba(128, 128, 128, 0.2);
 }
-.post-toc .toc-title { margin-top: 0; margin-bottom: 15px; font-size: 1.3em; }
-.post-toc .toc-list { list-style-type: none; padding-left: 0; margin: 0; }
-.post-toc li { margin-bottom: 8px; display: block; }
-.post-toc li a { text-decoration: none; opacity: 0.85; transition: opacity 0.2s; color: inherit; }
-.post-toc li a:hover { opacity: 1; text-decoration: underline; }
-.post-toc .toc-level-1 { margin-left: 0; font-weight: bold; }
-.post-toc .toc-level-2 { margin-left: 15px; }
-.post-toc .toc-level-3 { margin-left: 30px; }
-.post-toc .toc-level-4 { margin-left: 45px; }
-.post-toc .toc-level-5 { margin-left: 60px; }
 
-.post-card-categories { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
-.post-updated { font-size: 0.85rem; font-style: italic; opacity: 0.7; margin-bottom: 20px; }
+.post-toc .toc-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.post-toc .toc-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.post-toc li {
+    margin-bottom: 8px;
+    display: block;
+}
+
+.post-toc li a {
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    color: inherit;
+}
+
+.post-toc li a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.post-toc .toc-level-1 {
+    margin-left: 0;
+    font-weight: bold;
+}
+
+.post-toc .toc-level-2 {
+    margin-left: 15px;
+}
+
+.post-toc .toc-level-3 {
+    margin-left: 30px;
+}
+
+.post-toc .toc-level-4 {
+    margin-left: 45px;
+}
+
+.post-toc .toc-level-5 {
+    margin-left: 60px;
+}
+
+.post-card-categories {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.post-updated {
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
