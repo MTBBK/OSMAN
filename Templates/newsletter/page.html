@@ -1,0 +1,61 @@
+<style>
+    .author-bio {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        background: var(--theme-surface-alt, #f9f9f9);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .author-bio img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+
+    .author-bio strong {
+        display: block;
+        font-family: sans-serif;
+    }
+
+    .author-bio span {
+        font-size: 0.9em;
+        color: #555;
+    }
+</style>
+
+<article class="nl-post">
+    <header class="post-header" style="text-align: center; margin-bottom: 3rem;">
+        <div class="post-meta"
+            style="font-family: sans-serif; font-size: 0.85em; text-transform: uppercase; color: #777; margin-bottom: 1rem;">
+            <time>{{ POST_DATE }}</time> &bull;
+            <span>{{ POST_AUTHOR }}</span> &bull;
+            <span>{{ POST_READ_TIME }}</span>
+        </div>
+        <h1 class="post-title" style="font-size: 2.5rem; margin: 0 0 1.5rem 0; line-height: 1.2;">{{ POST_TITLE }}</h1>
+        <img src="{{ FEATURED_IMAGE }}" alt="Issue Cover" class="post-card-image" onerror="this.style.display='none'">
+    </header>
+
+    <section class="post-content" style="font-size: 1.1rem;">
+        {{ POST_TOC }}
+        {{ POST_CONTENT }}
+    </section>
+
+    <footer class="post-footer"
+        style="margin-top: 4rem; border-top: 3px double var(--theme-border, #ddd); padding-top: 2rem;">
+        <div class="post-tags"
+            style="font-family: sans-serif; font-size: 0.9em; margin-bottom: 2rem; text-align: center;">
+            <strong>Filed under:</strong> {{ POST_TAGS }}
+        </div>
+
+        {{ AUTHOR_CARD }}
+
+        <nav class="post-pagination"
+            style="display: flex; justify-content: space-between; font-family: sans-serif; font-size: 0.9em; text-transform: uppercase; font-weight: bold;">
+            <div class="prev-post" style="max-width: 45%;">{{ PREVIOUS_POST }}</div>
+            <div class="next-post" style="max-width: 45%; text-align: right;">{{ NEXT_POST }}</div>
+        </nav>
+    </footer>
+</article>

@@ -1,7 +1,35 @@
+<style>
+    .author-bio {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        background: var(--theme-surface-alt, #f9f9f9);
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+
+    .author-bio img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+    }
+
+    .author-bio strong {
+        display: block;
+        font-family: sans-serif;
+    }
+
+    .author-bio span {
+        font-size: 0.9em;
+        color: var(--theme-text, #555);
+    }
+</style>
+
 <article class="post">
-	<img src="{{ FEATURED_IMAGE }}" alt="Post Cover Image">
+    <img src="{{ FEATURED_IMAGE }}" alt="Post Cover Image">
     <header class="post-header">
-        <h1 class="post-title">{{ POST_TITLE }}	</h1>
+        <h1 class="post-title">{{ POST_TITLE }} </h1>
         <div class="post-meta">
             <time class="post-date">{{ POST_DATE }}</time>
             <span class="post-author">by {{ POST_AUTHOR }}</span>
@@ -10,12 +38,15 @@
     </header>
 
     <section class="post-content">
-	    {{ POST_TOC }}
+        {{ POST_TOC }}
         {{ POST_CONTENT }}
     </section>
 
     <footer class="post-footer">
         <div class="post-tags">{{ POST_TAGS }}</div>
+
+        {{ AUTHOR_CARD }}
+
         <nav class="post-pagination">
             <div class="prev-post">{{ PREVIOUS_POST }}</div>
             <div class="next-post">{{ NEXT_POST }}</div>

@@ -4,6 +4,11 @@ POST_TITLE: "OSMAN Builder - Showcase of Features"
 POST_DATE: "2026/06/27"
 POST_AUTHOR: "Büyük Albert"
 
+AUTHOR_CARD_ENABLE: "False"
+POST_AUTHOR_DESCRIPTION: "Merhaba ben Osman Guru"
+AUTHOR_CARD_IMAGE_ENABLE: "True"
+POST_AUTHOR_IMAGE: "./Images/osman2.png"
+
 POST_TAGS:
 - "Showcase"
 - "Features"

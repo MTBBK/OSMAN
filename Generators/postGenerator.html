@@ -45,7 +45,9 @@
         #POST_DATE,
         #TABLE_OF_CONTENT_TITLE,
         #FEATURED_IMAGE,
-        #FILENAME {
+        #FILENAME,
+        #POST_AUTHOR_IMAGE,
+        #POST_AUTHOR_DESCRIPTION {
             width: 300px;
         }
 
@@ -143,6 +145,10 @@
 
 <body>
     <h1>OSMAN Post Generator</h1>
+    <div style="margin-bottom: 20px;">
+        <label style="font-weight: bold; margin-right: 10px;">Load existing post (.md):</label>
+        <input type="file" id="fileUpload" accept=".md" onchange="loadFile(event)">
+    </div>
 
     <div class="section">
         <h3>Post Metadata</h3>
@@ -168,6 +174,19 @@
         <h2>Post Author <p>Author of the post</p>
         </h2>
         <input id="POST_AUTHOR" placeholder="Your Name">
+
+        <h2>Author Card <p>Enable the author bio card at the end of the post</p></h2>
+        <label class="type-switch" style="width:fit-content; margin-bottom: 10px;"><input type="checkbox" id="AUTHOR_CARD_ENABLE" checked> Enable  (True/False)</label>
+
+        <h2>Post Author Image <p>URL or path to your author image</p></h2>
+        <div class="row" style="margin-bottom: 5px;">
+            <input id="POST_AUTHOR_IMAGE" placeholder="osman2.png">
+            <label class="type-switch"><input type="checkbox" id="AUTHOR_IMAGE_IS_URL"> Is URL?</label>
+        </div>
+        <label class="type-switch" style="width:fit-content; margin-bottom: 10px;"><input type="checkbox" id="AUTHOR_CARD_IMAGE_ENABLE" checked> Show Author Image (True/False)</label>
+
+        <h2>Post Author Description <p>Short bio for the author</p></h2>
+        <input id="POST_AUTHOR_DESCRIPTION" placeholder="Merhaba ben Osman Guru">
     </div>
 
     <div class="section">
@@ -228,6 +247,90 @@
             container.appendChild(div);
         };
 
+        const loadFile = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+
+                const getOpt = (key) => {
+                    const match = text.match(new RegExp(`${key}:\\s*"([^"]*)"`));
+                    return match ? match[1] : "";
+                };
+
+                document.getElementById('POST_TITLE').value = getOpt('POST_TITLE');
+                document.getElementById('POST_DATE').value = getOpt('POST_DATE');
+                document.getElementById('POST_AUTHOR').value = getOpt('POST_AUTHOR');
+
+                const fImage = getOpt('FEATURED_IMAGE');
+                if (fImage) {
+                    if (fImage.startsWith('./Images/')) {
+                        document.getElementById('FEATURED_IMAGE').value = fImage.replace('./Images/', '');
+                        document.getElementById('IMAGE_IS_URL').checked = false;
+                    } else {
+                        document.getElementById('FEATURED_IMAGE').value = fImage;
+                        document.getElementById('IMAGE_IS_URL').checked = true;
+                    }
+                }
+
+                const aImage = getOpt('POST_AUTHOR_IMAGE');
+                if (aImage) {
+                    if (aImage.startsWith('./Images/')) {
+                        document.getElementById('POST_AUTHOR_IMAGE').value = aImage.replace('./Images/', '');
+                        document.getElementById('AUTHOR_IMAGE_IS_URL').checked = false;
+                    } else {
+                        document.getElementById('POST_AUTHOR_IMAGE').value = aImage;
+                        document.getElementById('AUTHOR_IMAGE_IS_URL').checked = true;
+                    }
+                }
+
+                document.getElementById('POST_AUTHOR_DESCRIPTION').value = getOpt('POST_AUTHOR_DESCRIPTION');
+                document.getElementById('PAGE_SUMMARY').value = getOpt('PAGE_SUMMARY');
+                document.getElementById('OTOMATIC_SUMMARY_ENABLE').checked = getOpt('OTOMATIC_SUMMARY_ENABLE').toLowerCase() === "true";
+
+                const tocOpt = getOpt('TABLE_OF_CONTENT_ENABLE');
+                document.getElementById('TABLE_OF_CONTENT_ENABLE').checked = tocOpt !== "" ? tocOpt.toLowerCase() !== "false" : true;
+
+                const tocTitleOpt = getOpt('TABLE_OF_CONTENT_TITLE');
+                if (tocTitleOpt) document.getElementById('TABLE_OF_CONTENT_TITLE').value = tocTitleOpt;
+
+                const authorCardOpt = getOpt('AUTHOR_CARD_ENABLE');
+                document.getElementById('AUTHOR_CARD_ENABLE').checked = authorCardOpt !== "" ? authorCardOpt.toLowerCase() !== "false" : true;
+
+                const authorCardImgOpt = getOpt('AUTHOR_CARD_IMAGE_ENABLE');
+                document.getElementById('AUTHOR_CARD_IMAGE_ENABLE').checked = authorCardImgOpt !== "" ? authorCardImgOpt.toLowerCase() !== "false" : true;
+
+                const tagsMatch = text.match(/POST_TAGS:\s*([\s\S]*?)(?:^[A-Z_]+:|$)/m);
+                const tagsContainer = document.getElementById('POST_TAGS');
+                tagsContainer.innerHTML = '';
+                if (tagsMatch && tagsMatch[1]) {
+                    const lines = tagsMatch[1].split('\n');
+                    let added = false;
+                    lines.forEach(line => {
+                        const m = line.match(/^\s*-\s*"([^"]*)"/);
+                        if (m && m[1]) {
+                            addArrayRow('POST_TAGS', m[1], 'Tag');
+                            added = true;
+                        }
+                    });
+                    if (!added) addArrayRow('POST_TAGS', '', 'Tag');
+                } else {
+                    addArrayRow('POST_TAGS', '', 'Tag');
+                }
+
+                const contentIndex = text.indexOf('POST_CONTENT:\n');
+                if (contentIndex !== -1) {
+                    document.getElementById('POST_CONTENT').value = text.substring(contentIndex + 'POST_CONTENT:\n'.length);
+                } else {
+                    document.getElementById('POST_CONTENT').value = '';
+                }
+
+                document.getElementById('FILENAME').value = file.name.replace(/\.md$/, '');
+            };
+            reader.readAsText(file);
+        };
+
         const processPath = (text, isUrl) => {
             if (!text) return "";
             if (isUrl) return text;
@@ -259,9 +362,15 @@
             const isImgUrl = document.getElementById("IMAGE_IS_URL").checked;
             const imgVal = processPath(document.getElementById("FEATURED_IMAGE").value, isImgUrl);
 
+            const isAuthorImgUrl = document.getElementById("AUTHOR_IMAGE_IS_URL").checked;
+            const authorImgVal = processPath(document.getElementById("POST_AUTHOR_IMAGE").value, isAuthorImgUrl);
+
             const title = document.getElementById("POST_TITLE").value;
             const date = document.getElementById("POST_DATE").value;
             const author = document.getElementById("POST_AUTHOR").value;
+            const authorDesc = document.getElementById("POST_AUTHOR_DESCRIPTION").value;
+            const authorCardEnable = document.getElementById("AUTHOR_CARD_ENABLE").checked ? "True" : "False";
+            const authorCardImgEnable = document.getElementById("AUTHOR_CARD_IMAGE_ENABLE").checked ? "True" : "False";
             const tags = getArrayData("POST_TAGS");
 
             const autoSummary = document.getElementById("OTOMATIC_SUMMARY_ENABLE").checked ? "True" : "False";
@@ -275,7 +384,12 @@
             let mdText = `FEATURED_IMAGE: "${imgVal}"\n`;
             mdText += `POST_TITLE: "${title}"\n`;
             mdText += `POST_DATE: "${date}"\n`;
-            mdText += `POST_AUTHOR: "${author}"\n`;
+            mdText += `POST_AUTHOR: "${author}"\n\n`;
+
+            mdText += `AUTHOR_CARD_ENABLE: "${authorCardEnable}"\n`;
+            if (authorDesc) mdText += `POST_AUTHOR_DESCRIPTION: "${authorDesc}"\n`;
+            mdText += `AUTHOR_CARD_IMAGE_ENABLE: "${authorCardImgEnable}"\n`;
+            if (authorImgVal) mdText += `POST_AUTHOR_IMAGE: "${authorImgVal}"\n\n`;
 
             if (tags) {
                 mdText += `POST_TAGS:\n${tags}`;

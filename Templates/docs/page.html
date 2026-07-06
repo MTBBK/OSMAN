@@ -1,19 +1,102 @@
 <style>
-    .docs-article { max-width: 800px; }
-    .docs-header { margin-bottom: 32px; border-bottom: 1px solid var(--theme-border); padding-bottom: 24px; }
-    .docs-title { font-size: 2.5em; font-weight: 600; margin: 0 0 16px 0; letter-spacing: -0.5px; }
+    .docs-article {
+        max-width: 800px;
+    }
 
-    .docs-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.9em; }
-    .docs-meta div { display: flex; align-items: center; }
+    .docs-header {
+        margin-bottom: 32px;
+        border-bottom: 1px solid var(--theme-border);
+        padding-bottom: 24px;
+    }
 
-    .docs-content { font-size: 16px; line-height: 1.5; word-wrap: break-word; }
-    .docs-content h1, .docs-content h2, .docs-content h3, .docs-content h4 { font-weight: 600; margin-top: 24px; margin-bottom: 16px; line-height: 1.25; border-bottom: 1px solid var(--theme-border); padding-bottom: 0.3em; }
-    .docs-content h3, .docs-content h4 { border-bottom: none; padding-bottom: 0; }
+    .docs-title {
+        font-size: 2.5em;
+        font-weight: 600;
+        margin: 0 0 16px 0;
+        letter-spacing: -0.5px;
+    }
 
-    .docs-footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--theme-border); }
-    .docs-tags { margin-bottom: 24px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .docs-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        font-size: 0.9em;
+    }
 
-    .post-pagination { display: flex; justify-content: space-between; font-weight: 500; font-size: 14px; }
+    .docs-meta div {
+        display: flex;
+        align-items: center;
+    }
+
+    .docs-content {
+        font-size: 16px;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+
+    .docs-content h1,
+    .docs-content h2,
+    .docs-content h3,
+    .docs-content h4 {
+        font-weight: 600;
+        margin-top: 24px;
+        margin-bottom: 16px;
+        line-height: 1.25;
+        border-bottom: 1px solid var(--theme-border);
+        padding-bottom: 0.3em;
+    }
+
+    .docs-content h3,
+    .docs-content h4 {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .docs-footer {
+        margin-top: 64px;
+        padding-top: 24px;
+        border-top: 1px solid var(--theme-border);
+    }
+
+    .docs-tags {
+        margin-bottom: 24px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .post-pagination {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .author-bio {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        padding: 1rem;
+        background: var(--theme-alt-bg, #f5f5f5);
+        border-radius: 4px;
+        margin-bottom: 2rem;
+    }
+
+    .author-bio img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .author-bio strong {
+        display: block;
+        font-weight: 500;
+    }
+
+    .author-bio span {
+        font-size: 0.85em;
+        opacity: 0.8;
+    }
 </style>
 
 <article class="docs-article">
@@ -35,6 +118,8 @@
         <div class="docs-tags">
             {{ POST_TAGS }}
         </div>
+
+        {{ AUTHOR_CARD }}
 
         <nav class="post-pagination">
             <div class="prev-post">{{ PREVIOUS_POST }}</div>

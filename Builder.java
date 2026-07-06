@@ -233,6 +233,7 @@ public class Builder {
             pages[i] = new StringBuilder(base);
                         
             String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
+            // SEO_TAGS template
 			String seoTags = "\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
                              "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n" +
                              "\t<meta property=\"og:type\" content=\"article\">\n";
@@ -242,6 +243,27 @@ public class Builder {
             stringEditor("{{ SEO_META }}", seoTags, pages[i]);
           
             stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
+        
+            if (isEnabled("AUTHOR_CARD_ENABLE", textContent[i][1])){
+				// AUTHOR_CARD template
+				String authorCardTemplate = "<div class=\"author-bio\">\n" + //
+					"{{ POST_AUTHOR_IMAGE }}" + //
+					"\t<div>\n" + //
+					"\t\t<strong>" + getOption("POST_AUTHOR", textContent[i][1]) + "</strong>\n" + //
+					"\t\t<span>"+ getOption("POST_AUTHOR_DESCRIPTION", textContent[i][1]) + "</span>\n" + //
+					"\t</div>\n" + //
+					"</div>";
+
+				stringEditor("{{ AUTHOR_CARD }}", authorCardTemplate, pages[i]);
+				
+				if(isEnabled("AUTHOR_CARD_IMAGE_ENABLE", textContent[i][1])){
+					stringEditor("{{ POST_AUTHOR_IMAGE }}", "\t<img src=\"" + getOption("POST_AUTHOR_IMAGE", textContent[i][1]) + "\" alt=\"Author Avatar\">\n", pages[i]);
+				}else{
+					stringEditor("{{ POST_AUTHOR_IMAGE }}", "", pages[i]);
+				}
+			}else{
+				stringEditor("{{ AUTHOR_CARD }}", "", pages[i]);
+			}
 
             if (0 != i) {
                 // <a href="ElHamraSarayiGezisi01.html">Previous Post</a>
@@ -488,7 +510,7 @@ public class Builder {
         if (option.equals("true") || option.equals("1") ||  option.equals("evet")){
 			isEnable = true;
         }
-        Builder.log("isEnabled", "Returned statue of" + configOption);
+        Builder.log("isEnabled", "Returned statue of " + configOption);
 		return isEnable;
 	}
 	
@@ -810,7 +832,6 @@ class PostContentStrategy extends Strategy {
             Builder.log("PostContentStrategy", "End.\n");
             return;
         } else {
-
             // {{ POST_READ_TIME }} handling part.
             Builder.log("PostContentStrategy", "Starting to calculate \"POST_READ_TIME\".");
             String cleanText = MarkdownConverter.convert(value).replaceAll("<[^>]*>", "").trim();
@@ -832,8 +853,8 @@ class PostContentStrategy extends Strategy {
             Builder.stringEditor(option, MarkdownConverter.convert(value), file);
             
             boolean TOCEnable = Builder.isEnabled("TABLE_OF_CONTENT_ENABLE", config);
-            
-            if (TOCEnable) {
+			
+            if (TOCEnable){
                 Builder.stringEditor("{{ POST_TOC }}", MarkdownConverter.currentTOC, file);
                 Builder.stringEditor("{{ TABLE_OF_CONTENT_TITLE }}", Builder.getOption("TABLE_OF_CONTENT_TITLE", config), file);
                 Builder.log("PostContentStrategy", "Successfully added \"POST_TOC\".");

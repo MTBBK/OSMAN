@@ -444,8 +444,12 @@
         }
     </style>
 </head>
+<body>
 <h1>OSMAN Config Generator</h1>
-
+<div style="margin-bottom: 20px; margin-left: 20px;">
+    <label style="font-weight: bold; margin-right: 10px;">Load existing config (.osman):</label>
+    <input type="file" id="fileUpload" accept=".osman" onchange="loadFile(event)">
+</div>
 <div class="section">
     <h3>Base Settings</h3>
     <h2>Template Name: <p>Selected Template Name (You can find more on our website or Templates folder)</p>
@@ -477,8 +481,6 @@
 </div>
 
 <div class="insidebox">
-
-    <body>
         <header class="header container">
             <div class="site-branding">
                 <a href="/" class="site-title">
@@ -585,6 +587,103 @@
               <button class="remove-btn" onclick="this.parentElement.remove()">X</button>
           `;
         container.appendChild(div);
+    };
+
+    const loadFile = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const text = e.target.result;
+            
+            const getOpt = (key) => {
+                const match = text.match(new RegExp(`^${key}:\\s*"([^"]*)"`, 'm'));
+                return match ? match[1] : "";
+            };
+            
+            document.getElementById('TEMPLATE_NAME').value = getOpt('TEMPLATE_NAME');
+            document.getElementById('baseURL').value = getOpt('baseURL');
+            document.getElementById('SITE_LANGUAGE').value = getOpt('SITE_LANGUAGE');
+            document.getElementById('THEME_NAME').value = getOpt('THEME_NAME');
+            document.getElementById('SITE_TITLE').value = getOpt('SITE_TITLE');
+            document.getElementById('SITE_DESCRIPTION').value = getOpt('SITE_DESCRIPTION');
+            document.getElementById('AUTHOR_NAME').value = getOpt('AUTHOR_NAME');
+            document.getElementById('COPYRIGHT_YEAR').value = getOpt('COPYRIGHT_YEAR');
+            document.getElementById('WELCOME_TITLE').value = getOpt('WELCOME_TITLE');
+            document.getElementById('INTRO_ABOUT_ME').value = getOpt('INTRO_ABOUT_ME');
+            
+            const faviconUrl = getOpt('FAVICON_URL');
+            if (faviconUrl) {
+                if (faviconUrl.startsWith('./Images/')) {
+                    document.getElementById('FAVICON_URL').value = faviconUrl.replace('./Images/', '');
+                    document.getElementById('FAVICON_IS_URL').checked = false;
+                } else {
+                    document.getElementById('FAVICON_URL').value = faviconUrl;
+                    document.getElementById('FAVICON_IS_URL').checked = true;
+                }
+            }
+            
+            const avatarUrl = getOpt('AUTHOR_AVATAR_URL');
+            if (avatarUrl) {
+                if (avatarUrl.startsWith('./Images/')) {
+                    document.getElementById('AUTHOR_AVATAR_URL').value = avatarUrl.replace('./Images/', '');
+                    document.getElementById('AVATAR_IS_URL').checked = false;
+                } else {
+                    document.getElementById('AUTHOR_AVATAR_URL').value = avatarUrl;
+                    document.getElementById('AVATAR_IS_URL').checked = true;
+                }
+            }
+            
+            document.getElementById('ANALYTIC_ENABLE').checked = getOpt('ANALYTIC_ENABLE').toLowerCase() === "true";
+            const analyticScriptMatch = text.match(/^ANALYTIC_SCRIPT:\s*"(.*)"$/m);
+            if (analyticScriptMatch) {
+                document.getElementById('ANALYTIC_SCRIPT').value = analyticScriptMatch[1].replace(/\\"/g, '"');
+            }
+            
+            const parseArray = (key, containerId, hasToggle) => {
+                const regex = new RegExp(`${key}:\\s*\\n([\\s\\S]*?)(?:^[A-Z_]+:|$)`, 'm');
+                const match = text.match(regex);
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                if (match && match[1]) {
+                    const lines = match[1].split('\n');
+                    let added = false;
+                    lines.forEach(line => {
+                        const m = line.match(/^\s*-\s*"([^"]*)",\s*"([^"]*)"/);
+                        if (m) {
+                            let val1 = m[1];
+                            let val2 = m[2];
+                            let isUrl = false;
+                            if (hasToggle) {
+                                if (!val1.startsWith('./Images/') && val1.includes('://')) {
+                                    isUrl = true;
+                                } else if (val1.startsWith('./Images/')) {
+                                    val1 = val1.replace('./Images/', '');
+                                }
+                            }
+                            addRow(containerId, hasToggle, val1, val2);
+                            if (hasToggle && isUrl) {
+                                const rows = container.querySelectorAll(".row");
+                                const lastRow = rows[rows.length - 1];
+                                if (lastRow) {
+                                    const toggle = lastRow.querySelector(".is-url");
+                                    if (toggle) toggle.checked = true;
+                                }
+                            }
+                            added = true;
+                        }
+                    });
+                    if (!added) addRow(containerId, hasToggle, '', '');
+                } else {
+                    addRow(containerId, hasToggle, '', '');
+                }
+            };
+
+            parseArray('NAV_BAR_LINKS', 'NAV_BAR_LINKS', false);
+            parseArray('SOCIAL_LINKS', 'SOCIAL_LINKS', false);
+            parseArray('SOCIAL_ICONS', 'SOCIAL_ICONS', true);
+        };
+        reader.readAsText(file);
     };
 
     const processPath = (text, isUrl) => {

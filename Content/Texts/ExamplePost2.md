@@ -2,6 +2,12 @@ FEATURED_IMAGE: "https://freepnglogo.com/images/all_img/gmail-icon-2013-2020-2ed
 POST_TITLE: "Examp Post"
 POST_DATE: "2026/02/27"
 POST_AUTHOR: "Büyük Albert"
+
+AUTHOR_CARD_ENABLE: "True"
+POST_AUTHOR_DESCRIPTION: "Merhaba ben Osman Guru"
+AUTHOR_CARD_IMAGE_ENABLE: "True"
+POST_AUTHOR_IMAGE: "./Images/osman2.png"
+
 POST_TAGS:
 - "Features"
 - "Showcase"

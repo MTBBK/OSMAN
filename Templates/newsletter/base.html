@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="{{ SITE_LANGUAGE }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ SITE_DESCRIPTION }}">
+{{ SEO_META }}
+    <title>{{ SITE_TITLE }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ FAVICON_URL }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body { font-family: serif; line-height: 1.8; margin: 0; padding: 0; background-color: var(--theme-bg, #fcfcfc); color: var(--theme-text, #333); }
+        .nl-container { max-width: 700px; margin: 0 auto; padding: 2rem; background-color: var(--theme-surface, #fff); box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 100vh;}
+        .nl-header { text-align: center; border-bottom: 3px double var(--theme-border, #ddd); padding-bottom: 2rem; margin-bottom: 2rem; }
+        .nl-header h1 { margin: 0; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 2px; }
+        .nl-nav { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; font-family: sans-serif; font-size: 0.9rem; text-transform: uppercase; }
+        .nl-nav a { text-decoration: none; font-weight: bold; }
+        .nl-footer { text-align: center; border-top: 1px solid var(--theme-border, #ddd); padding-top: 2rem; margin-top: 4rem; font-size: 0.8em; font-family: sans-serif; }
+        .social-links { margin-bottom: 1rem; }
+        
+        /* Markdown Converter defaults */
+        .code-block {position:relative; margin:1em 0; font-family: monospace;}
+        .copy-btn {position:absolute; top:8px; right:8px; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px; z-index:10;}
+        pre {padding:15px; border-radius:4px; overflow-x:auto; background: #f5f5f5; border: 1px solid #ddd;}
+        blockquote {border-left:4px solid var(--theme-border, #333); padding-left:15px; margin-left:0; font-style: italic;}
+        .post-table {overflow-x:auto;}
+        table {width:100%; border-collapse:collapse; margin-bottom:1rem;}
+        th, td {border:1px solid var(--theme-border, #ccc); padding:8px;}
+        .task-list {list-style-type:none; padding-left:0;}
+        li {display:flex; align-items:center; gap:0.5rem;}
+        onelinecode {padding:2px 4px; border-radius:4px; background: #f0f0f0;}
+        .post-card-image { width: 100%; height: auto; object-fit: cover; margin-bottom: 15px; }
+        
+        /* Specifics */
+        .post-card { padding: 1.5rem 0; border-bottom: 1px solid var(--theme-border, #eee); }
+        .post-card-title { font-size: 1.5rem; font-weight: bold; text-decoration: none; color: inherit; display: block; margin-bottom: 0.5rem; }
+        .post-card-excerpt { margin: 0 0 1rem 0; color: #555; }
+        .post-card-meta { font-size: 0.85rem; color: #777; text-transform: uppercase; font-family: sans-serif; }
+    </style>
+    <link rel="stylesheet" href="{{ THEME_NAME }}">
+</head>
+
+<body>
+    <div class="nl-container">
+        <header class="nl-header">
+            <div class="site-branding">
+                <h1><a href="/" style="text-decoration: none; color: inherit;">{{ SITE_TITLE }}</a></h1>
+                <p style="font-family: sans-serif; color: #666; margin-top: 0.5rem;">{{ SITE_DESCRIPTION }}</p>
+            </div>
+            <nav class="nl-nav">
+                <a href="./">Latest Issues</a>
+                {{ NAV_BAR_LINKS }}
+            </nav>
+        </header>
+
+        <main class="content">
+            {{ CONTENT }}
+        </main>
+
+        <footer class="nl-footer">
+            <div class="social-links">
+                {{ SOCIAL_LINKS }}
+            </div>
+            <div class="footer-copy">
+                <p>&copy; {{ COPYRIGHT_YEAR }} {{ AUTHOR_NAME }}</p>
+                <p>Published with <a href="https://osman.guru">OSMAN Builder</a></p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
