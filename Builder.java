@@ -122,28 +122,7 @@ public class Builder {
         }
 
         // Sort textContent based on POST_DATEs.
-        Arrays.sort(textContent, new Comparator<String[]>() {
-            @Override
-            public int compare(String[] o1, String[] o2) {
-                int first1Quote = o1[1].indexOf('"', o1[1].indexOf("POST_DATE")) + 1;
-                String[] date1 = o1[1].substring(first1Quote, o1[1].indexOf('"', first1Quote)).split("/");
-                int first2Quote = o2[1].indexOf('"', o2[1].indexOf("POST_DATE")) + 1;
-                String[] date2 = o2[1].substring(first2Quote, o2[1].indexOf('"', first2Quote)).split("/");
-                int comp = -1;
-                if (3 != date1.length) {
-                    return -1;
-                } else if (3 != date2.length) {
-                    return 1;
-                }
-                for (int i = 2; i > -1; i--) {
-                    comp = date1[i].compareTo(date2[i]);
-                    if (0 != comp) {
-                        return comp;
-                    }
-                }
-                return comp;
-            }
-        });
+        sortTextContent(textContent);
 
         // get pages' dates
         String[] pageDates = getOptionArray("POST_DATE", textContent);
@@ -161,45 +140,9 @@ public class Builder {
         String[] pageSummary = new String[textContent.length];
         getPageSummary(pageSummary, textContent);
 
-        // POST_LIST template
-        String postListTemplate = "<div class=\"post-card\">\n" + //
-                "                    {{ POST_IMAGE_HTML }}\n" + //
-                "                    <a href=\"{{ POST_PATH }}\" class=\"post-card-title\">{{ POST_TITLE }}</a>\n" + //
-                "                    <p class=\"post-card-excerpt\">{{ POST_SUMMARY }}</p>\n" + //
-                "                    <div class=\"post-card-meta\">{{ POST_DATE }}, {{ POST_AUTHOR }}</div>\n" + //
-                "                    <div class=\"post-card-categories\">{{ POST_TAGS }}</div>\n" + //
-                "                </div>";
-
         // POST_LIST maker start
         StringBuilder[] postLists = new StringBuilder[textContent.length];
-        for (int i = 0; i < postLists.length; i++) {
-            postLists[i] = new StringBuilder(postListTemplate);
-            String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
-            stringEditor("{{ POST_PATH }}", fileName + ".html", postLists[i]);
-            stringEditor("{{ POST_TITLE }}", pageTitles[i], postLists[i]);
-            stringEditor("{{ POST_DATE }}", pageDates[i], postLists[i]);
-            stringEditor("{{ POST_SUMMARY }}", pageSummary[i], postLists[i]);
-            stringEditor("{{ POST_AUTHOR }}", pageAuthors[i], postLists[i]);
-
-            String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
-            if (isEnabled("SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE", textContent[i][1]) && !"-1".equals(imgUrl)) {
-                String imgHtml = "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">";
-                stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
-            } else {
-                stringEditor("{{ POST_IMAGE_HTML }}", "", postLists[i]);
-            }
-
-            StringBuilder pTags = new StringBuilder();
-            for (int j = 0; j < pageTags[i].length; j++) {
-                String safeTag = pageTags[i][j].replaceAll("[^a-zA-Z0-9]", "_");
-                pTags.append("<a href=\"tag_").append(safeTag).append(".html\">").append(pageTags[i][j]).append("</a>");
-                if (j != pageTags[i].length - 1) {
-                    pTags.append(", ");
-                }
-            }
-
-            stringEditor("{{ POST_TAGS }}", pTags.toString(), postLists[i]);
-        }
+        makePostList(postLists, textContent, pageTitles, pageDates, pageSummary, pageAuthors, pageTags);
         // POST_LIST maker end
 
         // handling page.htmls begin
@@ -256,6 +199,31 @@ public class Builder {
         Builder.log("buildSite", "Successfully made \"robots.txt\".");
 
         Builder.log("buildFile", "End.\n");
+    }
+
+    static void sortTextContent(String[][] textContent) {
+        Arrays.sort(textContent, new Comparator<String[]>() {
+            @Override
+            public int compare(String[] o1, String[] o2) {
+                int first1Quote = o1[1].indexOf('"', o1[1].indexOf("POST_DATE")) + 1;
+                String[] date1 = o1[1].substring(first1Quote, o1[1].indexOf('"', first1Quote)).split("/");
+                int first2Quote = o2[1].indexOf('"', o2[1].indexOf("POST_DATE")) + 1;
+                String[] date2 = o2[1].substring(first2Quote, o2[1].indexOf('"', first2Quote)).split("/");
+                int comp = -1;
+                if (3 != date1.length) {
+                    return -1;
+                } else if (3 != date2.length) {
+                    return 1;
+                }
+                for (int i = 2; i > -1; i--) {
+                    comp = date1[i].compareTo(date2[i]);
+                    if (0 != comp) {
+                        return comp;
+                    }
+                }
+                return comp;
+            }
+        });
     }
 
     static void generateSitemap(String baseURL, String[][] textContent) throws IOException {
@@ -347,7 +315,8 @@ public class Builder {
         stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
     }
 
-    static StringBuilder addTagCloud(String[][] pageTags, StringBuilder indexPage, ArrayList<String> existingTags) throws Exception {
+    static StringBuilder addTagCloud(String[][] pageTags, StringBuilder indexPage, ArrayList<String> existingTags)
+            throws Exception {
         StringBuilder tagCloud = new StringBuilder();
         for (int i = 0; i < pageTags.length; i++) {
             for (int j = 0; j < pageTags[i].length; j++) {
@@ -373,6 +342,47 @@ public class Builder {
         }
         stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), indexPage);
         return tagCloud;
+    }
+
+    static void makePostList(StringBuilder[] postLists, String[][] textContent, String[] pageTitles, String[] pageDates,
+            String[] pageSummary, String[] pageAuthors, String[][] pageTags) throws Exception {
+        String postListTemplate = "<div class=\"post-card\">\n" + //
+                "                    {{ POST_IMAGE_HTML }}\n" + //
+                "                    <a href=\"{{ POST_PATH }}\" class=\"post-card-title\">{{ POST_TITLE }}</a>\n" + //
+                "                    <p class=\"post-card-excerpt\">{{ POST_SUMMARY }}</p>\n" + //
+                "                    <div class=\"post-card-meta\">{{ POST_DATE }}, {{ POST_AUTHOR }}</div>\n" + //
+                "                    <div class=\"post-card-categories\">{{ POST_TAGS }}</div>\n" + //
+                "                </div>";
+
+        // POST_LIST maker start
+        for (int i = 0; i < postLists.length; i++) {
+            postLists[i] = new StringBuilder(postListTemplate);
+            String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            stringEditor("{{ POST_PATH }}", fileName + ".html", postLists[i]);
+            stringEditor("{{ POST_TITLE }}", pageTitles[i], postLists[i]);
+            stringEditor("{{ POST_DATE }}", pageDates[i], postLists[i]);
+            stringEditor("{{ POST_SUMMARY }}", pageSummary[i], postLists[i]);
+            stringEditor("{{ POST_AUTHOR }}", pageAuthors[i], postLists[i]);
+
+            String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
+            if (isEnabled("SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE", textContent[i][1]) && !"-1".equals(imgUrl)) {
+                String imgHtml = "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">";
+                stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
+            } else {
+                stringEditor("{{ POST_IMAGE_HTML }}", "", postLists[i]);
+            }
+
+            StringBuilder pTags = new StringBuilder();
+            for (int j = 0; j < pageTags[i].length; j++) {
+                String safeTag = pageTags[i][j].replaceAll("[^a-zA-Z0-9]", "_");
+                pTags.append("<a href=\"tag_").append(safeTag).append(".html\">").append(pageTags[i][j]).append("</a>");
+                if (j != pageTags[i].length - 1) {
+                    pTags.append(", ");
+                }
+            }
+
+            stringEditor("{{ POST_TAGS }}", pTags.toString(), postLists[i]);
+        }
     }
 
     static void makeTagPages(ArrayList<String> existingTags, StringBuilder base, String tagsPage, String[][] pageTags,
