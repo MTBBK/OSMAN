@@ -19,14 +19,14 @@ import java.util.stream.Stream;
 public class Builder {
     private static Strategy strategy;
 
-	public static void log (String functionName, String message) {
-		System.out.println("\n" + functionName + ": " + message);
-	}
-	
-	public static void log (String message) {
-		System.out.println("\n" + message);
-	}
-	
+    public static void log(String functionName, String message) {
+        System.out.println("\n" + functionName + ": " + message);
+    }
+
+    public static void log(String message) {
+        System.out.println("\n" + message);
+    }
+
     public static void main(String args[]) {
         long startTime = System.currentTimeMillis();
         try {
@@ -37,7 +37,7 @@ public class Builder {
             writeFile("ErrorLogs/log.txt", null);
             PrintStream out = new PrintStream(new FileOutputStream("ErrorLogs/log.txt"));
             System.setOut(out);
-            Builder.log("main","Begin.");
+            Builder.log("main", "Begin.");
 
             // print to confirm that log functions properly
             System.err.println("Error's Stack Trace Will Be Below:");
@@ -52,9 +52,9 @@ public class Builder {
                 Files.deleteIfExists(path);
             }
             // https://stackoverflow.com/questions/35988192/java-nio-most-concise-recursive-directory-delete
-			
-			// recreate Output folder after cleaning
-			createFolder("Output/");
+
+            // recreate Output folder after cleaning
+            createFolder("Output/");
 
             // begin site building process
             buildSite();
@@ -63,25 +63,25 @@ public class Builder {
             e.printStackTrace();
         }
         Builder.log("main", "Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
-		Builder.log("main", "End.");
-    }    
+        Builder.log("main", "End.");
+    }
 
     static void buildSite() throws Exception {
         Builder.log("buildFile", "Begin.");
 
         String config = readFile("config.osman");
         Builder.log("buildSite", "Successfully read the config.");
-        
+
         String baseURL = getOption("baseURL", config).replaceAll("\"", "").trim();
         String siteTitle = getOption("SITE_TITLE", config).replaceAll("\"", "").trim();
         String siteDescription = getOption("SITE_DESCRIPTION", config).replaceAll("\"", "").trim();
 
         // Choose Template according to Config
-		String templateName = getOption("TEMPLATE_NAME", config);
+        String templateName = getOption("TEMPLATE_NAME", config);
         String templatePath = "Templates/" + templateName + "/";
-		if (Files.notExists(Paths.get(templatePath + "base.html"))) {
-			throw new FileNotFoundException("Selected template could not be found in Templates folder.");
-		}
+        if (Files.notExists(Paths.get(templatePath + "base.html"))) {
+            throw new FileNotFoundException("Selected template could not be found in Templates folder.");
+        }
 
         // [i][0] - file name, [i][1] file content
         // String[][] contents = parseContentFiles("/Content/Texts/");
@@ -104,7 +104,7 @@ public class Builder {
             if (templates[i][0].equals("base.html")) {
                 base = makeFile(templates[i], config);
                 baseSEOMetaModification("ANALYTIC_SCRIPT", "ANALYTIC_ENABLE", config, base);
-				stringEditor("{{ SEO_META }}", "{{ SEO_META }}\n\t" + getAssets("Content/Assets"), base);
+                stringEditor("{{ SEO_META }}", "{{ SEO_META }}\n\t" + getAssets("Content/Assets"), base);
                 Builder.log("buildSite", "Successfully run makeFile on \"" + templates[i][0] + "\".");
             }
             if (templates[i][0].equals("index.html")) {
@@ -148,44 +148,20 @@ public class Builder {
         // get pages' dates
         String[] pageDates = getOptionArray("POST_DATE", textContent);
 
-		String[] pageAuthors = getOptionArray("POST_AUTHOR", textContent);
-		
+        String[] pageAuthors = getOptionArray("POST_AUTHOR", textContent);
+
         // get pages' titles
         String[] pageTitles = getOptionArray("POST_TITLE", textContent);
 
         // --------------------------------------------------------------------------------------------
         // get pages' tags
         String[][] pageTags = new String[textContent.length][];
-		getPageTags(pageTags, textContent);
+        getPageTags(pageTags, textContent);
 
         // --------------------------------------------------------------------------------------------
         // get pages' summaries begin
         String[] pageSummary = new String[textContent.length];
-        for (int i = 0; i < textContent.length; i++) {
-			if (isEnabled("OTOMATIC_SUMMARY_ENABLE", textContent[i][1])){
-				if (-1 == textContent[i][1].indexOf("POST_CONTENT")) {
-					pageSummary[i] = "";
-				} else {
-					int firstNextLine = textContent[i][1].indexOf('\n', textContent[i][1].indexOf("POST_CONTENT")) + 1;
-					String content = textContent[i][1].substring(firstNextLine);
-					String cleanText = MarkdownConverter.convert(content).replaceAll("<[^>]*>", "").trim();
-					int spaces = 0;
-					int spaceIndex = 0;
-					// Writes first 20 word as summary
-					while (-1 != spaceIndex && 20 > spaces) {
-						spaces++;
-						spaceIndex = cleanText.indexOf(' ', spaceIndex + 1);
-					}
-					if (-1 == spaceIndex) {
-						pageSummary[i] = cleanText;
-					} else {
-						pageSummary[i] = (cleanText.substring(0, spaceIndex) + "...");
-					}
-				}
-			}else{
-				pageSummary[i] = getOption("PAGE_SUMMARY", textContent[i][1]);
-			}
-        }
+        getPageSummary(pageSummary, textContent);
         // get pages' summaries end
 
         // POST_LIST template
@@ -207,18 +183,18 @@ public class Builder {
             stringEditor("{{ POST_DATE }}", pageDates[i], postLists[i]);
             stringEditor("{{ POST_SUMMARY }}", pageSummary[i], postLists[i]);
             stringEditor("{{ POST_AUTHOR }}", pageAuthors[i], postLists[i]);
-                        
+
             String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
-            if(isEnabled("SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE", textContent[i][1]) && !"-1".equals(imgUrl)){
-				String imgHtml = "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">";
-				stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
-			}else{
-				stringEditor("{{ POST_IMAGE_HTML }}", "", postLists[i]);
-			}
-            
+            if (isEnabled("SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE", textContent[i][1]) && !"-1".equals(imgUrl)) {
+                String imgHtml = "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">";
+                stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
+            } else {
+                stringEditor("{{ POST_IMAGE_HTML }}", "", postLists[i]);
+            }
+
             StringBuilder pTags = new StringBuilder();
             for (int j = 0; j < pageTags[i].length; j++) {
-				String safeTag = pageTags[i][j].replaceAll("[^a-zA-Z0-9]", "_");
+                String safeTag = pageTags[i][j].replaceAll("[^a-zA-Z0-9]", "_");
                 pTags.append("<a href=\"tag_").append(safeTag).append(".html\">").append(pageTags[i][j]).append("</a>");
                 if (j != pageTags[i].length - 1) {
                     pTags.append(", ");
@@ -235,34 +211,35 @@ public class Builder {
         for (int i = 0; i < textContent.length; i++) {
             String[] arr = { textContent[i][0], page };
             pages[i] = new StringBuilder(base);
-                        
+
             String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
             // SEO_TAGS template
-			String seoTags = "\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
-                             "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n" +
-                             "\t<meta property=\"og:type\" content=\"article\">\n";
+            String seoTags = "\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
+                    "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n"
+                    +
+                    "\t<meta property=\"og:type\" content=\"article\">\n";
             if (!"-1".equals(imgUrl)) {
                 seoTags += "\t<meta property=\"og:image\" content=\"" + imgUrl + "\">\n";
             }
             stringEditor("{{ SEO_META }}", seoTags, pages[i]);
-          
-            stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
-        
-            if (isEnabled("AUTHOR_CARD_ENABLE", textContent[i][1])){
-				// AUTHOR_CARD template
-				String authorCardTemplate = "<div class=\"author-bio\">\n" + //
-					"\t<img src=\"{{ POST_AUTHOR_IMAGE }}\" alt=\"Author Avatar\">\n" + //
-					"\t<div>\n" + //
-					"\t\t<strong>" + getOption("POST_AUTHOR", textContent[i][1]) + "</strong>\n" + //
-					"\t\t<span>"+ getOption("POST_AUTHOR_DESCRIPTION", textContent[i][1]) + "</span>\n" + //
-					"\t</div>\n" + //
-					"</div>";
 
-				stringEditor("{{ AUTHOR_CARD }}", authorCardTemplate, pages[i]);
-				stringEditor("{{ POST_AUTHOR_IMAGE }}", getOption("POST_AUTHOR_IMAGE", textContent[i][1]) , pages[i]);
-			}else{
-				stringEditor("{{ AUTHOR_CARD }}", "", pages[i]);
-			}
+            stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
+
+            if (isEnabled("AUTHOR_CARD_ENABLE", textContent[i][1])) {
+                // AUTHOR_CARD template
+                String authorCardTemplate = "<div class=\"author-bio\">\n" + //
+                        "\t<img src=\"{{ POST_AUTHOR_IMAGE }}\" alt=\"Author Avatar\">\n" + //
+                        "\t<div>\n" + //
+                        "\t\t<strong>" + getOption("POST_AUTHOR", textContent[i][1]) + "</strong>\n" + //
+                        "\t\t<span>" + getOption("POST_AUTHOR_DESCRIPTION", textContent[i][1]) + "</span>\n" + //
+                        "\t</div>\n" + //
+                        "</div>";
+
+                stringEditor("{{ AUTHOR_CARD }}", authorCardTemplate, pages[i]);
+                stringEditor("{{ POST_AUTHOR_IMAGE }}", getOption("POST_AUTHOR_IMAGE", textContent[i][1]), pages[i]);
+            } else {
+                stringEditor("{{ AUTHOR_CARD }}", "", pages[i]);
+            }
 
             if (0 != i) {
                 // <a href="ElHamraSarayiGezisi01.html">Previous Post</a>
@@ -288,19 +265,18 @@ public class Builder {
                         "{{ NEXT_POST }}", "<a href=\"./index.html\">Next Post</a>", pages[i]);
 
             }
-            
+
             Builder.log("buildSite", "Successfully made \"" + textContent[i][0] + "\" page.");
         }
-        
-        
+
         Builder.log("buildSite", "Successfully made all of the site pages.");
         // handling page.htmls end
 
         // handle index.html begin
         StringBuilder indexPage = new StringBuilder(base);
-		String indexSeo = "\t<meta property=\"og:title\" content=\"" + siteTitle + "\">\n" +
-				  "\t<meta property=\"og:description\" content=\"" + siteDescription.replace("\"", "&quot;") + "\">\n" +
-				  "\t<meta property=\"og:type\" content=\"website\">";
+        String indexSeo = "\t<meta property=\"og:title\" content=\"" + siteTitle + "\">\n" +
+                "\t<meta property=\"og:description\" content=\"" + siteDescription.replace("\"", "&quot;") + "\">\n" +
+                "\t<meta property=\"og:type\" content=\"website\">";
         stringEditor("{{ SEO_META }}", indexSeo, indexPage);
         stringEditor("{{ CONTENT }}", index.toString(), indexPage);
         Builder.log("buildSite", "Successfully merged base and index.");
@@ -344,17 +320,17 @@ public class Builder {
                 tagCloud.append(toBeAdded);
             }
             stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), indexPage);
-            
+
             // generate dedicated tag pages begin
             for (int i = 0; i < existingTags.size(); i++) {
                 String tag = existingTags.get(i);
                 StringBuilder tagPage = new StringBuilder(base);
-                
+
                 String tagSeo = "\t<meta property=\"og:title\" content=\"Posts tagged: " + tag + "\">\n" +
-                                "\t<meta property=\"og:type\" content=\"website\">\n";
+                        "\t<meta property=\"og:type\" content=\"website\">\n";
                 stringEditor("{{ SEO_META }}", tagSeo, tagPage);
                 stringEditor("{{ CONTENT }}", tagsPage.toString(), tagPage);
-                
+
                 StringBuilder tagPostList = new StringBuilder();
                 int tagPostCount = 0;
                 for (int p = postLists.length - 1; p > -1; p--) {
@@ -369,12 +345,12 @@ public class Builder {
                 stringEditor("{{ POST_LIST }}", tagPostList.toString(), tagPage);
                 stringEditor("{{ TAG_TITLE }}", "Tag: " + tag + " (" + tagPostCount + ")", tagPage);
                 stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), tagPage);
-                
+
                 String safeTag = tag.replaceAll("[^a-zA-Z0-9]", "_");
                 writeFile("Output/tag_" + safeTag + ".html", tagPage.toString());
             }
             // generate dedicated tag pages end.
-            
+
         }
         // make TAG_CLOUD for index.html end.
 
@@ -383,18 +359,19 @@ public class Builder {
 
         Builder.log("buildSite", "Successfully made \"index.html\".");
 
-		// generate post pages
+        // generate post pages
         for (int i = 0; i < textContent.length; i++) {
             String fileName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
             writeFile("Output/" + fileName + ".html", pages[i].toString());
             Builder.log("buildSite", "Successfully made \"" + fileName + "\".");
         }
-        
+
         // generate sitemap.xml
-		generateSitemap(baseURL, textContent);
-		
+        generateSitemap(baseURL, textContent);
+
         // generate rss.xml
-        StringBuilder rss = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
+        StringBuilder rss = new StringBuilder(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
         rss.append("<title>").append(siteTitle).append("</title>\n");
         rss.append("<link>").append(baseURL).append("</link>\n");
         rss.append("<description>").append(siteDescription).append("</description>\n");
@@ -402,23 +379,25 @@ public class Builder {
             String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
             rss.append("<item>\n<title>").append(pageTitles[i]).append("</title>\n");
             rss.append("<link>").append(baseURL).append("/").append(fName).append(".html</link>\n");
-            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;")).append("</description>\n");
+            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;"))
+                    .append("</description>\n");
             rss.append("</item>\n");
         }
         rss.append("</channel>\n</rss>");
         writeFile("Output/rss.xml", rss.toString());
         Builder.log("buildSite", "Successfully made \"rss.xml\".");
-		
-		// generate robots.txt
-		String robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + baseURL + "/sitemap.xml\n";
+
+        // generate robots.txt
+        String robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + baseURL + "/sitemap.xml\n";
         writeFile("Output/robots.txt", robotsTxt);
         Builder.log("buildSite", "Successfully made \"robots.txt\".");
-        
+
         Builder.log("buildFile", "End.\n");
     }
-	
-	static void generateSitemap(String baseURL, String[][] textContent)  throws IOException{
-	    StringBuilder sitemap = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
+
+    static void generateSitemap(String baseURL, String[][] textContent) throws IOException {
+        StringBuilder sitemap = new StringBuilder(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
         sitemap.append("<url><loc>").append(baseURL).append("/</loc></url>\n");
         for (int i = 0; i < textContent.length; i++) {
             String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
@@ -427,8 +406,8 @@ public class Builder {
         sitemap.append("</urlset>");
         writeFile("Output/sitemap.xml", sitemap.toString());
         Builder.log("buildSite", "Successfully made \"sitemap.xml\".");
-	}
-	
+    }
+
     static void getPageTags(String[][] pageTags, String[][] textContent) {
         for (int j = 0; j < textContent.length; j++) {
             String option = "POST_TAGS";
@@ -468,8 +447,36 @@ public class Builder {
             pageTags[j] = (list.toArray(pageTags[j]));
         }
     }
-    
-	static String getOption (String configOption, String config) throws IOException {
+
+    static void getPageSummary(String[] pageSummary, String[][] textContent) throws IOException {
+        for (int i = 0; i < textContent.length; i++) {
+            if (isEnabled("OTOMATIC_SUMMARY_ENABLE", textContent[i][1])) {
+                if (-1 == textContent[i][1].indexOf("POST_CONTENT")) {
+                    pageSummary[i] = "";
+                } else {
+                    int firstNextLine = textContent[i][1].indexOf('\n', textContent[i][1].indexOf("POST_CONTENT")) + 1;
+                    String content = textContent[i][1].substring(firstNextLine);
+                    String cleanText = MarkdownConverter.convert(content).replaceAll("<[^>]*>", "").trim();
+                    int spaces = 0;
+                    int spaceIndex = 0;
+                    // Writes first 20 word as summary
+                    while (-1 != spaceIndex && 20 > spaces) {
+                        spaces++;
+                        spaceIndex = cleanText.indexOf(' ', spaceIndex + 1);
+                    }
+                    if (-1 == spaceIndex) {
+                        pageSummary[i] = cleanText;
+                    } else {
+                        pageSummary[i] = (cleanText.substring(0, spaceIndex) + "...");
+                    }
+                }
+            } else {
+                pageSummary[i] = getOption("PAGE_SUMMARY", textContent[i][1]);
+            }
+        }
+    }
+
+    static String getOption(String configOption, String config) throws IOException {
         String optionValue = "";
         int valueIndex = config.indexOf(configOption);
         if (-1 == valueIndex) {
@@ -480,74 +487,77 @@ public class Builder {
             // index of the first quote symbol after configOption
             int firstQuote = config.indexOf('"', valueIndex) + 1;
             int nextLine = config.indexOf('\n', firstQuote);
-			if (nextLine == -1) {
-				nextLine = config.length();
-			}
-			int lastQuote = config.lastIndexOf('"', nextLine - 1);
-			if (lastQuote <= firstQuote) {
-				lastQuote = config.indexOf('"', firstQuote);
-			}
+            if (nextLine == -1) {
+                nextLine = config.length();
+            }
+            int lastQuote = config.lastIndexOf('"', nextLine - 1);
+            if (lastQuote <= firstQuote) {
+                lastQuote = config.indexOf('"', firstQuote);
+            }
             // selected options name
             optionValue = config.substring(firstQuote, lastQuote);
             Builder.log("getOption", "Returned value of the option " + configOption + " as " + optionValue);
             return optionValue;
         }
-	}
-	
-	static String[] getOptionArray (String configOption, String[][] textContent) throws IOException {
-		String[] optionValues = new String[textContent.length];
+    }
+
+    static String[] getOptionArray(String configOption, String[][] textContent) throws IOException {
+        String[] optionValues = new String[textContent.length];
         for (int i = 0; i < textContent.length; i++) {
-			optionValues[i] = getOption(configOption, textContent[i][1]);
+            optionValues[i] = getOption(configOption, textContent[i][1]);
         }
         Builder.log("getOptionArray", "Returned values of " + configOption);
         return optionValues;
-	}
-	
-	static boolean isEnabled (String configOption, String config) throws IOException{	
-		String option = getOption(configOption, config).toLowerCase();
-		boolean isEnable = false;
-        if (option.equals("true") || option.equals("1") ||  option.equals("evet")){
-			isEnable = true;
+    }
+
+    static boolean isEnabled(String configOption, String config) throws IOException {
+        String option = getOption(configOption, config).toLowerCase();
+        boolean isEnable = false;
+        if (option.equals("true") || option.equals("1") || option.equals("evet")) {
+            isEnable = true;
         }
         Builder.log("isEnabled", "Returned statue of " + configOption);
-		return isEnable;
-	}
-	
-	static void baseSEOMetaModification (String configOption, String enableSignal, String config, StringBuilder base) throws Exception{
-		if(isEnabled(enableSignal, config)){
-			String newModule = ("{{ SEO_META }}\n\t" + getOption(configOption, config));
-			stringEditor("{{ SEO_META }}", newModule, base);
-			Builder.log("baseSEOMetaModification", "Successfully added \"" + configOption + "\" to base.html");
-		}
-	}
-	
-	static String getAssets (String assetsFolderPath) throws IOException{
-		Path assetsFolderPathObject = createFolder(assetsFolderPath);
-		StringBuilder customAssets = new StringBuilder();
-		try(Stream<Path> assetFiles = Files.list(assetsFolderPathObject)){
-			assetFiles.forEach(asset -> {
-				String fileName = asset.getFileName().toString();
-				if (fileName.endsWith(".css")) {
-					customAssets.append("<link rel=\"stylesheet\" href=\"./Assets/").append(fileName).append("\">\n");
-				} 
-				else if (fileName.endsWith(".js")) {
-					customAssets.append("<script defer src=\"./Assets/").append(fileName).append("\"></script>\n");
-				}
-			});
-		}
-		return customAssets.toString();
-	}
-	
-	static Path createFolder (String folderPath) throws IOException{
-		Path newPath = Paths.get(folderPath); 
-		if (Files.notExists(newPath)) { 
-			try {Files.createDirectory(newPath);}
-			catch (Exception e) {e.printStackTrace();}
-		}
-		return newPath;
-	}
-	
-	static int countFiles(Path folderPath) throws IOException {
+        return isEnable;
+    }
+
+    static void baseSEOMetaModification(String configOption, String enableSignal, String config, StringBuilder base)
+            throws Exception {
+        if (isEnabled(enableSignal, config)) {
+            String newModule = ("{{ SEO_META }}\n\t" + getOption(configOption, config));
+            stringEditor("{{ SEO_META }}", newModule, base);
+            Builder.log("baseSEOMetaModification", "Successfully added \"" + configOption + "\" to base.html");
+        }
+    }
+
+    static String getAssets(String assetsFolderPath) throws IOException {
+        Path assetsFolderPathObject = createFolder(assetsFolderPath);
+        StringBuilder customAssets = new StringBuilder();
+        try (Stream<Path> assetFiles = Files.list(assetsFolderPathObject)) {
+            assetFiles.forEach(asset -> {
+                String fileName = asset.getFileName().toString();
+                if (fileName.endsWith(".css")) {
+                    customAssets.append("<link rel=\"stylesheet\" href=\"./Assets/").append(fileName).append("\">\n");
+                } else if (fileName.endsWith(".js")) {
+                    customAssets.append("<script defer src=\"./Assets/").append(fileName).append("\"></script>\n");
+                }
+            });
+        }
+        return customAssets.toString();
+    }
+
+    static Path createFolder(String folderPath) throws IOException {
+        Path newPath = Paths.get(folderPath);
+        if (Files.notExists(newPath)) {
+            try {
+                Files.createDirectory(newPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return newPath;
+    }
+
+    static int countFiles(Path folderPath) throws IOException {
         int count = 0;
         try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(folderPath)) {
             for (Path path : directoryStream) {
@@ -560,35 +570,35 @@ public class Builder {
         }
         return count;
     }
-	
-static String[][] parseContentFiles(String folderPath) throws IOException {
-    Path newPath = Paths.get(folderPath);
 
-    if (!Files.isDirectory(newPath)) {
-        throw new IOException("Folder \"" + folderPath + "\" Could Not Be Found\n");
-    }
+    static String[][] parseContentFiles(String folderPath) throws IOException {
+        Path newPath = Paths.get(folderPath);
 
-    try (DirectoryStream<Path> stream = Files.newDirectoryStream(newPath)) {
-        List<Path> entries = new ArrayList<>();
-        for (Path p : stream) entries.add(p);
-
-        if (entries.isEmpty()) {
-            Builder.log("parseContentFiles", "Folder \"" + folderPath + "\" is empty.");
-            return new String[0][0];
+        if (!Files.isDirectory(newPath)) {
+            throw new IOException("Folder \"" + folderPath + "\" Could Not Be Found\n");
         }
 
-        String[][] fileContents = new String[entries.size()][2]; // [i][0] file's name, [i][1] file's content
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(newPath)) {
+            List<Path> entries = new ArrayList<>();
+            for (Path p : stream)
+                entries.add(p);
 
-        for (int i = 0; i < entries.size(); i++) {
-            Path p = entries.get(i);
-            fileContents[i][0] = p.getFileName().toString();
-            fileContents[i][1] = readFile(p.toString());
+            if (entries.isEmpty()) {
+                Builder.log("parseContentFiles", "Folder \"" + folderPath + "\" is empty.");
+                return new String[0][0];
+            }
+
+            String[][] fileContents = new String[entries.size()][2]; // [i][0] file's name, [i][1] file's content
+
+            for (int i = 0; i < entries.size(); i++) {
+                Path p = entries.get(i);
+                fileContents[i][0] = p.getFileName().toString();
+                fileContents[i][1] = readFile(p.toString());
+            }
+
+            return fileContents;
         }
-
-        return fileContents;
     }
-}
-
 
     // takes text file's name and reads text file and return its contents as a
     // string
@@ -677,7 +687,8 @@ static String[][] parseContentFiles(String folderPath) throws IOException {
             index = config.indexOf(file[0].substring(0, file[0].indexOf('.')).toUpperCase());
             Builder.log("makeFile", "Successfully found the start of \"" + file[0] + "\" file's part.");
             if (-1 == index) {
-                Builder.log("makeFile", "Failed to find the start of \"" + file[0]+ "\" file's part. Will begin from the top of the file");
+                Builder.log("makeFile", "Failed to find the start of \"" + file[0]
+                        + "\" file's part. Will begin from the top of the file");
             }
         }
 
@@ -706,7 +717,7 @@ static String[][] parseContentFiles(String folderPath) throws IOException {
                 Builder.log("makeFile", "Successfully executed performStrategy(\"" + option + "\") on the file.");
                 index = nextLine;
                 Builder.log("makeFile", "Successfully finished changing \"" + option + "\" in the file.");
-                
+
                 // Maybe we can stop searching for strategy options after POST_CONTENT reached.
                 // if(option.equals("POST_CONTENT")){break;}
             }
@@ -721,10 +732,10 @@ static String[][] parseContentFiles(String folderPath) throws IOException {
     public static void stringEditor(String contentName, String newContent, StringBuilder file) throws Exception {
         int index = file.indexOf(contentName);
         if (index != -1) {
-			file.replace(index, index + contentName.length(), newContent);
-		} else {
-			Builder.log("stringEditor", "Placeholder \"" + contentName + "\" not found in file.");
-		}
+            file.replace(index, index + contentName.length(), newContent);
+        } else {
+            Builder.log("stringEditor", "Placeholder \"" + contentName + "\" not found in file.");
+        }
     }
 
     // sets a Strategy using Factory class
@@ -755,7 +766,8 @@ class ThemeNameStrategy extends Strategy {
         int THEME_NAMEindex = config.indexOf(option);
 
         if (-1 == file.indexOf("{{ " + option + " }}")) {
-            Builder.log("ThemeNameStrategy", "Could not find both \"THEME_NAME\" AND \"SOCIAL_LINKS\" in the file, they will be skipped.");
+            Builder.log("ThemeNameStrategy",
+                    "Could not find both \"THEME_NAME\" AND \"SOCIAL_LINKS\" in the file, they will be skipped.");
             return;
         }
 
@@ -770,10 +782,10 @@ class ThemeNameStrategy extends Strategy {
         String themeName = config.substring(kesme1Index + 1, config.indexOf('"', kesme1Index + 1));
         String themePath = "Themes/" + themeName + "/" + themeName + ".css";
 
-		Path newPath = Paths.get(themePath); 
-		if (Files.notExists(newPath)) { 
-			throw new Exception("Selected theme could not be found in Themes folder.");
-		}
+        Path newPath = Paths.get(themePath);
+        if (Files.notExists(newPath)) {
+            throw new Exception("Selected theme could not be found in Themes folder.");
+        }
 
         // copy theme file to Output folder
         Builder.log("ThemeNameStrategy", "Starting copying \"" + themeName + ".css\" to the Output folder.");
@@ -803,7 +815,8 @@ class NonArrayStrategy extends Strategy {
         String value = config.substring(firstQuote, lastQuote);
         option = "{{ " + option + " }}";
         if (-1 == file.indexOf(option)) {
-            Builder.log("NonArrayStrategy", "Could not find the option \"" + option + "\" in the file, it will be skipped.");
+            Builder.log("NonArrayStrategy",
+                    "Could not find the option \"" + option + "\" in the file, it will be skipped.");
             Builder.log("NonArrayStrategy", "End.\n");
             return;
         } else {
@@ -827,7 +840,7 @@ class PostContentStrategy extends Strategy {
         if (-1 == file.indexOf(option)) {
             // if the option isnt available in the file
             Builder.log("PostContentStrategy", "Could not find the option \"" + option
-                            + "\" in the file, it will be skipped.");
+                    + "\" in the file, it will be skipped.");
             Builder.log("PostContentStrategy", "End.\n");
             return;
         } else {
@@ -842,26 +855,27 @@ class PostContentStrategy extends Strategy {
 
             if (wordNum > 1) {
                 Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: " + wordNum + " minutes", file);
-            } else if (wordNum == 1){
+            } else if (wordNum == 1) {
                 Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: " + wordNum + " minute", file);
-            }else {
+            } else {
                 Builder.stringEditor("{{ POST_READ_TIME }}", "Expected Read Time: Under one minute.", file);
             }
             Builder.log("PostContentStrategy", "Successfully calculated \"POST_READ_TIME\".");
 
             Builder.stringEditor(option, MarkdownConverter.convert(value), file);
-            
+
             boolean TOCEnable = Builder.isEnabled("TABLE_OF_CONTENT_ENABLE", config);
-			
-            if (TOCEnable){
+
+            if (TOCEnable) {
                 Builder.stringEditor("{{ POST_TOC }}", MarkdownConverter.currentTOC, file);
-                Builder.stringEditor("{{ TABLE_OF_CONTENT_TITLE }}", Builder.getOption("TABLE_OF_CONTENT_TITLE", config), file);
+                Builder.stringEditor("{{ TABLE_OF_CONTENT_TITLE }}",
+                        Builder.getOption("TABLE_OF_CONTENT_TITLE", config), file);
                 Builder.log("PostContentStrategy", "Successfully added \"POST_TOC\".");
-            }else{
-				Builder.stringEditor("{{ POST_TOC }}", "", file);
-				Builder.log("PostContentStrategy", "Table Of Content Is Disable skipping \"POST_TOC\".");
-			}
-            
+            } else {
+                Builder.stringEditor("{{ POST_TOC }}", "", file);
+                Builder.log("PostContentStrategy", "Table Of Content Is Disable skipping \"POST_TOC\".");
+            }
+
             Builder.log("PostContentStrategy", "End.\n");
         }
         Builder.log("PostContentStrategy", "End.\n");
@@ -925,10 +939,10 @@ abstract class SingleArrayStrategy extends Strategy {
 class PostTagsStrategy extends SingleArrayStrategy {
     @Override
     public void makeChanges(StringBuilder file, String config) throws Exception {
-		Builder.log("PostTagsStrategy", "Begin.");
-		
-		codePiece = "\t\t\t<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
-		// \n's and \t's to allign it better. It is just visual.
+        Builder.log("PostTagsStrategy", "Begin.");
+
+        codePiece = "\t\t\t<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
+        // \n's and \t's to allign it better. It is just visual.
         String sl = "{{ " + option + " }}";
         String slLink = "{{ " + option + "_LINK }}";
 
@@ -964,13 +978,13 @@ class PostTagsStrategy extends SingleArrayStrategy {
             StringBuilder ref = new StringBuilder(codePiece);
 
             String lValue = config.substring(nextLQuote, config.indexOf('"', nextLQuote));
-			String safelValue = lValue.replaceAll("[^a-zA-Z0-9]", "_");
+            String safelValue = lValue.replaceAll("[^a-zA-Z0-9]", "_");
 
             lIndex = config.indexOf('\n', lIndex) + 1;
             lIndex = nextLLine + 1;
 
             Builder.stringEditor(sl, lValue, ref);
-			Builder.stringEditor(slLink, safelValue, ref);
+            Builder.stringEditor(slLink, safelValue, ref);
 
             result.append(ref);
         }
@@ -1116,53 +1130,56 @@ class Factory {
 }
 
 class MarkdownConverter {
-	public static String currentTOC = "";
-	
-	public static boolean isEndingList (boolean inList, StringBuilder html){
-		if(inList){
-			// Add list ending code
-			html.append("</ul>\n");
-			inList = false;
-		}
-		return inList;
-	}
-	
-	public static boolean isEndingTable (boolean inTable, StringBuilder html){		
-		if(inTable){
-			// Add table ending code
-			html.append("</tbody></table></div>\n");
-			inTable = false;
-		}
-		return inTable;
-	}
-	
-	public static boolean isEndingBlockquote (boolean inBlockquote, StringBuilder html){		
-		if(inBlockquote){
-			// Add blockquote ending code
-			html.append("</blockquote>\n");
-			inBlockquote = false;
-		}
-		return inBlockquote;
-	}
-	
-	public static String generateTitle (String titleStarter, String titleOptionCode, String line, StringBuilder toc){
-		StringBuilder title = new StringBuilder();
-		int titleStarterLength = titleStarter.length();
-		String rawText = parseInline(line.substring(titleStarterLength));
-		String text = rawText;
-		String id = text.replaceAll("<[^>]*>", "").replaceAll("[^a-zA-Z0-9]+", "-").toLowerCase();
-		title.append("<").append(titleOptionCode).append(" id=\"").append(id).append("\">").append(text).append("</").append(titleOptionCode).append(">\n");
-        toc.append("<li class=\"toc-level-").append(titleStarterLength).append("\"><a href=\"#").append(id).append("\">").append(text).append("</a></li>\n");
-		return title.toString();
-	}
-	
+    public static String currentTOC = "";
+
+    public static boolean isEndingList(boolean inList, StringBuilder html) {
+        if (inList) {
+            // Add list ending code
+            html.append("</ul>\n");
+            inList = false;
+        }
+        return inList;
+    }
+
+    public static boolean isEndingTable(boolean inTable, StringBuilder html) {
+        if (inTable) {
+            // Add table ending code
+            html.append("</tbody></table></div>\n");
+            inTable = false;
+        }
+        return inTable;
+    }
+
+    public static boolean isEndingBlockquote(boolean inBlockquote, StringBuilder html) {
+        if (inBlockquote) {
+            // Add blockquote ending code
+            html.append("</blockquote>\n");
+            inBlockquote = false;
+        }
+        return inBlockquote;
+    }
+
+    public static String generateTitle(String titleStarter, String titleOptionCode, String line, StringBuilder toc) {
+        StringBuilder title = new StringBuilder();
+        int titleStarterLength = titleStarter.length();
+        String rawText = parseInline(line.substring(titleStarterLength));
+        String text = rawText;
+        String id = text.replaceAll("<[^>]*>", "").replaceAll("[^a-zA-Z0-9]+", "-").toLowerCase();
+        title.append("<").append(titleOptionCode).append(" id=\"").append(id).append("\">").append(text).append("</")
+                .append(titleOptionCode).append(">\n");
+        toc.append("<li class=\"toc-level-").append(titleStarterLength).append("\"><a href=\"#").append(id)
+                .append("\">").append(text).append("</a></li>\n");
+        return title.toString();
+    }
+
     public static String convert(String md) {
         if (md == null || md.trim().isEmpty()) {
             return "";
         }
-        
+
         StringBuilder html = new StringBuilder();
-		StringBuilder toc = new StringBuilder("<div class=\"post-toc\">\n  <h3 class=\"toc-title\">").append("{{ TABLE_OF_CONTENT_TITLE }}").append("</h3>\n  <ul class=\"toc-list\">\n");
+        StringBuilder toc = new StringBuilder("<div class=\"post-toc\">\n  <h3 class=\"toc-title\">")
+                .append("{{ TABLE_OF_CONTENT_TITLE }}").append("</h3>\n  <ul class=\"toc-list\">\n");
         String[] allLines = md.split("\n");
         List<String> footnotes = new ArrayList<>();
         boolean inCodeBlock = false;
@@ -1172,8 +1189,8 @@ class MarkdownConverter {
         boolean tocHasItems = false;
         for (int i = 0; i < allLines.length; i++) {
             String line = allLines[i];
-			
-			// code block
+
+            // code block
             if (line.trim().startsWith("```")) {
                 if (inCodeBlock) {
                     html.append("</code></pre></div>\n");
@@ -1182,18 +1199,19 @@ class MarkdownConverter {
                     String lang = line.trim().substring(3).trim();
                     String langClass = lang.isEmpty() ? "" : " class=\"language-" + lang + "\"";
                     html.append(
-                            "<div class=\"code-block\"><button class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(this.parentElement.querySelector('code').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000);\">Copy</button><pre><code").append(langClass).append(">");
+                            "<div class=\"code-block\"><button class=\"copy-btn\" onclick=\"navigator.clipboard.writeText(this.parentElement.querySelector('code').innerText); this.innerText='Copied!'; setTimeout(()=>this.innerText='Copy',2000);\">Copy</button><pre><code")
+                            .append(langClass).append(">");
                     inCodeBlock = true;
                 }
                 continue;
             }
-            
+
             // in code block modify some characters
             if (inCodeBlock) {
                 html.append(line.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")).append("\n");
                 continue;
             }
-                       
+
             // footnote definition
             if (line.trim().matches("\\[\\^\\d+\\]:.*")) {
                 inList = isEndingList(inList, html);
@@ -1202,8 +1220,8 @@ class MarkdownConverter {
                 footnotes.add(line.trim());
                 continue;
             }
-            
-			// long horizontal line as seperator
+
+            // long horizontal line as seperator
             if (line.trim().matches("---+") || line.trim().matches("\\*\\*\\*+")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
@@ -1211,7 +1229,7 @@ class MarkdownConverter {
                 continue;
             }
 
-			// caution message like vertical small line infront of the text
+            // caution message like vertical small line infront of the text
             if (line.trim().startsWith("> ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
@@ -1225,7 +1243,7 @@ class MarkdownConverter {
                 inBlockquote = isEndingBlockquote(inBlockquote, html);
             }
 
-			// big title
+            // big title
             if (line.startsWith("# ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
@@ -1237,16 +1255,16 @@ class MarkdownConverter {
             else if (line.startsWith("## ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
-				html.append(generateTitle("## ", "h2", line, toc));
-				tocHasItems = true;
+                html.append(generateTitle("## ", "h2", line, toc));
+                tocHasItems = true;
                 continue;
-            } 
+            }
             // small title
             else if (line.startsWith("### ")) {
                 inList = isEndingList(inList, html);
                 inTable = isEndingTable(inTable, html);
-				html.append(generateTitle("### ", "h3", line, toc));
-				tocHasItems = true;
+                html.append(generateTitle("### ", "h3", line, toc));
+                tocHasItems = true;
                 continue;
             }
 
@@ -1273,11 +1291,12 @@ class MarkdownConverter {
                 }
                 continue;
             } else {
-				inTable = isEndingTable(inTable, html);
-			}
+                inTable = isEndingTable(inTable, html);
+            }
 
             // task lists
-            if (line.trim().startsWith("- [ ] ") || line.trim().startsWith("- [x] ") || line.trim().startsWith("- [X] ")) {
+            if (line.trim().startsWith("- [ ] ") || line.trim().startsWith("- [x] ")
+                    || line.trim().startsWith("- [X] ")) {
                 inTable = isEndingTable(inTable, html);
                 if (!inList) {
                     html.append("<ul class=\"task-list\">\n");
@@ -1286,11 +1305,12 @@ class MarkdownConverter {
                 boolean checked = line.trim().startsWith("- [x] ") || line.trim().startsWith("- [X] ");
                 String text = line.trim().substring(6);
                 html.append("<li><input type=\"checkbox\" disabled ")
-                    .append(checked ? "checked" : "").append("><span>").append(parseInline(text)).append("</span></li>\n");
+                        .append(checked ? "checked" : "").append("><span>").append(parseInline(text))
+                        .append("</span></li>\n");
                 continue;
             }
 
-			// unordered list
+            // unordered list
             if (line.trim().startsWith("- ")) {
                 inTable = isEndingTable(inTable, html);
                 if (!inList) {
@@ -1300,7 +1320,7 @@ class MarkdownConverter {
                 html.append("<li>").append("• ").append(parseInline(line.trim().substring(2))).append("</li>\n");
                 continue;
             } else {
-				inList = isEndingList(inList, html);
+                inList = isEndingList(inList, html);
             }
 
             if (line.trim().isEmpty()) {
@@ -1313,47 +1333,49 @@ class MarkdownConverter {
                 }
             }
         }
-        
+
         inList = isEndingList(inList, html);
         inTable = isEndingTable(inTable, html);
         inBlockquote = isEndingBlockquote(inBlockquote, html);
-        
-		if (!footnotes.isEmpty()) {
-			html.append("<div class=\"footnotes\">\n<hr>\n<ol>\n");
-			for (String fn : footnotes) {
-				int colonIdx = fn.indexOf("]:");
-				String num = fn.substring(2, colonIdx);
-				String fnText = fn.substring(colonIdx + 2).trim();
-				html.append("<li id=\"fn:").append(num).append("\">");
-				html.append(parseInline(fnText));
-				html.append(" <a href=\"#fnref:").append(num).append("\" class=\"footnote-backref\">&#8617;</a></li>\n");
-			}
-			html.append("</ol>\n</div>\n");
+
+        if (!footnotes.isEmpty()) {
+            html.append("<div class=\"footnotes\">\n<hr>\n<ol>\n");
+            for (String fn : footnotes) {
+                int colonIdx = fn.indexOf("]:");
+                String num = fn.substring(2, colonIdx);
+                String fnText = fn.substring(colonIdx + 2).trim();
+                html.append("<li id=\"fn:").append(num).append("\">");
+                html.append(parseInline(fnText));
+                html.append(" <a href=\"#fnref:").append(num)
+                        .append("\" class=\"footnote-backref\">&#8617;</a></li>\n");
+            }
+            html.append("</ol>\n</div>\n");
         }
-		
+
         toc.append("</ul></div>\n");
         if (tocHasItems) {
             currentTOC = toc.toString();
         }
-        
+
         return html.toString();
     }
 
     private static String parseInline(String text) {
-		// bold text
+        // bold text
         text = text.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
         // italic text
         text = text.replaceAll("\\*(.*?)\\*", "<em>$1</em>");
         // onlined text
         text = text.replaceAll("~~(.*?)~~", "<del>$1</del>");
-		// image
+        // image
         text = text.replaceAll("!\\[(.*?)\\]\\((.*?)\\)", "<img src=\"$2\" alt=\"$1\" loading=\"lazy\">");
         // link
         text = text.replaceAll("\\[(.*?)\\]\\((.*?)\\)", "<a href=\"$2\">$1</a>");
         // footnote references
         text = text.replaceAll("\\[\\^(\\d+)\\]", "<sup id=\"fnref:$1\"><a href=\"#fn:$1\">$1</a></sup>");
         // youtube shortcode
-        text = text.replaceAll("\\[youtube:(.*?)\\]", "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube-nocookie.com/embed/$1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>");
+        text = text.replaceAll("\\[youtube:(.*?)\\]",
+                "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube-nocookie.com/embed/$1\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>");
         // oneline code
         text = text.replaceAll("`(.*?)`",
                 "<onelinecode>$1</onelinecode>");
