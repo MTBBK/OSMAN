@@ -284,13 +284,7 @@ public class Builder {
         stringEditor("{{ TOTAL_POSTS_COUNT }}", "Total Posts: " + pages.length, indexPage);
 
         // make POST_LIST for index begin.
-        {
-            StringBuilder megaPostList = new StringBuilder();
-            for (int i = postLists.length - 1; i > -1; i--) {
-                megaPostList.append(postLists[i]);
-            }
-            stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
-        }
+        addPostList(postLists, indexPage);
         // make POST_LIST for index end.
 
         // make TAG_CLOUD for index.html begin.
@@ -474,6 +468,14 @@ public class Builder {
                 pageSummary[i] = getOption("PAGE_SUMMARY", textContent[i][1]);
             }
         }
+    }
+
+    static void addPostList(StringBuilder[] postLists, StringBuilder indexPage) throws Exception {
+        StringBuilder megaPostList = new StringBuilder();
+        for (int i = postLists.length - 1; i > -1; i--) {
+            megaPostList.append(postLists[i]);
+        }
+        stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
     }
 
     static String getOption(String configOption, String config) throws IOException {
