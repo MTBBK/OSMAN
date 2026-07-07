@@ -175,9 +175,8 @@ public class Builder {
 
         Builder.log("buildSite", "Successfully made \"index.html\".");
 
-        // generate dedicated tag pages begin
+        // generate dedicated tag pages
         makeTagPages(existingTags, base, tagsPage, pageTags, postLists, tagCloud);
-        // generate dedicated tag pages end.
 
         // generate post pages
         for (int i = 0; i < textContent.length; i++) {
@@ -259,8 +258,7 @@ public class Builder {
                 int nextLDash = page.indexOf('-', lIndex);
                 int nextLLine = page.indexOf('\n', lIndex);
 
-                // check if there is a variable to read and skip to the next iteration if there
-                // isnt
+                // check if there is a variable to read and skip to the next iteration if there isnt
 
                 if (nextLDash > nextLQuote || nextLDash > nextLLine || -1 == nextLDash) {
                     nextExists = false;
@@ -501,6 +499,7 @@ public class Builder {
         }
     }
 
+	// Search in given file and look for this style and return option's value between quottas -> Option: "Value"
     static String getOption(String configOption, String config) throws IOException {
         String optionValue = "";
         int valueIndex = config.indexOf(configOption);
@@ -535,6 +534,7 @@ public class Builder {
         return optionValues;
     }
 
+	// Search in given file and look for this style and return option's value's boolean value between quottas -> Option: "Value"
     static boolean isEnabled(String configOption, String config) throws IOException {
         String option = getOption(configOption, config).toLowerCase();
         boolean isEnable = false;
