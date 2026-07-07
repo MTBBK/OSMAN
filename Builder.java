@@ -153,16 +153,13 @@ public class Builder {
         // get pages' titles
         String[] pageTitles = getOptionArray("POST_TITLE", textContent);
 
-        // --------------------------------------------------------------------------------------------
         // get pages' tags
         String[][] pageTags = new String[textContent.length][];
         getPageTags(pageTags, textContent);
 
-        // --------------------------------------------------------------------------------------------
-        // get pages' summaries begin
+        // get pages' summaries
         String[] pageSummary = new String[textContent.length];
         getPageSummary(pageSummary, textContent);
-        // get pages' summaries end
 
         // POST_LIST template
         String postListTemplate = "<div class=\"post-card\">\n" + //
@@ -223,14 +220,12 @@ public class Builder {
 
         stringEditor("{{ TOTAL_POSTS_COUNT }}", "Total Posts: " + pages.length, indexPage);
 
-        // make POST_LIST for index begin.
+        // make POST_LIST for index
         addPostList(postLists, indexPage);
-        // make POST_LIST for index end.
 
-        // make TAG_CLOUD for index.html begin.
+        // make TAG_CLOUD for index
         ArrayList<String> existingTags = new ArrayList<>();
         StringBuilder tagCloud = addTagCloud(pageTags, indexPage, existingTags);
-        // make TAG_CLOUD for index.html end.
 
         writeFile("Output/index.html", indexPage.toString());
         // handle index.html end
@@ -352,8 +347,7 @@ public class Builder {
         stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
     }
 
-    static StringBuilder addTagCloud(String[][] pageTags, StringBuilder indexPage, ArrayList<String> existingTags)
-            throws Exception {
+    static StringBuilder addTagCloud(String[][] pageTags, StringBuilder indexPage, ArrayList<String> existingTags) throws Exception {
         StringBuilder tagCloud = new StringBuilder();
         for (int i = 0; i < pageTags.length; i++) {
             for (int j = 0; j < pageTags[i].length; j++) {
