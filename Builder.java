@@ -288,70 +288,18 @@ public class Builder {
         // make POST_LIST for index end.
 
         // make TAG_CLOUD for index.html begin.
-        {
-            StringBuilder tagCloud = new StringBuilder();
-            ArrayList<String> existingTags = new ArrayList<>();
-            for (int i = 0; i < pageTags.length; i++) {
-                for (int j = 0; j < pageTags[i].length; j++) {
-                    boolean alreadyExists = false;
-                    for (int k = 0; k < existingTags.size() && !alreadyExists; k++) {
-                        if (existingTags.get(k).equals(pageTags[i][j])) {
-                            alreadyExists = true;
-                        }
-                    }
-                    if (!alreadyExists)
-                        existingTags.add(pageTags[i][j]);
-                }
-
-            }
-
-            String tagCloudTemplate = "<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
-            for (int i = 0; i < existingTags.size(); i++) {
-                StringBuilder toBeAdded = new StringBuilder(tagCloudTemplate);
-                String safeTag = existingTags.get(i).replaceAll("[^a-zA-Z0-9]", "_");
-                stringEditor("{{ POST_TAGS_LINK }}", safeTag, toBeAdded);
-                stringEditor("{{ POST_TAGS }}", existingTags.get(i), toBeAdded);
-                tagCloud.append(toBeAdded);
-            }
-            stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), indexPage);
-
-            // generate dedicated tag pages begin
-            for (int i = 0; i < existingTags.size(); i++) {
-                String tag = existingTags.get(i);
-                StringBuilder tagPage = new StringBuilder(base);
-
-                String tagSeo = "\t<meta property=\"og:title\" content=\"Posts tagged: " + tag + "\">\n" +
-                        "\t<meta property=\"og:type\" content=\"website\">\n";
-                stringEditor("{{ SEO_META }}", tagSeo, tagPage);
-                stringEditor("{{ CONTENT }}", tagsPage.toString(), tagPage);
-
-                StringBuilder tagPostList = new StringBuilder();
-                int tagPostCount = 0;
-                for (int p = postLists.length - 1; p > -1; p--) {
-                    for (String t : pageTags[p]) {
-                        if (t.equals(tag)) {
-                            tagPostList.append(postLists[p]);
-                            tagPostCount++;
-                            break;
-                        }
-                    }
-                }
-                stringEditor("{{ POST_LIST }}", tagPostList.toString(), tagPage);
-                stringEditor("{{ TAG_TITLE }}", "Tag: " + tag + " (" + tagPostCount + ")", tagPage);
-                stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), tagPage);
-
-                String safeTag = tag.replaceAll("[^a-zA-Z0-9]", "_");
-                writeFile("Output/tag_" + safeTag + ".html", tagPage.toString());
-            }
-            // generate dedicated tag pages end.
-
-        }
+        ArrayList<String> existingTags = new ArrayList<>();
+        StringBuilder tagCloud = addTagCloud(pageTags, indexPage, existingTags);
         // make TAG_CLOUD for index.html end.
 
         writeFile("Output/index.html", indexPage.toString());
         // handle index.html end
 
         Builder.log("buildSite", "Successfully made \"index.html\".");
+
+        // generate dedicated tag pages begin
+        makeTagPages(existingTags, base, tagsPage, pageTags, postLists, tagCloud);
+        // generate dedicated tag pages end.
 
         // generate post pages
         for (int i = 0; i < textContent.length; i++) {
@@ -476,6 +424,66 @@ public class Builder {
             megaPostList.append(postLists[i]);
         }
         stringEditor("{{ POST_LIST }}", megaPostList.toString(), indexPage);
+    }
+
+    static StringBuilder addTagCloud(String[][] pageTags, StringBuilder indexPage, ArrayList<String> existingTags)
+            throws Exception {
+        StringBuilder tagCloud = new StringBuilder();
+        for (int i = 0; i < pageTags.length; i++) {
+            for (int j = 0; j < pageTags[i].length; j++) {
+                boolean alreadyExists = false;
+                for (int k = 0; k < existingTags.size() && !alreadyExists; k++) {
+                    if (existingTags.get(k).equals(pageTags[i][j])) {
+                        alreadyExists = true;
+                    }
+                }
+                if (!alreadyExists)
+                    existingTags.add(pageTags[i][j]);
+            }
+
+        }
+
+        String tagCloudTemplate = "<a href=\"tag_{{ POST_TAGS_LINK }}.html\">{{ POST_TAGS }}</a>\t\t\t\n";
+        for (int i = 0; i < existingTags.size(); i++) {
+            StringBuilder toBeAdded = new StringBuilder(tagCloudTemplate);
+            String safeTag = existingTags.get(i).replaceAll("[^a-zA-Z0-9]", "_");
+            stringEditor("{{ POST_TAGS_LINK }}", safeTag, toBeAdded);
+            stringEditor("{{ POST_TAGS }}", existingTags.get(i), toBeAdded);
+            tagCloud.append(toBeAdded);
+        }
+        stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), indexPage);
+        return tagCloud;
+    }
+
+    static void makeTagPages(ArrayList<String> existingTags, StringBuilder base, String tagsPage, String[][] pageTags,
+            StringBuilder[] postLists, StringBuilder tagCloud) throws Exception {
+        for (int i = 0; i < existingTags.size(); i++) {
+            String tag = existingTags.get(i);
+            StringBuilder tagPage = new StringBuilder(base);
+
+            String tagSeo = "\t<meta property=\"og:title\" content=\"Posts tagged: " + tag + "\">\n" +
+                    "\t<meta property=\"og:type\" content=\"website\">\n";
+            stringEditor("{{ SEO_META }}", tagSeo, tagPage);
+            stringEditor("{{ CONTENT }}", tagsPage.toString(), tagPage);
+
+            StringBuilder tagPostList = new StringBuilder();
+            int tagPostCount = 0;
+            for (int p = postLists.length - 1; p > -1; p--) {
+                for (String t : pageTags[p]) {
+                    if (t.equals(tag)) {
+                        tagPostList.append(postLists[p]);
+                        tagPostCount++;
+                        break;
+                    }
+                }
+            }
+            stringEditor("{{ POST_LIST }}", tagPostList.toString(), tagPage);
+            stringEditor("{{ TAG_TITLE }}", "Tag: " + tag + " (" + tagPostCount + ")", tagPage);
+            stringEditor("{{ TAG_CLOUD }}", tagCloud.toString(), tagPage);
+
+            String safeTag = tag.replaceAll("[^a-zA-Z0-9]", "_");
+            writeFile("Output/tag_" + safeTag + ".html", tagPage.toString());
+        }
     }
 
     static String getOption(String configOption, String config) throws IOException {
