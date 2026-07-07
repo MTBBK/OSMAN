@@ -208,67 +208,7 @@ public class Builder {
         // handling page.htmls begin
         Builder.log("buildSite", "Starting to make site pages.");
         StringBuilder[] pages = new StringBuilder[textContent.length];
-        for (int i = 0; i < textContent.length; i++) {
-            String[] arr = { textContent[i][0], page };
-            pages[i] = new StringBuilder(base);
-
-            String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
-            // SEO_TAGS template
-            String seoTags = "\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
-                    "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n"
-                    +
-                    "\t<meta property=\"og:type\" content=\"article\">\n";
-            if (!"-1".equals(imgUrl)) {
-                seoTags += "\t<meta property=\"og:image\" content=\"" + imgUrl + "\">\n";
-            }
-            stringEditor("{{ SEO_META }}", seoTags, pages[i]);
-
-            stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
-
-            if (isEnabled("AUTHOR_CARD_ENABLE", textContent[i][1])) {
-                // AUTHOR_CARD template
-                String authorCardTemplate = "<div class=\"author-bio\">\n" + //
-                        "\t<img src=\"{{ POST_AUTHOR_IMAGE }}\" alt=\"Author Avatar\">\n" + //
-                        "\t<div>\n" + //
-                        "\t\t<strong>" + getOption("POST_AUTHOR", textContent[i][1]) + "</strong>\n" + //
-                        "\t\t<span>" + getOption("POST_AUTHOR_DESCRIPTION", textContent[i][1]) + "</span>\n" + //
-                        "\t</div>\n" + //
-                        "</div>";
-
-                stringEditor("{{ AUTHOR_CARD }}", authorCardTemplate, pages[i]);
-                stringEditor("{{ POST_AUTHOR_IMAGE }}", getOption("POST_AUTHOR_IMAGE", textContent[i][1]), pages[i]);
-            } else {
-                stringEditor("{{ AUTHOR_CARD }}", "", pages[i]);
-            }
-
-            if (0 != i) {
-                // <a href="ElHamraSarayiGezisi01.html">Previous Post</a>
-                stringEditor(
-                        "{{ PREVIOUS_POST }}", "<a href=\"./"
-                                + textContent[i - 1][0].substring(0, textContent[i - 1][0].indexOf(".md"))
-                                + ".html\">Previous Post</a>",
-                        pages[i]);
-            } else {
-                stringEditor(
-                        "{{ PREVIOUS_POST }}", "<a href=\"./index.html\">Previous Post</a>", pages[i]);
-            }
-
-            if (textContent.length - 1 != i) {
-                // <a href="ElHamraSarayiGezisi01.html">Next Post</a>
-                stringEditor(
-                        "{{ NEXT_POST }}", "<a href=\"./"
-                                + textContent[i + 1][0].substring(0, textContent[i + 1][0].indexOf(".md"))
-                                + ".html\">Next Post</a>",
-                        pages[i]);
-            } else {
-                stringEditor(
-                        "{{ NEXT_POST }}", "<a href=\"./index.html\">Next Post</a>", pages[i]);
-
-            }
-
-            Builder.log("buildSite", "Successfully made \"" + textContent[i][0] + "\" page.");
-        }
-
+        makePageHTMLs(textContent, page, pages, base, pageTitles, pageSummary);
         Builder.log("buildSite", "Successfully made all of the site pages.");
         // handling page.htmls end
 
@@ -312,25 +252,11 @@ public class Builder {
         generateSitemap(baseURL, textContent);
 
         // generate rss.xml
-        StringBuilder rss = new StringBuilder(
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
-        rss.append("<title>").append(siteTitle).append("</title>\n");
-        rss.append("<link>").append(baseURL).append("</link>\n");
-        rss.append("<description>").append(siteDescription).append("</description>\n");
-        for (int i = 0; i < Math.min(textContent.length, 20); i++) {
-            String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
-            rss.append("<item>\n<title>").append(pageTitles[i]).append("</title>\n");
-            rss.append("<link>").append(baseURL).append("/").append(fName).append(".html</link>\n");
-            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;"))
-                    .append("</description>\n");
-            rss.append("</item>\n");
-        }
-        rss.append("</channel>\n</rss>");
-        writeFile("Output/rss.xml", rss.toString());
-        Builder.log("buildSite", "Successfully made \"rss.xml\".");
+        makeRSS(siteTitle, baseURL, siteDescription, textContent, pageTitles, pageSummary);
 
         // generate robots.txt
         String robotsTxt = "User-agent: *\nAllow: /\nSitemap: " + baseURL + "/sitemap.xml\n";
+
         writeFile("Output/robots.txt", robotsTxt);
         Builder.log("buildSite", "Successfully made \"robots.txt\".");
 
@@ -483,6 +409,91 @@ public class Builder {
 
             String safeTag = tag.replaceAll("[^a-zA-Z0-9]", "_");
             writeFile("Output/tag_" + safeTag + ".html", tagPage.toString());
+        }
+    }
+
+    static void makeRSS(String siteTitle, String baseURL, String siteDescription, String[][] textContent,
+            String[] pageTitles, String[] pageSummary) throws IOException {
+        StringBuilder rss = new StringBuilder(
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<rss version=\"2.0\">\n<channel>\n");
+        rss.append("<title>").append(siteTitle).append("</title>\n");
+        rss.append("<link>").append(baseURL).append("</link>\n");
+        rss.append("<description>").append(siteDescription).append("</description>\n");
+        for (int i = 0; i < Math.min(textContent.length, 20); i++) {
+            String fName = textContent[i][0].substring(0, textContent[i][0].indexOf(".md"));
+            rss.append("<item>\n<title>").append(pageTitles[i]).append("</title>\n");
+            rss.append("<link>").append(baseURL).append("/").append(fName).append(".html</link>\n");
+            rss.append("<description>").append(pageSummary[i].replace("<", "&lt;").replace(">", "&gt;"))
+                    .append("</description>\n");
+            rss.append("</item>\n");
+        }
+        rss.append("</channel>\n</rss>");
+        writeFile("Output/rss.xml", rss.toString());
+        Builder.log("buildSite", "Successfully made \"rss.xml\".");
+    }
+
+    static void makePageHTMLs(String[][] textContent, String page, StringBuilder[] pages, StringBuilder base,
+            String[] pageTitles,
+            String[] pageSummary) throws Exception {
+        for (int i = 0; i < textContent.length; i++) {
+            String[] arr = { textContent[i][0], page };
+            pages[i] = new StringBuilder(base);
+
+            String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
+            // SEO_TAGS template
+            String seoTags = "\t<meta property=\"og:title\" content=\"" + pageTitles[i] + "\">\n" +
+                    "\t<meta property=\"og:description\" content=\"" + pageSummary[i].replace("\"", "&quot;") + "\">\n"
+                    +
+                    "\t<meta property=\"og:type\" content=\"article\">\n";
+            if (!"-1".equals(imgUrl)) {
+                seoTags += "\t<meta property=\"og:image\" content=\"" + imgUrl + "\">\n";
+            }
+            stringEditor("{{ SEO_META }}", seoTags, pages[i]);
+
+            stringEditor("{{ CONTENT }}", makeFile(arr, textContent[i][1]).toString(), pages[i]);
+
+            if (isEnabled("AUTHOR_CARD_ENABLE", textContent[i][1])) {
+                // AUTHOR_CARD template
+                String authorCardTemplate = "<div class=\"author-bio\">\n" + //
+                        "\t<img src=\"{{ POST_AUTHOR_IMAGE }}\" alt=\"Author Avatar\">\n" + //
+                        "\t<div>\n" + //
+                        "\t\t<strong>" + getOption("POST_AUTHOR", textContent[i][1]) + "</strong>\n" + //
+                        "\t\t<span>" + getOption("POST_AUTHOR_DESCRIPTION", textContent[i][1]) + "</span>\n" + //
+                        "\t</div>\n" + //
+                        "</div>";
+
+                stringEditor("{{ AUTHOR_CARD }}", authorCardTemplate, pages[i]);
+                stringEditor("{{ POST_AUTHOR_IMAGE }}", getOption("POST_AUTHOR_IMAGE", textContent[i][1]), pages[i]);
+            } else {
+                stringEditor("{{ AUTHOR_CARD }}", "", pages[i]);
+            }
+
+            if (0 != i) {
+                // <a href="ElHamraSarayiGezisi01.html">Previous Post</a>
+                stringEditor(
+                        "{{ PREVIOUS_POST }}", "<a href=\"./"
+                                + textContent[i - 1][0].substring(0, textContent[i - 1][0].indexOf(".md"))
+                                + ".html\">Previous Post</a>",
+                        pages[i]);
+            } else {
+                stringEditor(
+                        "{{ PREVIOUS_POST }}", "<a href=\"./index.html\">Previous Post</a>", pages[i]);
+            }
+
+            if (textContent.length - 1 != i) {
+                // <a href="ElHamraSarayiGezisi01.html">Next Post</a>
+                stringEditor(
+                        "{{ NEXT_POST }}", "<a href=\"./"
+                                + textContent[i + 1][0].substring(0, textContent[i + 1][0].indexOf(".md"))
+                                + ".html\">Next Post</a>",
+                        pages[i]);
+            } else {
+                stringEditor(
+                        "{{ NEXT_POST }}", "<a href=\"./index.html\">Next Post</a>", pages[i]);
+
+            }
+
+            Builder.log("buildSite", "Successfully made \"" + textContent[i][0] + "\" page.");
         }
     }
 
