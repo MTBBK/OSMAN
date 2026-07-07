@@ -1,0 +1,16 @@
+Tema Adı: Web1991 Theme (Classic 90s Web)
+Yazar: OSMAN
+Tarih: 07/07/2026
+Versiyon: 1.0
+
+Renk Paleti:
+- Background: #ffffff
+- Text Primary: #000000
+- Links: #0000ee
+- Visited Links: #551a8b
+- Borders/Lines: #000000
+- Container BG: transparent
+- Footer BG: transparent
+- Footer Text: #000000
+- Meta/Secondary Text: #000000
+- Muted Text: #000000

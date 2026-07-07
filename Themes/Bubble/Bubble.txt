@@ -1,0 +1,11 @@
+Tema Adı: Bubble Theme
+Yazar: OSMAN AI
+Tarih: 07.07.2026
+Version: 1.0
+
+Renk Paleti:
+- Background: #f0f4f8
+- Text Primary: #334155
+- Accent: #3b82f6
+- Borders/Lines: #cbd5e1
+- Card Background: #ffffff

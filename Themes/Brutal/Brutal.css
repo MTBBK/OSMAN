@@ -1,0 +1,158 @@
+/* ── 1. GLOBAL SETTINGS ── */
+:root {
+    --theme-bg: #ffdc00;
+    --theme-text: #000000;
+    --theme-accent: #ff4136;
+    --theme-border: #000000;
+    --theme-alt-bg: #ffffff;
+}
+
+body {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 10px solid #000;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+a {
+    color: var(--theme-text);
+    text-decoration: none;
+    border-bottom: 3px solid var(--theme-text);
+    font-weight: 800;
+}
+a:hover {
+    background-color: var(--theme-text);
+    color: var(--theme-bg);
+}
+
+img {
+    border: 4px solid #000;
+    border-radius: 0 !important;
+    box-shadow: 8px 8px 0 #000;
+    margin-bottom: 15px;
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+hr {
+    border: none;
+    border-top: 4px solid #000;
+    margin: 30px 0;
+}
+
+/* ── 2. HEADER & NAV ── */
+.header {
+    background-color: var(--theme-alt-bg);
+    border: 4px solid #000;
+    border-top: none;
+    padding: 30px;
+    box-shadow: 8px 8px 0 #000;
+    margin-bottom: 50px;
+}
+
+.site-title {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    border-bottom: none;
+}
+
+.nav-bar a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--theme-alt-bg);
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    margin: 5px;
+    text-transform: uppercase;
+    font-weight: 900;
+    border-bottom: 3px solid #000; /* override base link */
+}
+.nav-bar a:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 #000;
+    background-color: var(--theme-accent);
+    color: #fff;
+}
+
+/* ── 3. COMPONENTS ── */
+.post-card, .post-toc, .author-bio, .welcome-header {
+    background-color: var(--theme-alt-bg);
+    border: 4px solid #000;
+    box-shadow: 10px 10px 0 #000;
+    padding: 30px;
+    margin-bottom: 40px;
+    border-radius: 0;
+}
+
+.post-card-title {
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: 900;
+}
+
+.tag-cloud a, .post-tags a {
+    background-color: #fff;
+    color: #000;
+    border: 3px solid #000;
+    padding: 5px 15px;
+    font-family: monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 3px 3px 0 #000;
+    margin: 5px;
+    display: inline-block;
+    border-bottom: 3px solid #000;
+}
+.tag-cloud a:hover, .post-tags a:hover {
+    background-color: var(--theme-accent);
+    color: white;
+    transform: translate(3px, 3px);
+    box-shadow: 0 0 0 #000;
+}
+
+.post-pagination {
+    background: #000;
+    color: #fff;
+    padding: 20px;
+    border: 4px solid #000;
+}
+.post-pagination a {
+    color: #ffdc00;
+    border-color: #ffdc00;
+}
+.post-pagination a:hover {
+    background: #ffdc00;
+    color: #000;
+}
+
+/* ── 4. FOOTER ── */
+.footer {
+    background-color: #000;
+    color: #fff;
+    padding: 50px 20px;
+    margin-top: 80px;
+    border: 4px solid #000;
+}
+
+.footer-links a {
+    color: #fff;
+    border-color: #fff;
+    margin: 0 10px;
+}
+.footer-links a:hover {
+    background: #fff;
+    color: #000;
+}

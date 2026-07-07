@@ -1,0 +1,11 @@
+Tema Adı: Neumorph Theme
+Yazar: OSMAN AI
+Tarih: 07.07.2026
+Version: 1.0
+
+Renk Paleti:
+- Background: #e0e5ec
+- Text Primary: #4a5568
+- Accent: #3182ce
+- Borders/Lines: transparent
+- Card Background: #e0e5ec

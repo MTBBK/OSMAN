@@ -159,6 +159,7 @@
             <input id="FEATURED_IMAGE" placeholder="cover.png">
             <label class="type-switch"><input type="checkbox" id="IMAGE_IS_URL"> Is URL?</label>
         </div>
+        <label class="type-switch" style="width:fit-content; margin-bottom: 10px;"><input type="checkbox" id="SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE" checked> Show in Index (True/False)</label>
 
         <h2>Post Title <p>The main title of your post</p>
         </h2>
@@ -183,7 +184,6 @@
             <input id="POST_AUTHOR_IMAGE" placeholder="osman2.png">
             <label class="type-switch"><input type="checkbox" id="AUTHOR_IMAGE_IS_URL"> Is URL?</label>
         </div>
-        <label class="type-switch" style="width:fit-content; margin-bottom: 10px;"><input type="checkbox" id="AUTHOR_CARD_IMAGE_ENABLE" checked> Show Author Image (True/False)</label>
 
         <h2>Post Author Description <p>Short bio for the author</p></h2>
         <input id="POST_AUTHOR_DESCRIPTION" placeholder="Merhaba ben Osman Guru">
@@ -298,8 +298,8 @@
                 const authorCardOpt = getOpt('AUTHOR_CARD_ENABLE');
                 document.getElementById('AUTHOR_CARD_ENABLE').checked = authorCardOpt !== "" ? authorCardOpt.toLowerCase() !== "false" : true;
 
-                const authorCardImgOpt = getOpt('AUTHOR_CARD_IMAGE_ENABLE');
-                document.getElementById('AUTHOR_CARD_IMAGE_ENABLE').checked = authorCardImgOpt !== "" ? authorCardImgOpt.toLowerCase() !== "false" : true;
+                const showImgIndexOpt = getOpt('SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE');
+                document.getElementById('SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE').checked = showImgIndexOpt !== "" ? showImgIndexOpt.toLowerCase() !== "false" : true;
 
                 const tagsMatch = text.match(/POST_TAGS:\s*([\s\S]*?)(?:^[A-Z_]+:|$)/m);
                 const tagsContainer = document.getElementById('POST_TAGS');
@@ -370,7 +370,7 @@
             const author = document.getElementById("POST_AUTHOR").value;
             const authorDesc = document.getElementById("POST_AUTHOR_DESCRIPTION").value;
             const authorCardEnable = document.getElementById("AUTHOR_CARD_ENABLE").checked ? "True" : "False";
-            const authorCardImgEnable = document.getElementById("AUTHOR_CARD_IMAGE_ENABLE").checked ? "True" : "False";
+            const showImgIndexEnable = document.getElementById("SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE").checked ? "True" : "False";
             const tags = getArrayData("POST_TAGS");
 
             const autoSummary = document.getElementById("OTOMATIC_SUMMARY_ENABLE").checked ? "True" : "False";
@@ -384,11 +384,11 @@
             let mdText = `FEATURED_IMAGE: "${imgVal}"\n`;
             mdText += `POST_TITLE: "${title}"\n`;
             mdText += `POST_DATE: "${date}"\n`;
-            mdText += `POST_AUTHOR: "${author}"\n\n`;
+            mdText += `POST_AUTHOR: "${author}"\n`;
+            mdText += `SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE: "${showImgIndexEnable}"\n\n`;
 
             mdText += `AUTHOR_CARD_ENABLE: "${authorCardEnable}"\n`;
             if (authorDesc) mdText += `POST_AUTHOR_DESCRIPTION: "${authorDesc}"\n`;
-            mdText += `AUTHOR_CARD_IMAGE_ENABLE: "${authorCardImgEnable}"\n`;
             if (authorImgVal) mdText += `POST_AUTHOR_IMAGE: "${authorImgVal}"\n\n`;
 
             if (tags) {

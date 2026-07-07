@@ -1,0 +1,138 @@
+/* ── 1. GLOBAL SETTINGS ── */
+:root {
+    --theme-bg: #f0f4f8;
+    --theme-text: #334155;
+    --theme-accent: #3b82f6;
+    --theme-border: transparent; /* No hard borders in bubble */
+    --theme-alt-bg: #ffffff;
+}
+
+body {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Base shapes */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+a {
+    color: var(--theme-accent);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+img {
+    border-radius: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+hr {
+    border: none;
+    height: 4px;
+    background-color: #e2e8f0;
+    border-radius: 4px;
+    margin: 40px 0;
+}
+
+/* ── 2. HEADER & NAV ── */
+.header {
+    background-color: var(--theme-alt-bg);
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 25px 30px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.site-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--theme-accent);
+}
+
+.nav-bar a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--theme-bg);
+    border-radius: 30px;
+    margin: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+.nav-bar a:hover {
+    background-color: var(--theme-accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ── 3. COMPONENTS ── */
+.post-card, .post-toc, .author-bio, .post-pagination {
+    background-color: var(--theme-alt-bg);
+    border-radius: 30px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+    border: none !important;
+}
+
+.post > img {
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar {
+    border-radius: 50% !important;
+    box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
+}
+
+.tag-cloud a, .post-tags a {
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: bold;
+    margin: 5px;
+    display: inline-block;
+}
+
+.tag-cloud a:hover, .post-tags a:hover {
+    background-color: #bae6fd;
+    transform: scale(1.05);
+}
+
+.welcome-header {
+    background-color: var(--theme-alt-bg);
+    border-radius: 40px;
+    padding: 40px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+}
+
+/* ── 4. FOOTER ── */
+.footer {
+    background-color: var(--theme-alt-bg);
+    border-radius: 40px 40px 0 0;
+    padding: 40px 20px;
+    margin-top: 60px;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
+    text-align: center;
+}
+
+.footer-links a {
+    background-color: var(--theme-bg);
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin: 5px;
+    font-weight: 600;
+}

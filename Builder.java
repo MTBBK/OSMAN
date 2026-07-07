@@ -209,8 +209,12 @@ public class Builder {
             stringEditor("{{ POST_AUTHOR }}", pageAuthors[i], postLists[i]);
                         
             String imgUrl = getOption("FEATURED_IMAGE", textContent[i][1]);
-            String imgHtml = !"-1".equals(imgUrl) ? "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">" : "";
-            stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
+            if(isEnabled("SHOW_FEATURED_IMAGE_IN_INDEX_ENABLE", textContent[i][1]) && !"-1".equals(imgUrl)){
+				String imgHtml = "<img src=\"" + imgUrl + "\" alt=\"" + pageTitles[i] + "\" class=\"post-card-image\">";
+				stringEditor("{{ POST_IMAGE_HTML }}", imgHtml, postLists[i]);
+			}else{
+				stringEditor("{{ POST_IMAGE_HTML }}", "", postLists[i]);
+			}
             
             StringBuilder pTags = new StringBuilder();
             for (int j = 0; j < pageTags[i].length; j++) {
@@ -247,7 +251,7 @@ public class Builder {
             if (isEnabled("AUTHOR_CARD_ENABLE", textContent[i][1])){
 				// AUTHOR_CARD template
 				String authorCardTemplate = "<div class=\"author-bio\">\n" + //
-					"{{ POST_AUTHOR_IMAGE }}" + //
+					"\t<img src=\"{{ POST_AUTHOR_IMAGE }}\" alt=\"Author Avatar\">\n" + //
 					"\t<div>\n" + //
 					"\t\t<strong>" + getOption("POST_AUTHOR", textContent[i][1]) + "</strong>\n" + //
 					"\t\t<span>"+ getOption("POST_AUTHOR_DESCRIPTION", textContent[i][1]) + "</span>\n" + //
@@ -255,12 +259,7 @@ public class Builder {
 					"</div>";
 
 				stringEditor("{{ AUTHOR_CARD }}", authorCardTemplate, pages[i]);
-				
-				if(isEnabled("AUTHOR_CARD_IMAGE_ENABLE", textContent[i][1])){
-					stringEditor("{{ POST_AUTHOR_IMAGE }}", "\t<img src=\"" + getOption("POST_AUTHOR_IMAGE", textContent[i][1]) + "\" alt=\"Author Avatar\">\n", pages[i]);
-				}else{
-					stringEditor("{{ POST_AUTHOR_IMAGE }}", "", pages[i]);
-				}
+				stringEditor("{{ POST_AUTHOR_IMAGE }}", getOption("POST_AUTHOR_IMAGE", textContent[i][1]) , pages[i]);
 			}else{
 				stringEditor("{{ AUTHOR_CARD }}", "", pages[i]);
 			}

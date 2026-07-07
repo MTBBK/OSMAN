@@ -1,0 +1,211 @@
+/* ── 1. GLOBAL SETTINGS ── */
+:root {
+    --theme-bg: #ffffff;
+    --theme-text: #000000;
+    --theme-accent: #0000ee;
+    --theme-border: #000000;
+    --theme-alt-bg: #ffffff;
+}
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    margin: 8px;
+    line-height: 1.2;
+}
+
+.container {
+    max-width: 640px;
+    padding: 0 8px;
+}
+
+a {
+    color: #0000ee;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #551a8b;
+}
+
+a:active {
+    color: #ff0000;
+}
+
+img {
+    border: 0;
+    max-width: 100%;
+    height: auto;
+}
+
+a img {
+    border: 2px solid #0000ee;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #000000;
+    margin: 1em 0;
+}
+
+/* ── 2. HEADER & NAV ── */
+.header {
+    border-bottom: 1px solid #000000;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+}
+
+.site-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: #000000;
+}
+
+.nav-bar {
+    margin-top: 0.5em;
+}
+
+.nav-bar a {
+    margin-right: 1em;
+}
+
+/* ── 3. FOOTER ── */
+.footer {
+    border-top: 1px solid #000000;
+    margin-top: 2em;
+    padding-top: 1em;
+    font-size: 0.9em;
+}
+
+.footer-links a {
+    margin-right: 1em;
+}
+
+/* ── 4. INDEX PAGE ── */
+.index-page {
+    margin-bottom: 2em;
+}
+
+.index-welcome {
+    margin-bottom: 2em;
+}
+
+.profile-avatar {
+    max-width: 150px;
+}
+
+.welcome-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.tag-cloud {
+    margin: 1em 0;
+}
+
+.tag-cloud a {
+    margin-right: 0.5em;
+}
+
+.post-count {
+    font-weight: bold;
+}
+
+.post-card {
+    margin-bottom: 1.5em;
+}
+
+.post-card-title {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.post-card-excerpt {
+    margin: 0.5em 0;
+}
+
+.post-card-meta, .post-card-categories {
+    font-size: 0.9em;
+}
+
+/* ── 5. POST PAGE ── */
+.post {
+    margin-bottom: 2em;
+}
+
+.post-title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.post-meta {
+    font-size: 0.9em;
+    margin-bottom: 1em;
+}
+
+.post-header {
+    margin-bottom: 1em;
+}
+
+.post-content {
+    line-height: 1.4;
+}
+
+.post-tags {
+    margin: 1em 0;
+}
+
+.post-tags a {
+    margin-right: 0.5em;
+}
+
+.post-pagination {
+    margin-top: 2em;
+    border-top: 1px solid #000000;
+    padding-top: 1em;
+}
+
+.prev-post, .next-post {
+    display: inline-block;
+}
+
+.next-post {
+    float: right;
+}
+
+/* --- NEW FEATURES STYLING --- */
+.post-toc {
+    border: 1px solid #000000;
+    padding: 1em;
+    margin-bottom: 1em;
+    background-color: #f0f0f0;
+}
+
+.post-toc .toc-title {
+    margin-top: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.post-toc .toc-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.post-toc li {
+    margin-bottom: 0.2em;
+}
+
+.post-toc .toc-level-2 { margin-left: 1em; }
+.post-toc .toc-level-3 { margin-left: 2em; }
+.post-toc .toc-level-4 { margin-left: 3em; }
+.post-toc .toc-level-5 { margin-left: 4em; }
