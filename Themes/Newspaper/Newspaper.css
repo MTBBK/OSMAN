@@ -1,6 +1,3 @@
-/* ── 1. GENEL AYARLAR ── */
-
-/* Injected Global Theme Variables for Templates */
 :root {
     --theme-bg: #f9f6f0;
     --theme-text: #1a1a1a;
@@ -39,8 +36,6 @@ img {
     margin: 10px 0;
 }
 
-/* Sans-serif font gereken tüm kısımlar - body Georgia kullandığı için
-   nav, footer, meta gibi küçük bilgi alanlarını ayrıca belirtiyoruz */
 .nav-bar a,
 .footer-links a,
 .footer-copy,
@@ -56,7 +51,6 @@ img {
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 
-/* Büyük harf olmasını istediğimiz tüm kısımlar */
 .nav-bar a,
 .footer-links a,
 .tag-cloud a,
@@ -68,9 +62,6 @@ img {
 .next-post {
     text-transform: uppercase;
 }
-
-
-/* ── 2. HEADER & NAV ── */
 
 .header {
     padding: 20px 24px;
@@ -101,9 +92,6 @@ img {
     border: 1px solid #ccc;
     font-size: 0.75rem;
 }
-
-
-/* ── 3. FOOTER ── */
 
 .footer hr {
     border: none;
@@ -136,9 +124,6 @@ img {
 .footer-copy p {
     margin: 4px 0;
 }
-
-
-/* ── 4. INDEX SAYFASI ── */
 
 .index-page {
     padding: 40px 0;
@@ -265,7 +250,6 @@ img {
     margin-bottom: 10px;
 }
 
-/* Gri renk olmasını istediğimiz tüm kısımlar */
 .footer-copy,
 .post-count,
 .post-card-meta,
@@ -335,8 +319,6 @@ img {
     cursor: pointer;
 }
 
-
-/* --- NEW FEATURES STYLING --- */
 .post-toc {
     background: rgba(128, 128, 128, 0.1);
     padding: 20px;
@@ -357,3 +339,14 @@ img {
 
 .post-card-categories { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
 .post-updated { font-size: 0.85rem; font-style: italic; opacity: 0.7; margin-bottom: 20px; }
+
+.author-bio {
+    background-color: var(--theme-alt-bg, #ffffff) !important;
+    border: 1px solid var(--theme-border, #ddd) !important;
+    color: var(--theme-text, #333) !important;
+}
+
+.author-bio span {
+    color: var(--theme-text, #555) !important;
+    opacity: 0.8 !important;
+}

@@ -1,4 +1,3 @@
-/* ── 1. GLOBAL SETTINGS ── */
 :root {
     --theme-bg: #ffffff;
     --theme-text: #000000;
@@ -57,7 +56,6 @@ hr {
     margin: 1em 0;
 }
 
-/* ── 2. HEADER & NAV ── */
 .header {
     border-bottom: 1px solid #000000;
     padding-bottom: 1em;
@@ -78,7 +76,6 @@ hr {
     margin-right: 1em;
 }
 
-/* ── 3. FOOTER ── */
 .footer {
     border-top: 1px solid #000000;
     margin-top: 2em;
@@ -90,7 +87,6 @@ hr {
     margin-right: 1em;
 }
 
-/* ── 4. INDEX PAGE ── */
 .index-page {
     margin-bottom: 2em;
 }
@@ -182,7 +178,6 @@ hr {
     float: right;
 }
 
-/* --- NEW FEATURES STYLING --- */
 .post-toc {
     border: 1px solid #000000;
     padding: 1em;
@@ -209,3 +204,14 @@ hr {
 .post-toc .toc-level-3 { margin-left: 2em; }
 .post-toc .toc-level-4 { margin-left: 3em; }
 .post-toc .toc-level-5 { margin-left: 4em; }
+
+.author-bio {
+    background-color: var(--theme-alt-bg, #ffffff) !important;
+    border: 1px solid var(--theme-border, #ddd) !important;
+    color: var(--theme-text, #333) !important;
+}
+
+.author-bio span {
+    color: var(--theme-text, #555) !important;
+    opacity: 0.8 !important;
+}

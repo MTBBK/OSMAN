@@ -1,4 +1,3 @@
-/* ── 1. GLOBAL SETTINGS ── */
 :root {
     --theme-bg: #e0e5ec;
     --theme-text: #4a5568;
@@ -44,7 +43,6 @@ hr {
     margin: 40px 0;
 }
 
-/* ── 2. HEADER & NAV ── */
 .header {
     background-color: var(--theme-bg);
     padding: 30px 20px;
@@ -80,7 +78,6 @@ hr {
     color: var(--theme-accent);
 }
 
-/* ── 3. COMPONENTS ── */
 .post-card, .post-toc, .author-bio, .welcome-header {
     background-color: var(--theme-bg);
     border-radius: 20px;
@@ -118,7 +115,6 @@ hr {
     display: inline-block;
 }
 
-/* ── 4. FOOTER ── */
 .footer {
     background-color: var(--theme-bg);
     padding: 40px 20px;
@@ -131,4 +127,15 @@ hr {
 .footer-links a {
     margin: 0 10px;
     font-weight: 600;
+}
+
+.author-bio {
+    background-color: var(--theme-alt-bg, #ffffff) !important;
+    border: 1px solid var(--theme-border, #ddd) !important;
+    color: var(--theme-text, #333) !important;
+}
+
+.author-bio span {
+    color: var(--theme-text, #555) !important;
+    opacity: 0.8 !important;
 }

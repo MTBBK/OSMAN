@@ -1,6 +1,3 @@
-/* 1. GENEL AYARLAR */
-
-/* Injected Global Theme Variables for Templates */
 :root {
     --theme-bg: #f2f7f0;
     --theme-text: #2c3e2d;
@@ -39,7 +36,6 @@ img {
     margin: 10px 0;
 }
 
-/* Açık yeşil-gri renk tüm kısımlar */
 .footer-links a,
 .footer-copy,
 .post-count,
@@ -50,8 +46,6 @@ img {
     color: #8aab8c;
 }
 
-
-/*2.HEADER & NAV*/
 
 .header {
     padding: 18px 24px;
@@ -80,9 +74,6 @@ img {
     border-radius: 6px;
     border: 1px solid transparent;
 }
-
-
-/*3. FOOTER */
 
 .footer {
     margin-top: 80px;
@@ -184,7 +175,6 @@ img {
     margin-top: 8px;
 }
 
-/* Builder'ın POST_LIST için ürettiği post kartları */
 .post-card {
     padding: 16px;
     border-radius: 8px;
@@ -210,9 +200,6 @@ img {
     font-size: 0.75rem;
 }
 
-
-/*  5. POST / MAKALE SAYFASI */
-
 .post {
     background-color: #ffffff;
     max-width: 750px;
@@ -222,7 +209,7 @@ img {
     border-radius: 12px;
 }
 
-.post > img {
+.post>img {
     width: 100%;
     margin: 0 0 36px 0;
     border-radius: 12px 12px 0 0;
@@ -242,8 +229,13 @@ img {
     margin-bottom: 10px;
 }
 
-.post-date   { color: #5a7a5c; }
-.post-author { color: #3a7d44; }
+.post-date {
+    color: #5a7a5c;
+}
+
+.post-author {
+    color: #3a7d44;
+}
 
 .post-updated {
     font-size: 0.78rem;
@@ -256,7 +248,6 @@ img {
     margin-bottom: 28px;
 }
 
-/* Sadece düz metin gelir */
 .post-content {
     line-height: 1.8;
     font-size: 16px;
@@ -289,15 +280,22 @@ img {
     overflow: hidden;
 }
 
-.prev-post, .next-post {
+.prev-post,
+.next-post {
     padding: 14px 18px;
     border: 1px solid #c8dfc0;
     border-radius: 8px;
     background-color: #f2f7f0;
 }
 
-.prev-post { float: left; }
-.next-post { float: right; text-align: right; }
+.prev-post {
+    float: left;
+}
+
+.next-post {
+    float: right;
+    text-align: right;
+}
 
 .post-pagination div {
     color: #3a7d44;
@@ -305,8 +303,6 @@ img {
     cursor: pointer;
 }
 
-
-/* --- NEW FEATURES STYLING --- */
 .post-toc {
     background: rgba(128, 128, 128, 0.1);
     padding: 20px;
@@ -314,16 +310,78 @@ img {
     margin-bottom: 30px;
     border: 1px solid rgba(128, 128, 128, 0.2);
 }
-.post-toc .toc-title { margin-top: 0; margin-bottom: 15px; font-size: 1.3em; }
-.post-toc .toc-list { list-style-type: none; padding-left: 0; margin: 0; }
-.post-toc li { margin-bottom: 8px; display: block; }
-.post-toc li a { text-decoration: none; opacity: 0.85; transition: opacity 0.2s; color: inherit; }
-.post-toc li a:hover { opacity: 1; text-decoration: underline; }
-.post-toc .toc-level-1 { margin-left: 0; font-weight: bold; }
-.post-toc .toc-level-2 { margin-left: 15px; }
-.post-toc .toc-level-3 { margin-left: 30px; }
-.post-toc .toc-level-4 { margin-left: 45px; }
-.post-toc .toc-level-5 { margin-left: 60px; }
 
-.post-card-categories { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
-.post-updated { font-size: 0.85rem; font-style: italic; opacity: 0.7; margin-bottom: 20px; }
+.post-toc .toc-title {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.post-toc .toc-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.post-toc li {
+    margin-bottom: 8px;
+    display: block;
+}
+
+.post-toc li a {
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    color: inherit;
+}
+
+.post-toc li a:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.post-toc .toc-level-1 {
+    margin-left: 0;
+    font-weight: bold;
+}
+
+.post-toc .toc-level-2 {
+    margin-left: 15px;
+}
+
+.post-toc .toc-level-3 {
+    margin-left: 30px;
+}
+
+.post-toc .toc-level-4 {
+    margin-left: 45px;
+}
+
+.post-toc .toc-level-5 {
+    margin-left: 60px;
+}
+
+.post-card-categories {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.post-updated {
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
+
+.author-bio {
+    background-color: var(--theme-alt-bg, #ffffff) !important;
+    border: 1px solid var(--theme-border, #ddd) !important;
+    color: var(--theme-text, #333) !important;
+}
+
+.author-bio span {
+    color: var(--theme-text, #555) !important;
+    opacity: 0.8 !important;
+}

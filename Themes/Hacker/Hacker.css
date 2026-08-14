@@ -423,3 +423,16 @@ img {
     opacity: 0.7;
     margin-bottom: 20px;
 }
+
+
+/* --- AUTHOR BIO STYLING --- */
+.author-bio {
+    background-color: var(--theme-alt-bg, #ffffff) !important;
+    border: 1px solid var(--theme-border, #ddd) !important;
+    color: var(--theme-text, #333) !important;
+}
+
+.author-bio span {
+    color: var(--theme-text, #555) !important;
+    opacity: 0.8 !important;
+}

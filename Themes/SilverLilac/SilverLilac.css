@@ -1,5 +1,4 @@
 
-/* Injected Global Theme Variables for Templates */
 :root {
     --theme-bg: var(--bg-earth);
     --theme-text: var(--paper-text);
@@ -8,13 +7,13 @@
     --theme-alt-bg: var(--clay-dark, #1e1e1e);
 }
 :root {
-    --bg-earth: #1a1b1e;      /* Gece Mavisi/Gri ana arka plan */
-    --paper-text: #e0d7ff;    /* Soluk Lila ana metin */
-    --clay-dark: #121214;     /* Antrasit Kartlar */
-    --sunset-ochre: #c0c0c0;  /* Gümüş (Başlıklar) */
-    --dull-gold: #a699cc;     /* Muted Purple (Linkler) */
-    --sand-meta: #8b8ea1;     /* Metalik Gri Meta */
-    --stone-border: #3d3e4d;  /* Kenarlıklar */
+    --bg-earth: #1a1b1e;
+    --paper-text: #e0d7ff;
+    --clay-dark: #121214;
+    --sunset-ochre: #c0c0c0;
+    --dull-gold: #a699cc;
+    --sand-meta: #8b8ea1;
+    --stone-border: #3d3e4d;
 }
 body {
     background-color: var(--bg-earth);
@@ -344,7 +343,6 @@ img {
     cursor: pointer;
 }
 
-/* --- NEW FEATURES STYLING --- */
 .post-toc {
     background: rgba(128, 128, 128, 0.1);
     padding: 20px;
@@ -365,3 +363,14 @@ img {
 
 .post-card-categories { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
 .post-updated { font-size: 0.85rem; font-style: italic; opacity: 0.7; margin-bottom: 20px; }
+
+.author-bio {
+    background-color: var(--theme-alt-bg, #ffffff) !important;
+    border: 1px solid var(--theme-border, #ddd) !important;
+    color: var(--theme-text, #333) !important;
+}
+
+.author-bio span {
+    color: var(--theme-text, #555) !important;
+    opacity: 0.8 !important;
+}

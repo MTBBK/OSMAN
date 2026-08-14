@@ -12,3 +12,8 @@ makeJarFile.bat
 Potato.java
 compile.ps1
 compile.sh
+Combinations
+Combinations/*
+osman.guru
+osman.guru/*
+generate_combinations.py
