@@ -39,10 +39,6 @@ img {
     height: auto;
 }
 
-a img {
-    border: 2px solid #0000ee;
-}
-
 h1, h2, h3, h4, h5, h6 {
     font-family: "Times New Roman", Times, serif;
     font-weight: bold;
@@ -133,7 +129,6 @@ hr {
     font-size: 0.9em;
 }
 
-/* ── 5. POST PAGE ── */
 .post {
     margin-bottom: 2em;
 }
