@@ -1,9 +1,8 @@
-/* ── 1. GLOBAL SETTINGS ── */
 :root {
     --theme-bg: #f0f4f8;
     --theme-text: #334155;
     --theme-accent: #3b82f6;
-    --theme-border: transparent; /* No hard borders in bubble */
+    --theme-border: transparent;
     --theme-alt-bg: #ffffff;
 }
 
@@ -44,7 +43,6 @@ hr {
     margin: 40px 0;
 }
 
-/* ── 2. HEADER & NAV ── */
 .header {
     background-color: var(--theme-alt-bg);
     border-radius: 0 0 40px 40px;
@@ -75,7 +73,6 @@ hr {
     transform: translateY(-2px);
 }
 
-/* ── 3. COMPONENTS ── */
 .post-card, .post-toc, .author-bio, .post-pagination {
     background-color: var(--theme-alt-bg);
     border-radius: 30px;
@@ -119,7 +116,6 @@ hr {
     margin-bottom: 40px;
 }
 
-/* ── 4. FOOTER ── */
 .footer {
     background-color: var(--theme-alt-bg);
     border-radius: 40px 40px 0 0;
@@ -137,7 +133,6 @@ hr {
     font-weight: 600;
 }
 
-/* --- AUTHOR BIO STYLING --- */
 .author-bio {
     background-color: var(--theme-alt-bg, #ffffff) !important;
     border: 1px solid var(--theme-border, #ddd) !important;

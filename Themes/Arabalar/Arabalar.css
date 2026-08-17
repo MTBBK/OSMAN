@@ -1,9 +1,3 @@
-/* =============================================
-   CARS THEME (McQueen & Mater) - Static Site Generator
-   Asfalt karanlığı, yarış kırmızısı, paslı kahverengi ve hız hissiyatı.
-   ============================================= */
-
-/* Injected Global Theme Variables for Templates */
 :root {
     --theme-bg: var(--asphalt-bg);
     --theme-text: var(--text-main);
@@ -12,8 +6,6 @@
     --theme-alt-bg: var(--asphalt-card);
 }
 
-
-/* ── 0. CSS VARIABLES (THEME TOKENS) ── */
 :root {
     --mcqueen-red: #e53935;
     --mcqueen-dark: #b71c1c;
@@ -27,8 +19,6 @@
     --tire-black: #0a0a0a;
 }
 
-/* ── 1. GENEL AYARLAR ── */
-
 body {
     background-color: var(--asphalt-bg);
     color: var(--text-main);
@@ -36,7 +26,7 @@ body {
     margin: 0;
     padding: 0;
     background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
-    background-size: 20px 20px; /* Asfalt dokusu illüzyonu */
+    background-size: 20px 20px;
 }
 
 .container {
@@ -67,7 +57,6 @@ img {
     margin: 10px 0;
 }
 
-/* Metadata ve ikincil bilgiler (Mater tonları) */
 .footer-copy,
 .footer-links a,
 .post-count,
@@ -77,8 +66,6 @@ img {
 .post-updated {
     color: var(--text-muted);
 }
-
-/* ── 2. HEADER & NAV ── */
 
 .header {
     padding: 18px 24px;
@@ -96,7 +83,7 @@ img {
     font-size: 1.5rem;
     font-weight: 900;
     text-transform: uppercase;
-    font-style: italic; /* Hız hissiyatı için italik */
+    font-style: italic;
     letter-spacing: 1.5px;
 }
 
@@ -131,8 +118,6 @@ img {
 .nav-bar a:hover::before {
     opacity: 1;
 }
-
-/* ── 3. FOOTER ── */
 
 .footer {
     margin-top: 80px;
@@ -264,7 +249,6 @@ img {
     margin-top: 16px;
 }
 
-/* Post Kartları */
 .post-card {
     background-color: var(--asphalt-card);
     padding: 24px;
@@ -276,7 +260,7 @@ img {
 }
 
 .post-card:hover {
-    transform: translateX(5px); /* İleri atılma hissi */
+    transform: translateX(5px);
     border-left-color: var(--mcqueen-yellow);
 }
 
@@ -308,8 +292,6 @@ img {
     color: var(--mater-rust);
     text-transform: uppercase;
 }
-
-/* ── 5. POST / MAKALE SAYFASI ── */
 
 .post {
     background-color: var(--asphalt-card);
@@ -415,8 +397,6 @@ img {
     cursor: pointer;
 }
 
-
-/* --- NEW FEATURES STYLING --- */
 .post-toc {
     background: rgba(128, 128, 128, 0.1);
     padding: 20px;
@@ -438,7 +418,6 @@ img {
 .post-card-categories { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
 .post-updated { font-size: 0.85rem; font-style: italic; opacity: 0.7; margin-bottom: 20px; }
 
-/* --- AUTHOR BIO STYLING --- */
 .author-bio {
     background-color: var(--theme-alt-bg, #ffffff) !important;
     border: 1px solid var(--theme-border, #ddd) !important;

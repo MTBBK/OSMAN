@@ -1,5 +1,3 @@
-
-/* Injected Global Theme Variables for Templates */
 :root {
     --theme-bg: var(--bg-earth);
     --theme-text: var(--paper-text);
@@ -8,13 +6,13 @@
     --theme-alt-bg: var(--clay-dark, #1e1e1e);
 }
 :root {
-    --bg-earth: #3b0a1c;      /* Derin Mürdüm */
-    --paper-text: #f0f4d2;    /* Kirli Beyaz/Yeşil */
-    --clay-dark: #240611;     /* Koyu Berry Kartlar */
-    --sunset-ochre: #d4e157;  /* Chartreuse Yeşili (Başlıklar) */
-    --dull-gold: #c2185b;     /* Berry Pembesi (Linkler) */
-    --sand-meta: #a1887f;     /* Toprak Meta */
-    --stone-border: #5d3a44;  /* Kenarlıklar */
+    --bg-earth: #3b0a1c;
+    --paper-text: #f0f4d2;
+    --clay-dark: #240611;
+    --sunset-ochre: #d4e157;
+    --dull-gold: #c2185b;
+    --sand-meta: #a1887f;
+    --stone-border: #5d3a44;
 }
 body {
     background-color: var(--bg-earth);
@@ -344,7 +342,6 @@ img {
     cursor: pointer;
 }
 
-/* --- NEW FEATURES STYLING --- */
 .post-toc {
     background: rgba(128, 128, 128, 0.1);
     padding: 20px;
@@ -366,7 +363,6 @@ img {
 .post-card-categories { font-size: 0.8rem; text-transform: uppercase; opacity: 0.8; margin-top: 4px; }
 .post-updated { font-size: 0.85rem; font-style: italic; opacity: 0.7; margin-bottom: 20px; }
 
-/* --- AUTHOR BIO STYLING --- */
 .author-bio {
     background-color: var(--theme-alt-bg, #ffffff) !important;
     border: 1px solid var(--theme-border, #ddd) !important;

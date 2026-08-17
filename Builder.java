@@ -1342,7 +1342,7 @@ class MarkdownConverter {
                     html.append("<ul>\n");
                     inList = true;
                 }
-                html.append("<li>").append("• ").append(parseInline(line.trim().substring(2))).append("</li>\n");
+                html.append("<li>").append(parseInline(line.trim().substring(2))).append("</li>\n");
                 continue;
             } else {
                 inList = isEndingList(inList, html);
