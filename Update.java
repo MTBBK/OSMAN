@@ -4,6 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.DirectoryStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -36,6 +38,15 @@ public class Update {
         Update.log("main", "Begin.");
 
         try {
+			
+            // sets error's print location to log.txt in ErrorLogs
+            writeFile("ErrorLogs/updateErrorLog.txt", null);
+            PrintStream err = new PrintStream(new FileOutputStream("ErrorLogs/updateErrorLog.txt"));
+            System.setErr(err);
+            writeFile("ErrorLogs/updateLog.txt", null);
+            PrintStream out = new PrintStream(new FileOutputStream("ErrorLogs/updateLog.txt"));
+            System.setOut(out);
+            
             // Download zip to a temporary file
             Path temporaryZip = Files.createTempFile("osman_update", ".zip");
             Update.log("Downloading latest version of OSMAN from " + osmanURL);
@@ -68,8 +79,8 @@ public class Update {
             }
 
             // Move files to current directory, excluding the ones we want to preserve
-            // The zip extracts to a root folder named "OSMAN-master"
-            Path extractedRoot = temporaryDir.resolve("OSMAN-master");
+            // The zip extracts to a root folder named "OSMAN-main"
+            Path extractedRoot = temporaryDir.resolve("OSMAN-main");
             if (Files.exists(extractedRoot)) {
                 Update.log("Applying updates while preserving configuration and content");
                 try (DirectoryStream<Path> stream = Files.newDirectoryStream(extractedRoot)) {
@@ -107,6 +118,25 @@ public class Update {
         }
         Update.log("main", "Finished the process in " + (System.currentTimeMillis() - startTime) + " milliseconds.");
         Update.log("main", "End.");
+    }
+    
+    public static void writeFile(String filePath, String fileContent) throws IOException {
+        // Creates required folders if they don't already exist.
+
+        Path path = Paths.get(filePath);
+        Files.createDirectories(path.getParent());
+        try {
+            Files.createFile(path);
+        } catch (FileAlreadyExistsException e) {
+            // expected exception maybe add Expected exception or smt idk
+        }
+
+        // creates an empty file if the content is null
+        if (null == fileContent) {
+            return;
+        }
+
+        Files.writeString(path, fileContent, StandardCharsets.UTF_8);
     }
 
     private static void copyDirectory(Path source, Path target) throws IOException {
