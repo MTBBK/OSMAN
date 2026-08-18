@@ -44,14 +44,9 @@ public class Builder {
 
             // create an Output folder in the case that it doesn't exist.
             createFolder("Output/");
-
-            Path rootPath = Paths.get("Output");
-            final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder())
-                    .collect(Collectors.toList());
-            for (Path path : pathsToDelete) {
-                Files.deleteIfExists(path);
-            }
-            // https://stackoverflow.com/questions/35988192/java-nio-most-concise-recursive-directory-delete
+            
+            // delete old files in Output directory
+            deleteDirectory("Output");
 
             // recreate Output folder after cleaning
             createFolder("Output/");
@@ -667,8 +662,8 @@ public class Builder {
                     return;
                 }
 
-                // 1. Relativize: Finds the difference between the root and the current file
-                // 2. Resolve: Appends that difference to the target directory
+                // Relativize: Finds the difference between the root and the current file
+                // Resolve: Appends that difference to the target directory
                 Path relativePath = sourceFol.relativize(source);
                 Path destination = targetFol.resolve(relativePath);
 
@@ -691,6 +686,20 @@ public class Builder {
             System.err.println("Failed to walk directory.");
             e.printStackTrace();
         }
+    }
+    
+	private static void deleteDirectory(String directoryToBeDeleted) throws IOException {
+		Path rootPath = Paths.get(directoryToBeDeleted);
+		final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder())
+				.collect(Collectors.toList());
+		for (Path path : pathsToDelete) {
+			try {
+				Files.deleteIfExists(path);
+			} catch(IOException e) {
+			  System.err.println("Failed to delete " + path + " : " + e.getMessage());
+		  }
+		}
+		// https://stackoverflow.com/questions/35988192/java-nio-most-concise-recursive-directory-delete
     }
 
     // replaces file[1]'s with the appropriate parts in config and returns the
