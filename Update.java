@@ -35,8 +35,6 @@ public class Update {
         long startTime = System.currentTimeMillis();
 
         final String osmanURL = "https://github.com/MTBBK/OSMAN/archive/refs/heads/master.zip";
-        Update.log("main", "Begin.");
-
         try {
 			
             // sets error's print location to log.txt in ErrorLogs
@@ -47,6 +45,7 @@ public class Update {
             PrintStream out = new PrintStream(new FileOutputStream("ErrorLogs/updateLog.txt"));
             System.setOut(out);
             
+            Update.log("main", "Begin.");
             // Download zip to a temporary file
             Path temporaryZip = Files.createTempFile("osman_update", ".zip");
             Update.log("Downloading latest version of OSMAN from " + osmanURL);
